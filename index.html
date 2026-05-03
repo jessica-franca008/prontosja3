@@ -28,57 +28,202 @@
                 </div>
             </section>
 
-            <!-- TELA 2: SELEÇÃO -->
+            <!-- TELA 2: SELEÇÃO (Cliente ou Empresa) -->
             <section id="tela-2" class="tela">
                 <div class="tela-conteudo">
                     <div class="selecao-logo"></div>
                     <h1>Seleção de Acesso</h1>
-                    <p>Escolha como deseja acessar o aplicativo para continuar</p>
+                    <p>Escolha como deseja acessar o aplicativo</p>
                     <div class="selecao-botoes">
-                        <button onclick="escolherTipo('cliente')" class="btn-cliente"><span class="material-symbols-outlined">person</span><span>Entrar como Cliente</span></button>
-                        <button onclick="escolherTipo('empresa')" class="btn-empresa"><span class="material-symbols-outlined">storefront</span><span>Entrar como Empresa</span></button>
-                        <div class="selecao-divider"><span>ou</span></div>
-                        <button id="btn-google" class="btn-google" disabled style="opacity: 0.5; cursor: not-allowed;"><svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg><span>Continuar com Google</span></button>
+                        <button onclick="irParaLogin('cliente')" class="btn-cliente">
+                            <span class="material-symbols-outlined">person</span>
+                            <span>Entrar como Cliente</span>
+                        </button>
+                        <button onclick="irParaLogin('empresa')" class="btn-empresa">
+                            <span class="material-symbols-outlined">storefront</span>
+                            <span>Entrar como Empresa</span>
+                        </button>
                     </div>
                 </div>
             </section>
 
-            <!-- TELA 3: CADASTRO CLIENTE -->
+            <!-- TELA LOGIN: LOGIN COM GOOGLE -->
+            <section id="tela-login" class="tela">
+                <div class="tela-cabecalho">
+                    <button onclick="mudarTela('tela-2')" class="btn-voltar">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <h1>Entrar</h1>
+                </div>
+                <div class="tela-conteudo" style="justify-content: center; gap: 20px;">
+                    <div class="empresa-logo" style="width: 80px; height: 80px; background: rgba(229,6,21,0.1); border-radius: 50%;">
+                        <span class="material-symbols-outlined" style="font-size: 40px; color: var(--primary);">google</span>
+                    </div>
+                    <h2>Bem-vindo ao ProntosJá</h2>
+                    <p style="text-align: center; max-width: 250px;">Continue com sua conta Google para acessar o aplicativo</p>
+                    <div class="selecao-botoes">
+                        <button class="btn-google" onclick="loginComGoogle()">
+                            <svg class="google-icon" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z"></path>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path>
+                            </svg>
+                            <span>Continuar com Google</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TELA 3: CADASTRO CLIENTE (sem Google) -->
             <section id="tela-3" class="tela">
-                <div class="tela-cabecalho"><button onclick="mudarTela('tela-2')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Crie sua conta</h1></div>
-                <div class="tela-abas"><button class="aba ativa">Sou Cliente</button><button onclick="mudarTela('tela-4')" class="aba">Sou Empresa</button></div>
+                <div class="tela-cabecalho">
+                    <button onclick="mudarTela('tela-2')" class="btn-voltar">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <h1>Crie sua conta</h1>
+                </div>
+                <div class="tela-abas">
+                    <button class="aba ativa">Sou Cliente</button>
+                    <button onclick="mudarTela('tela-4')" class="aba">Sou Empresa</button>
+                </div>
                 <div class="tela-formulario">
-                    <div class="campo-input"><label>Nome Completo</label><div class="input-wrapper"><span class="material-symbols-outlined">person</span><input type="text" placeholder="Digite seu nome"></div></div>
-                    <div class="campo-input"><label>E-mail</label><div class="input-wrapper"><span class="material-symbols-outlined">mail</span><input type="email" placeholder="exemplo@email.com"></div></div>
-                    <div class="campo-input"><label>Telefone</label><div class="input-wrapper"><span class="material-symbols-outlined">call</span><input type="tel" placeholder="(XX) XXXXX-XXXX"></div></div>
-                    <div class="campo-input"><label>Localidade</label><div class="input-wrapper"><span class="material-symbols-outlined">location_on</span><input type="text" placeholder="Cidade ou CEP"></div></div>
-                    <div class="campo-input"><label>Senha</label><div class="input-wrapper"><span class="material-symbols-outlined">lock</span><input type="password" placeholder="••••••••"><button class="btn-visibilidade"><span class="material-symbols-outlined">visibility</span></button></div></div>
+                    <div class="campo-input">
+                        <label>Nome Completo</label>
+                        <div class="input-wrapper">
+                            <span class="material-symbols-outlined">person</span>
+                            <input type="text" placeholder="Digite seu nome">
+                        </div>
+                    </div>
+                    <div class="campo-input">
+                        <label>E-mail</label>
+                        <div class="input-wrapper">
+                            <span class="material-symbols-outlined">mail</span>
+                            <input type="email" placeholder="exemplo@email.com">
+                        </div>
+                    </div>
+                    <div class="campo-input">
+                        <label>Telefone</label>
+                        <div class="input-wrapper">
+                            <span class="material-symbols-outlined">call</span>
+                            <input type="tel" placeholder="(XX) XXXXX-XXXX">
+                        </div>
+                    </div>
+                    <div class="campo-input">
+                        <label>Localidade</label>
+                        <div class="input-wrapper">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <input type="text" placeholder="Cidade ou CEP">
+                        </div>
+                    </div>
+                    <div class="campo-input">
+                        <label>Senha</label>
+                        <div class="input-wrapper">
+                            <span class="material-symbols-outlined">lock</span>
+                            <input type="password" placeholder="••••••••">
+                            <button class="btn-visibilidade"><span class="material-symbols-outlined">visibility</span></button>
+                        </div>
+                    </div>
                     <button onclick="mudarTela('tela-5')" class="btn-principal">Cadastrar</button>
                 </div>
             </section>
 
             <!-- TELA 4: CADASTRO EMPRESA -->
             <section id="tela-4" class="tela">
-                <div class="tela-cabecalho"><button onclick="mudarTela('tela-2')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Cadastro Empresa</h1></div>
+                <div class="tela-cabecalho">
+                    <button onclick="mudarTela('tela-2')" class="btn-voltar">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <h1>Cadastro Empresa</h1>
+                </div>
                 <div class="tela-conteudo empresa-conteudo">
                     <div class="empresa-logo"><span class="material-symbols-outlined">storefront</span></div>
                     <p class="empresa-descricao">Cadastre seu estabelecimento e comece a vender no ProntosJá.</p>
                     <div class="tela-formulario">
-                        <div class="campo-input"><label>Nome da Loja</label><div class="input-wrapper"><span class="material-symbols-outlined">store</span><input type="text" placeholder="Ex: Pizzaria do João"></div></div>
-                        <div class="campo-input"><label>CNPJ</label><div class="input-wrapper"><span class="material-symbols-outlined">badge</span><input type="text" placeholder="00.000.000/0000-00"></div></div>
-                        <div class="campo-input"><label>Categoria</label><div class="input-wrapper"><span class="material-symbols-outlined">restaurant_menu</span><select><option value="">Selecione o tipo de loja</option><option value="restaurante">Restaurante</option><option value="mercado">Mercado</option><option value="farmacia">Farmácia</option></select><span class="material-symbols-outlined seta-baixo">keyboard_arrow_down</span></div></div>
-                        <div class="campo-input"><label>Endereço</label><div class="input-wrapper"><input type="text" placeholder="Buscar endereço..."><span class="material-symbols-outlined icone-local">location_on</span></div></div>
-                        <div class="campo-input"><label>Senha</label><div class="input-wrapper"><span class="material-symbols-outlined">lock</span><input type="password" placeholder="Crie uma senha forte"><button class="btn-visibilidade"><span class="material-symbols-outlined">visibility_off</span></button></div><p class="info-senha">Mínimo de 8 caracteres.</p></div>
+                        <div class="campo-input">
+                            <label>Nome da Loja</label>
+                            <div class="input-wrapper">
+                                <span class="material-symbols-outlined">store</span>
+                                <input type="text" placeholder="Ex: Pizzaria do João">
+                            </div>
+                        </div>
+                        <div class="campo-input">
+                            <label>CNPJ</label>
+                            <div class="input-wrapper">
+                                <span class="material-symbols-outlined">badge</span>
+                                <input type="text" placeholder="00.000.000/0000-00">
+                            </div>
+                        </div>
+                        <div class="campo-input">
+                            <label>Categoria</label>
+                            <div class="input-wrapper">
+                                <span class="material-symbols-outlined">restaurant_menu</span>
+                                <select>
+                                    <option value="">Selecione o tipo de loja</option>
+                                    <option value="restaurante">Restaurante</option>
+                                    <option value="mercado">Mercado</option>
+                                    <option value="farmacia">Farmácia</option>
+                                </select>
+                                <span class="material-symbols-outlined seta-baixo">keyboard_arrow_down</span>
+                            </div>
+                        </div>
+                        <div class="campo-input">
+                            <label>Endereço</label>
+                            <div class="input-wrapper">
+                                <input type="text" placeholder="Buscar endereço...">
+                                <span class="material-symbols-outlined icone-local">location_on</span>
+                            </div>
+                        </div>
+                        <div class="campo-input">
+                            <label>Senha</label>
+                            <div class="input-wrapper">
+                                <span class="material-symbols-outlined">lock</span>
+                                <input type="password" placeholder="Crie uma senha forte">
+                                <button class="btn-visibilidade"><span class="material-symbols-outlined">visibility_off</span></button>
+                            </div>
+                            <p class="info-senha">Mínimo de 8 caracteres.</p>
+                        </div>
                     </div>
-                    <button onclick="mudarTela('tela-10')" class="btn-principal btn-salvar"><span>Salvar</span><span class="material-symbols-outlined">arrow_forward</span></button>
+                    <button onclick="mudarTela('tela-10')" class="btn-principal btn-salvar">
+                        <span>Salvar</span>
+                        <span class="material-symbols-outlined">arrow_forward</span>
+                    </button>
                 </div>
             </section>
 
             <!-- TELA 5: HOME CLIENTE -->
             <section id="tela-5" class="tela">
-                <div class="home-cabecalho"><div class="home-local"><span class="material-symbols-outlined">location_on</span><div><span class="local-texto">Entregar em</span><span class="local-endereco">Minha Localidade</span></div><span class="material-symbols-outlined">expand_more</span></div><button class="btn-notificacao"><span class="material-symbols-outlined">notifications</span><span class="notificacao-ponto"></span></button></div>
-                <div class="home-conteudo"><h2>O que você precisa?</h2><div class="categorias-grid"><button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant</span></div><span>Restaurantes</span></button><button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">storefront</span></div><span>Mercado</span></button><button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">medication</span></div><span>Farmácia</span></button><button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">liquor</span></div><span>Bebidas</span></button><button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">pets</span></div><span>Pet Shop</span></button><button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">two_wheeler</span></div><span>Entregas</span></button></div></div>
-                <nav class="navegacao-inferior"><button class="nav-item ativo"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">account_circle</span><span>Perfil</span></button></nav>
+                <div class="home-cabecalho">
+                    <div class="home-local">
+                        <span class="material-symbols-outlined">location_on</span>
+                        <div>
+                            <span class="local-texto">Entregar em</span>
+                            <span class="local-endereco">Minha Localidade</span>
+                        </div>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </div>
+                    <button class="btn-notificacao">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="notificacao-ponto"></span>
+                    </button>
+                </div>
+                <div class="home-conteudo">
+                    <h2>O que você precisa?</h2>
+                    <div class="categorias-grid">
+                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant</span></div><span>Restaurantes</span></button>
+                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">storefront</span></div><span>Mercado</span></button>
+                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">medication</span></div><span>Farmácia</span></button>
+                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">liquor</span></div><span>Bebidas</span></button>
+                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">pets</span></div><span>Pet Shop</span></button>
+                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">two_wheeler</span></div><span>Entregas</span></button>
+                    </div>
+                </div>
+                <nav class="navegacao-inferior">
+                    <button class="nav-item ativo"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                    <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
+                    <button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
+                    <button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">account_circle</span><span>Perfil</span></button>
+                </nav>
             </section>
 
             <!-- TELA 6: PESQUISAR -->
@@ -167,61 +312,86 @@
 
         let tipoUsuario = null;
 
-        window.escolherTipo = function(tipo) {
+        // Salva o tipo escolhido e vai para tela de login
+        window.irParaLogin = function(tipo) {
             tipoUsuario = tipo;
-            const btnGoogle = document.getElementById('btn-google');
-            if (btnGoogle) {
-                btnGoogle.disabled = false;
-                btnGoogle.style.opacity = '1';
-                btnGoogle.style.cursor = 'pointer';
-                btnGoogle.onclick = loginComGoogle;
-            }
+            mudarTela('tela-login');
         };
 
-        async function loginComGoogle() {
+        // Login com Google - redireciona baseado no tipoUsuario
+        window.loginComGoogle = async function() {
             if (!tipoUsuario) {
-                alert("Por favor, escolha Cliente ou Empresa primeiro!");
+                alert("Erro: Tipo de usuário não definido.");
+                mudarTela('tela-2');
                 return;
             }
-            
+
             try {
                 const result = await signInWithPopup(auth, provider);
-                const nome = result.user.displayName || "Usuário";
-                const email = result.user.email || "";
-                
+                const user = result.user;
+                const nome = user.displayName || "Usuário";
+                const email = user.email || "";
+
                 console.log("Usuário logado:", nome);
-                
-                // Preenche o perfil do cliente se existir
+                console.log("Tipo:", tipoUsuario);
+
+                // Salvar no localStorage para manter sessão
+                localStorage.setItem('tipoUsuario', tipoUsuario);
+                localStorage.setItem('nomeUsuario', nome);
+                localStorage.setItem('emailUsuario', email);
+
+                // Atualiza perfil do cliente se existir
                 const nomePerfil = document.getElementById('nomePerfil');
                 const emailPerfil = document.getElementById('emailPerfil');
                 if (nomePerfil) nomePerfil.textContent = nome;
                 if (emailPerfil) emailPerfil.textContent = email;
-                
+
                 if (tipoUsuario === 'cliente') {
                     mudarTela('tela-5'); // HOME CLIENTE
                 } else if (tipoUsuario === 'empresa') {
                     mudarTela('tela-4'); // CADASTRO EMPRESA
                 } else {
-                    mudarTela('tela-5'); // fallback
+                    mudarTela('tela-5');
                 }
             } catch (error) {
                 console.error("Erro no login:", error);
                 alert("Erro ao fazer login: " + error.message);
             }
-        }
-
-        window.loginComGoogle = loginComGoogle;
-        window.sairDaConta = function() {
-            tipoUsuario = null;
-            const btnGoogle = document.getElementById('btn-google');
-            if (btnGoogle) {
-                btnGoogle.disabled = true;
-                btnGoogle.style.opacity = '0.5';
-                btnGoogle.style.cursor = 'not-allowed';
-                btnGoogle.onclick = null;
-            }
-            mudarTela('tela-2');
         };
+
+        // Função para sair da conta
+        window.sairDaConta = function() {
+            auth.signOut().then(() => {
+                tipoUsuario = null;
+                localStorage.removeItem('tipoUsuario');
+                localStorage.removeItem('nomeUsuario');
+                localStorage.removeItem('emailUsuario');
+                mudarTela('tela-2');
+            }).catch((error) => {
+                console.error("Erro ao sair:", error);
+            });
+        };
+
+        // Verifica se já tem sessão salva ao carregar
+        window.addEventListener('DOMContentLoaded', function() {
+            const tipoSalvo = localStorage.getItem('tipoUsuario');
+            const nomeSalvo = localStorage.getItem('nomeUsuario');
+            const emailSalvo = localStorage.getItem('emailUsuario');
+            
+            if (tipoSalvo && nomeSalvo) {
+                tipoUsuario = tipoSalvo;
+                const nomePerfil = document.getElementById('nomePerfil');
+                const emailPerfil = document.getElementById('emailPerfil');
+                if (nomePerfil) nomePerfil.textContent = nomeSalvo;
+                if (emailPerfil) emailPerfil.textContent = emailSalvo;
+                
+                if (tipoSalvo === 'cliente') {
+                    mudarTela('tela-5');
+                } else if (tipoSalvo === 'empresa') {
+                    mudarTela('tela-10');
+                }
+            }
+        });
     </script>
 </body>
 </html>
