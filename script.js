@@ -369,4 +369,3 @@ document.addEventListener('visibilitychange', function() {
 document.addEventListener('submit', function(e) {
     e.preventDefault();
 });
-
