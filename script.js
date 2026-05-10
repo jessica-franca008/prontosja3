@@ -1,3 +1,14 @@
+import { auth, db } from './firebaseConfig.js';
+
+import {
+  createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 // SISTEMA DE NAVEGAÇÃO ENTRE TELAS
 function mudarTela(idTela) {
     document.querySelectorAll('.tela').forEach(tela => {
@@ -350,6 +361,59 @@ document.addEventListener('click', function(e) {
         }
     }
 });
+
+// FUNÇÃO DE CADASTRO DO CLIENTE
+async function cadastrarCliente() {
+    const nome = document.getElementById('nome').value;
+    const email = document.getElementById('email').value;
+    const telefone = document.getElementById('telefone').value;
+    const senha = document.getElementById('senha').value;
+    const localidade = document.getElementById('localidade')?.value || '';
+
+    if (!nome || !email || !telefone || !senha) {
+        alert("Preencha todos os campos!");
+        return;
+    }
+
+    try {
+        // CRIA O LOGIN
+        const usuario = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            senha
+        );
+
+        // PEGA O ID DO USUÁRIO
+        const uid = usuario.user.uid;
+
+        // SALVA NO BANCO
+        await setDoc(doc(db, "clientes", uid), {
+            nome: nome,
+            email: email,
+            telefone: telefone,
+            localidade: localidade
+        });
+
+        alert("Cadastro realizado com sucesso!");
+
+        // Salva no localStorage para manter sessão
+        localStorage.setItem('tipoUsuario', 'cliente');
+        localStorage.setItem('nomeUsuario', nome);
+        localStorage.setItem('emailUsuario', email);
+
+        // Atualiza perfil do cliente
+        const nomePerfil = document.getElementById('nomePerfil');
+        const emailPerfil = document.getElementById('emailPerfil');
+        if (nomePerfil) nomePerfil.textContent = nome;
+        if (emailPerfil) emailPerfil.textContent = email;
+
+        mudarTela('tela-5');
+
+    } catch (erro) {
+        console.error(erro);
+        alert("Erro ao cadastrar: " + erro.message);
+    }
+}
 
 // INICIALIZAÇÃO
 window.addEventListener('DOMContentLoaded', function() {
