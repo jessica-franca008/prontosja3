@@ -433,3 +433,7 @@ document.addEventListener('visibilitychange', function() {
 document.addEventListener('submit', function(e) {
     e.preventDefault();
 });
+
+window.mudarTela = mudarTela;
+window.cadastrarCliente = cadastrarCliente;
+window.aceitarPedido = aceitarPedido;
