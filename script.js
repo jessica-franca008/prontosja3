@@ -10,7 +10,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // SISTEMA DE NAVEGAÇÃO ENTRE TELAS
-function mudarTela(idTela) {
+window.mudarTela = function(idTela) {
     document.querySelectorAll('.tela').forEach(tela => {
         tela.classList.remove('ativa');
     });
@@ -256,7 +256,7 @@ function inicializarSwitchLoja() {
 }
 
 // ACEITAR PEDIDO
-function aceitarPedido(botao) {
+window.aceitarPedido = function(botao) {
     const pedidoDiv = botao.closest('.loja-pedido');
     if (pedidoDiv) {
         botao.textContent = 'Aceito!';
@@ -363,7 +363,7 @@ document.addEventListener('click', function(e) {
 });
 
 // FUNÇÃO DE CADASTRO DO CLIENTE
-async function cadastrarCliente() {
+window.cadastrarCliente = async function() {
     const nome = document.getElementById('nome').value;
     const email = document.getElementById('email').value;
     const telefone = document.getElementById('telefone').value;
