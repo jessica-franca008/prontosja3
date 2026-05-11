@@ -92,39 +92,39 @@
                         <label>Nome Completo</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">person</span>
-                            <input type="text" id="nome" placeholder="Digite seu nome">
+                            <input type="text" placeholder="Digite seu nome">
                         </div>
                     </div>
                     <div class="campo-input">
                         <label>E-mail</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">mail</span>
-                            <input type="email" id="email" placeholder="exemplo@email.com">
+                            <input type="email" placeholder="exemplo@email.com">
                         </div>
                     </div>
                     <div class="campo-input">
                         <label>Telefone</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">call</span>
-                            <input type="tel" id="telefone" placeholder="(XX) XXXXX-XXXX">
+                            <input type="tel" placeholder="(XX) XXXXX-XXXX">
                         </div>
                     </div>
                     <div class="campo-input">
                         <label>Localidade</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">location_on</span>
-                            <input type="text" id="localidade" placeholder="Cidade ou CEP">
+                            <input type="text" placeholder="Cidade ou CEP">
                         </div>
                     </div>
                     <div class="campo-input">
                         <label>Senha</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">lock</span>
-                            <input type="password" id="senha" placeholder="••••••••">
+                            <input type="password" placeholder="••••••••">
                             <button class="btn-visibilidade"><span class="material-symbols-outlined">visibility</span></button>
                         </div>
                     </div>
-                    <button onclick="cadastrarCliente()" class="btn-principal">Cadastrar</button>
+                    <button onclick="mudarTela('tela-5')" class="btn-principal">Cadastrar</button>
                 </div>
             </section>
 
@@ -291,7 +291,7 @@
         </div>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script src="script.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
