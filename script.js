@@ -1,33 +1,4 @@
-// ============================================
-// IMPORTAÇÕES DO FIREBASE
-// ============================================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-// ============================================
-// CONFIGURAÇÃO DO FIREBASE
-// ============================================
-const firebaseConfig = {
-    apiKey: "AIzaSyB6OlOdx2p71kv57KF5XlRYoATZa8bWYvw",
-    authDomain: "aplicativo-prontoja-80c02.firebaseapp.com",
-    projectId: "aplicativo-prontoja-80c02",
-    storageBucket: "aplicativo-prontoja-80c02.firebasestorage.app",
-    messagingSenderId: "625556388980",
-    appId: "1:625556388980:web:32b3bcf47cb3aa9ccda521",
-    measurementId: "G-4YMXEHLGDR"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-
-let tipoUsuario = null;
-
-// ============================================
 // SISTEMA DE NAVEGAÇÃO ENTRE TELAS
-// ============================================
 function mudarTela(idTela) {
     document.querySelectorAll('.tela').forEach(tela => {
         tela.classList.remove('ativa');
@@ -60,110 +31,7 @@ function mudarTela(idTela) {
     }
 }
 
-// ============================================
-// FUNÇÕES DE LOGIN E CADASTRO
-// ============================================
-function irParaLogin(tipo) {
-    tipoUsuario = tipo;
-    mudarTela('tela-login');
-}
-
-async function loginComGoogle() {
-    if (!tipoUsuario) {
-        alert("Erro: Tipo de usuário não definido.");
-        mudarTela('tela-2');
-        return;
-    }
-
-    try {
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        const nome = user.displayName || "Usuário";
-        const email = user.email || "";
-
-        console.log("Usuário logado:", nome);
-        console.log("Tipo:", tipoUsuario);
-
-        localStorage.setItem('tipoUsuario', tipoUsuario);
-        localStorage.setItem('nomeUsuario', nome);
-        localStorage.setItem('emailUsuario', email);
-
-        const nomePerfil = document.getElementById('nomePerfil');
-        const emailPerfil = document.getElementById('emailPerfil');
-        if (nomePerfil) nomePerfil.textContent = nome;
-        if (emailPerfil) emailPerfil.textContent = email;
-
-        if (tipoUsuario === 'cliente') {
-            mudarTela('tela-5');
-        } else if (tipoUsuario === 'empresa') {
-            mudarTela('tela-4');
-        } else {
-            mudarTela('tela-5');
-        }
-    } catch (error) {
-        console.error("Erro no login:", error);
-        alert("Erro ao fazer login: " + error.message);
-    }
-}
-
-async function cadastrarCliente() {
-    const nome = document.getElementById('nome').value;
-    const email = document.getElementById('email').value;
-    const telefone = document.getElementById('telefone').value;
-    const senha = document.getElementById('senha').value;
-    const localidade = document.getElementById('localidade')?.value || '';
-
-    if (!nome || !email || !telefone || !senha) {
-        alert("Preencha todos os campos!");
-        return;
-    }
-
-    try {
-        const usuario = await createUserWithEmailAndPassword(auth, email, senha);
-        const uid = usuario.user.uid;
-
-        await setDoc(doc(db, "clientes", uid), {
-            nome: nome,
-            email: email,
-            telefone: telefone,
-            localidade: localidade
-        });
-
-        alert("Cadastro realizado com sucesso!");
-
-        localStorage.setItem('tipoUsuario', 'cliente');
-        localStorage.setItem('nomeUsuario', nome);
-        localStorage.setItem('emailUsuario', email);
-
-        const nomePerfil = document.getElementById('nomePerfil');
-        const emailPerfil = document.getElementById('emailPerfil');
-        if (nomePerfil) nomePerfil.textContent = nome;
-        if (emailPerfil) emailPerfil.textContent = email;
-
-        mudarTela('tela-5');
-
-    } catch (erro) {
-        console.error(erro);
-        alert("Erro ao cadastrar: " + erro.message);
-    }
-}
-
-async function sairDaConta() {
-    try {
-        await signOut(auth);
-        tipoUsuario = null;
-        localStorage.removeItem('tipoUsuario');
-        localStorage.removeItem('nomeUsuario');
-        localStorage.removeItem('emailUsuario');
-        mudarTela('tela-2');
-    } catch (error) {
-        console.error("Erro ao sair:", error);
-    }
-}
-
-// ============================================
 // FUNCIONALIDADE DO CHAT
-// ============================================
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
@@ -358,9 +226,7 @@ function exibirAudioGravado(audioBlob) {
     }, 3000);
 }
 
-// ============================================
 // SWITCH DA LOJA
-// ============================================
 let switchInicializado = false;
 
 function inicializarSwitchLoja() {
@@ -378,9 +244,7 @@ function inicializarSwitchLoja() {
     }
 }
 
-// ============================================
 // ACEITAR PEDIDO
-// ============================================
 function aceitarPedido(botao) {
     const pedidoDiv = botao.closest('.loja-pedido');
     if (pedidoDiv) {
@@ -402,9 +266,7 @@ function aceitarPedido(botao) {
     }
 }
 
-// ============================================
 // BUSCA CARDÁPIO
-// ============================================
 function inicializarBuscaCardapio() {
     const buscaInput = document.getElementById('cardapio-busca');
     if (!buscaInput || buscaInput.hasListener) return;
@@ -433,9 +295,7 @@ function inicializarBuscaCardapio() {
     buscaInput.hasListener = true;
 }
 
-// ============================================
 // BUSCA MENSAGENS
-// ============================================
 function inicializarBuscaMensagens() {
     const buscaInput = document.getElementById('mensagens-busca-input');
     if (!buscaInput || buscaInput.hasListener) return;
@@ -473,9 +333,7 @@ function inicializarAjustes() {
     console.log('Tela de Ajustes carregada');
 }
 
-// ============================================
 // TOGGLE VISIBILIDADE DE SENHA
-// ============================================
 document.addEventListener('click', function(e) {
     if (e.target.closest('.btn-visibilidade')) {
         const btn = e.target.closest('.btn-visibilidade');
@@ -493,120 +351,21 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// ============================================
-// INICIALIZAÇÃO E EVENTOS
-// ============================================
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden && isRecording) pararGravacao();
-});
-
-document.addEventListener('submit', function(e) {
-    e.preventDefault();
-});
-
-// ============================================
-// CONFIGURAÇÃO DOS EVENTOS DOS BOTÕES (sem onclick no HTML)
-// ============================================
+// INICIALIZAÇÃO
 window.addEventListener('DOMContentLoaded', function() {
-    // Tela inicial
     mudarTela('tela-1');
-    
-    // Botão Começar
-    const btnComecar = document.getElementById('btn-comecar');
-    if (btnComecar) btnComecar.addEventListener('click', () => mudarTela('tela-2'));
-    
-    // Botões da tela de seleção
-    const btnCliente = document.getElementById('btn-cliente');
-    const btnEmpresa = document.getElementById('btn-empresa');
-    if (btnCliente) btnCliente.addEventListener('click', () => irParaLogin('cliente'));
-    if (btnEmpresa) btnEmpresa.addEventListener('click', () => irParaLogin('empresa'));
-    
-    // Botão voltar da tela de login
-    const voltarLogin = document.getElementById('voltar-login');
-    if (voltarLogin) voltarLogin.addEventListener('click', () => mudarTela('tela-2'));
-    
-    // Botão Google Login
-    const btnGoogle = document.getElementById('btn-google-login');
-    if (btnGoogle) btnGoogle.addEventListener('click', loginComGoogle);
-    
-    // Botões do cadastro cliente
-    const voltarCadastroCliente = document.getElementById('voltar-cadastro-cliente');
-    if (voltarCadastroCliente) voltarCadastroCliente.addEventListener('click', () => mudarTela('tela-2'));
-    
-    const irEmpresa = document.getElementById('ir-empresa');
-    if (irEmpresa) irEmpresa.addEventListener('click', () => mudarTela('tela-4'));
-    
-    const btnCadastrarCliente = document.getElementById('btn-cadastrar-cliente');
-    if (btnCadastrarCliente) btnCadastrarCliente.addEventListener('click', cadastrarCliente);
-    
-    // Botões do cadastro empresa
-    const voltarCadastroEmpresa = document.getElementById('voltar-cadastro-empresa');
-    if (voltarCadastroEmpresa) voltarCadastroEmpresa.addEventListener('click', () => mudarTela('tela-2'));
-    
-    const btnSalvarEmpresa = document.getElementById('btn-salvar-empresa');
-    if (btnSalvarEmpresa) btnSalvarEmpresa.addEventListener('click', () => mudarTela('tela-10'));
-    
-    // Botão Chat
-    const btnChat = document.getElementById('btn-chat');
-    if (btnChat) btnChat.addEventListener('click', () => mudarTela('tela-8'));
-    
-    // Botão voltar do chat
-    const voltarChat = document.getElementById('voltar-chat');
-    if (voltarChat) voltarChat.addEventListener('click', () => mudarTela('tela-7'));
-    
-    // Botões de voltar da empresa
-    const voltarEmpresaBtns = document.querySelectorAll('.voltar-empresa');
-    voltarEmpresaBtns.forEach(btn => {
-        btn.addEventListener('click', () => mudarTela('tela-10'));
-    });
-    
-    // Botões de sair da conta
-    const sairConta = document.getElementById('sair-conta');
-    const sairAjustes = document.getElementById('sair-ajustes');
-    if (sairConta) sairConta.addEventListener('click', sairDaConta);
-    if (sairAjustes) sairAjustes.addEventListener('click', sairDaConta);
-    
-    // Navegação inferior (todos os botões com data-tela)
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const tela = item.getAttribute('data-tela');
-            if (tela) mudarTela(tela);
-        });
-    });
-    
-    // Botões Aceitar Pedido
-    const btnAceitar = document.querySelectorAll('.btn-aceitar');
-    btnAceitar.forEach(btn => {
-        btn.addEventListener('click', function() {
-            aceitarPedido(this);
-        });
-    });
-    
-    // Busca da tela de pesquisa
     const buscaPesquisa = document.querySelector('#tela-6 .pesquisa-busca input');
     if (buscaPesquisa) {
         buscaPesquisa.addEventListener('input', function(e) {
             console.log('Pesquisando:', this.value);
         });
     }
-    
-    // Verifica sessão salva
-    const tipoSalvo = localStorage.getItem('tipoUsuario');
-    const nomeSalvo = localStorage.getItem('nomeUsuario');
-    const emailSalvo = localStorage.getItem('emailUsuario');
-    
-    if (tipoSalvo && nomeSalvo) {
-        tipoUsuario = tipoSalvo;
-        const nomePerfil = document.getElementById('nomePerfil');
-        const emailPerfil = document.getElementById('emailPerfil');
-        if (nomePerfil) nomePerfil.textContent = nomeSalvo;
-        if (emailPerfil) emailPerfil.textContent = emailSalvo;
-        
-        if (tipoSalvo === 'cliente') {
-            mudarTela('tela-5');
-        } else if (tipoSalvo === 'empresa') {
-            mudarTela('tela-10');
-        }
-    }
+});
+
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden && isRecording) pararGravacao();
+});
+
+document.addEventListener('submit', function(e) {
+    e.preventDefault();
 });
