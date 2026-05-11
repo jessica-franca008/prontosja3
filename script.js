@@ -440,7 +440,6 @@ window.addEventListener('DOMContentLoaded', function() {
     console.log("DOM carregado, iniciando aplicação...");
     mudarTela('tela-1');
     
-    // Verifica sessão salva
     const tipoSalvo = localStorage.getItem('tipoUsuario');
     const nomeSalvo = localStorage.getItem('nomeUsuario');
     const emailSalvo = localStorage.getItem('emailUsuario');
