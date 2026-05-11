@@ -1,11 +1,39 @@
+// FIREBASE IMPORTS E CONFIGURAÇÃO
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB6OlOdx2p71kv57KF5XlRYoATZa8bWYvw",
+    authDomain: "aplicativo-prontoja-80c02.firebaseapp.com",
+    projectId: "aplicativo-prontoja-80c02",
+    storageBucket: "aplicativo-prontoja-80c02.firebasestorage.app",
+    messagingSenderId: "625556388980",
+    appId: "1:625556388980:web:32b3bcf47cb3aa9ccda521",
+    measurementId: "G-4YMXEHLGDR"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+let tipoUsuario = null;
+
 // SISTEMA DE NAVEGAÇÃO ENTRE TELAS
-function mudarTela(idTela) {
+window.mudarTela = function(idTela) {
+    console.log("mudarTela chamada para:", idTela);
+    
     document.querySelectorAll('.tela').forEach(tela => {
         tela.classList.remove('ativa');
     });
     
-    document.getElementById(idTela).classList.add('ativa');
-    window.scrollTo(0, 0);
+    const telaDestino = document.getElementById(idTela);
+    if (telaDestino) {
+        telaDestino.classList.add('ativa');
+        window.scrollTo(0, 0);
+    } else {
+        console.error("Tela não encontrada:", idTela);
+        return;
+    }
     
     if (idTela === 'tela-8') {
         setTimeout(inicializarChat, 100);
@@ -29,7 +57,63 @@ function mudarTela(idTela) {
     if (idTela === 'tela-13') {
         setTimeout(inicializarAjustes, 100);
     }
-}
+};
+
+// FUNÇÕES DE LOGIN
+window.irParaLogin = function(tipo) {
+    tipoUsuario = tipo;
+    mudarTela('tela-login');
+};
+
+window.loginComGoogle = async function() {
+    if (!tipoUsuario) {
+        alert("Erro: Tipo de usuário não definido.");
+        mudarTela('tela-2');
+        return;
+    }
+
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        const nome = user.displayName || "Usuário";
+        const email = user.email || "";
+
+        console.log("Usuário logado:", nome);
+        console.log("Tipo:", tipoUsuario);
+
+        localStorage.setItem('tipoUsuario', tipoUsuario);
+        localStorage.setItem('nomeUsuario', nome);
+        localStorage.setItem('emailUsuario', email);
+
+        const nomePerfil = document.getElementById('nomePerfil');
+        const emailPerfil = document.getElementById('emailPerfil');
+        if (nomePerfil) nomePerfil.textContent = nome;
+        if (emailPerfil) emailPerfil.textContent = email;
+
+        if (tipoUsuario === 'cliente') {
+            mudarTela('tela-5');
+        } else if (tipoUsuario === 'empresa') {
+            mudarTela('tela-4');
+        } else {
+            mudarTela('tela-5');
+        }
+    } catch (error) {
+        console.error("Erro no login:", error);
+        alert("Erro ao fazer login: " + error.message);
+    }
+};
+
+window.sairDaConta = function() {
+    auth.signOut().then(() => {
+        tipoUsuario = null;
+        localStorage.removeItem('tipoUsuario');
+        localStorage.removeItem('nomeUsuario');
+        localStorage.removeItem('emailUsuario');
+        mudarTela('tela-2');
+    }).catch((error) => {
+        console.error("Erro ao sair:", error);
+    });
+};
 
 // FUNCIONALIDADE DO CHAT
 let mediaRecorder;
@@ -245,7 +329,7 @@ function inicializarSwitchLoja() {
 }
 
 // ACEITAR PEDIDO
-function aceitarPedido(botao) {
+window.aceitarPedido = function(botao) {
     const pedidoDiv = botao.closest('.loja-pedido');
     if (pedidoDiv) {
         botao.textContent = 'Aceito!';
@@ -264,7 +348,7 @@ function aceitarPedido(botao) {
             if (!isNaN(preparo)) preparoCard.textContent = preparo + 1;
         }
     }
-}
+};
 
 // BUSCA CARDÁPIO
 function inicializarBuscaCardapio() {
@@ -353,7 +437,28 @@ document.addEventListener('click', function(e) {
 
 // INICIALIZAÇÃO
 window.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM carregado, iniciando aplicação...");
     mudarTela('tela-1');
+    
+    // Verifica sessão salva
+    const tipoSalvo = localStorage.getItem('tipoUsuario');
+    const nomeSalvo = localStorage.getItem('nomeUsuario');
+    const emailSalvo = localStorage.getItem('emailUsuario');
+    
+    if (tipoSalvo && nomeSalvo) {
+        tipoUsuario = tipoSalvo;
+        const nomePerfil = document.getElementById('nomePerfil');
+        const emailPerfil = document.getElementById('emailPerfil');
+        if (nomePerfil) nomePerfil.textContent = nomeSalvo;
+        if (emailPerfil) emailPerfil.textContent = emailSalvo;
+        
+        if (tipoSalvo === 'cliente') {
+            mudarTela('tela-5');
+        } else if (tipoSalvo === 'empresa') {
+            mudarTela('tela-10');
+        }
+    }
+    
     const buscaPesquisa = document.querySelector('#tela-6 .pesquisa-busca input');
     if (buscaPesquisa) {
         buscaPesquisa.addEventListener('input', function(e) {
@@ -368,4 +473,4 @@ document.addEventListener('visibilitychange', function() {
 
 document.addEventListener('submit', function(e) {
     e.preventDefault();
-});v
+});
