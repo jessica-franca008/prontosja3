@@ -291,6 +291,107 @@
         </div>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script src="script.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6OlOdx2p71kv57KF5XlRYoATZa8bWYvw",
+            authDomain: "aplicativo-prontoja-80c02.firebaseapp.com",
+            projectId: "aplicativo-prontoja-80c02",
+            storageBucket: "aplicativo-prontoja-80c02.firebasestorage.app",
+            messagingSenderId: "625556388980",
+            appId: "1:625556388980:web:32b3bcf47cb3aa9ccda521",
+            measurementId: "G-4YMXEHLGDR"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        let tipoUsuario = null;
+
+        // Salva o tipo escolhido e vai para tela de login
+        window.irParaLogin = function(tipo) {
+            tipoUsuario = tipo;
+            mudarTela('tela-login');
+        };
+
+        // Login com Google - redireciona baseado no tipoUsuario
+        window.loginComGoogle = async function() {
+            if (!tipoUsuario) {
+                alert("Erro: Tipo de usuário não definido.");
+                mudarTela('tela-2');
+                return;
+            }
+
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                const nome = user.displayName || "Usuário";
+                const email = user.email || "";
+
+                console.log("Usuário logado:", nome);
+                console.log("Tipo:", tipoUsuario);
+
+                // Salvar no localStorage para manter sessão
+                localStorage.setItem('tipoUsuario', tipoUsuario);
+                localStorage.setItem('nomeUsuario', nome);
+                localStorage.setItem('emailUsuario', email);
+
+                // Atualiza perfil do cliente se existir
+                const nomePerfil = document.getElementById('nomePerfil');
+                const emailPerfil = document.getElementById('emailPerfil');
+                if (nomePerfil) nomePerfil.textContent = nome;
+                if (emailPerfil) emailPerfil.textContent = email;
+
+                if (tipoUsuario === 'cliente') {
+                    mudarTela('tela-5'); // HOME CLIENTE
+                } else if (tipoUsuario === 'empresa') {
+                    mudarTela('tela-4'); // CADASTRO EMPRESA
+                } else {
+                    mudarTela('tela-5');
+                }
+            } catch (error) {
+                console.error("Erro no login:", error);
+                alert("Erro ao fazer login: " + error.message);
+            }
+        };
+
+        // Função para sair da conta
+        window.sairDaConta = function() {
+            auth.signOut().then(() => {
+                tipoUsuario = null;
+                localStorage.removeItem('tipoUsuario');
+                localStorage.removeItem('nomeUsuario');
+                localStorage.removeItem('emailUsuario');
+                mudarTela('tela-2');
+            }).catch((error) => {
+                console.error("Erro ao sair:", error);
+            });
+        };
+
+        // Verifica se já tem sessão salva ao carregar
+        window.addEventListener('DOMContentLoaded', function() {
+            const tipoSalvo = localStorage.getItem('tipoUsuario');
+            const nomeSalvo = localStorage.getItem('nomeUsuario');
+            const emailSalvo = localStorage.getItem('emailUsuario');
+            
+            if (tipoSalvo && nomeSalvo) {
+                tipoUsuario = tipoSalvo;
+                const nomePerfil = document.getElementById('nomePerfil');
+                const emailPerfil = document.getElementById('emailPerfil');
+                if (nomePerfil) nomePerfil.textContent = nomeSalvo;
+                if (emailPerfil) emailPerfil.textContent = emailSalvo;
+                
+                if (tipoSalvo === 'cliente') {
+                    mudarTela('tela-5');
+                } else if (tipoSalvo === 'empresa') {
+                    mudarTela('tela-10');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
