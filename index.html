@@ -274,13 +274,7 @@
                         <div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div>
                         <div class="detalhe-conteudo">
                             <span class="detalhe-rotulo">Telefone</span>
-                            <input
-                                type="tel"
-                                id="telefonePerfil"
-                                class="input-perfil"
-                                placeholder="(00) 00000-0000"
-                                maxlength="15"
-                            />
+                            <input type="tel" id="telefonePerfil" class="input-perfil" placeholder="(00) 00000-0000" maxlength="15">
                         </div>
                     </div>
                     <div class="detalhe-item">
@@ -383,7 +377,7 @@
             mudarTela('tela-login');
         };
 
-        // Login com Google - redireciona baseado no tipoUsuario
+        // Login com Google
         window.loginComGoogle = async function() {
             if (!tipoUsuario) {
                 alert("Erro: Tipo de usuário não definido.");
@@ -399,10 +393,6 @@
                 const foto = user.photoURL || "";
                 const uid = user.uid;
 
-                console.log("Usuário logado:", nome);
-                console.log("Tipo:", tipoUsuario);
-
-                // Salvar foto no perfil
                 const fotoPerfil = document.getElementById('fotoPerfil');
                 if (fotoPerfil && foto) {
                     fotoPerfil.style.backgroundImage = `url('${foto}')`;
@@ -424,13 +414,10 @@
                     }, { merge: true });
                 }
 
-                // Salvar no localStorage para manter sessão
                 localStorage.setItem('tipoUsuario', tipoUsuario);
                 localStorage.setItem('nomeUsuario', nome);
                 localStorage.setItem('emailUsuario', email);
-                localStorage.setItem('fotoUsuario', foto);
 
-                // Atualiza perfil do cliente se existir
                 const nomePerfil = document.getElementById('nomePerfil');
                 const emailPerfil = document.getElementById('emailPerfil');
                 
@@ -450,21 +437,20 @@
             }
         };
 
-        // Função para sair da conta
+        // Sair da conta
         window.sairDaConta = function() {
             signOut(auth).then(() => {
                 tipoUsuario = null;
                 localStorage.removeItem('tipoUsuario');
                 localStorage.removeItem('nomeUsuario');
                 localStorage.removeItem('emailUsuario');
-                localStorage.removeItem('fotoUsuario');
                 mudarTela('tela-2');
             }).catch((error) => {
                 console.error("Erro ao sair:", error);
             });
         };
 
-        // FOTO DE PERFIL - Câmera e upload
+        // Upload de foto
         const btnCamera = document.getElementById('btnCamera');
         const inputFoto = document.getElementById('inputFoto');
 
@@ -498,7 +484,7 @@
             });
         }
 
-        // onAuthStateChanged - Recupera dados automaticamente
+        // onAuthStateChanged
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const uid = user.uid;
@@ -538,6 +524,7 @@
                     mudarTela('tela-2');
                 }
             } else {
+                // Se não tem usuário, vai para tela de seleção
                 mudarTela('tela-2');
             }
         });
