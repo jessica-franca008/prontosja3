@@ -251,8 +251,8 @@
             <!-- TELA 9: PERFIL CLIENTE -->
             <section id="tela-9" class="tela">
                 <div class="perfil-cabecalho"><h1>Meu Perfil</h1></div>
-                <div class="perfil-conteudo"><div class="perfil-foto-container"><div class="perfil-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdfNGj9M5PWs6ndJyrqKlftGJxQCay23IDeqSjrZr2uEE5rpgzA_W7x_sj50n3uEwXXuBP_1X1wnpueL20XuVppn2evqajkJWmkjHwpoohbJKGtGLNYILf_hal-eRCwK678boFLs2v2RXByyR1S1D_eXIhkOkDymsi52Roq2wJMGPB64Xur8Eswjq3TwZVxEVCXw87w5qW_joqA8ezHd-ljbU1BLcFkFrB9PZxwnQJ5iuBhnS_QkjhJaZIFk-q6RxpvVp9gMipJ_Y')"></div><button class="btn-camera"><span class="material-symbols-outlined">camera_alt</span></button></div><h2 id="nomePerfil">Maria Silva</h2><button class="btn-mudar-perfil">Mudar Perfil</button></div>
-                <div class="perfil-detalhes"><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">mail</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Email</span><span class="detalhe-valor" id="emailPerfil">maria.silva@email.com</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Número</span><span class="detalhe-valor">(11) 98765-4321</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">location_on</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Localidade</span><span class="detalhe-valor">Rua das Flores, 123 - São Paulo</span></div><button class="btn-editar"><span class="material-symbols-outlined">edit</span></button></div></div>
+                <div class="perfil-conteudo"><div class="perfil-foto-container"><div class="perfil-foto" id="fotoPerfil" style="background-image: url('')"></div><button class="btn-camera"><span class="material-symbols-outlined">camera_alt</span></button></div><h2 id="nomePerfil">Carregando...</h2><button class="btn-mudar-perfil">Mudar Perfil</button></div>
+                <div class="perfil-detalhes"><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">mail</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Email</span><span class="detalhe-valor" id="emailPerfil">Carregando...</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Número</span><span class="detalhe-valor">(11) 98765-4321</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">location_on</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Localidade</span><span class="detalhe-valor">Rua das Flores, 123 - São Paulo</span></div><button class="btn-editar"><span class="material-symbols-outlined">edit</span></button></div></div>
                 <button onclick="sairDaConta()" class="btn-sair"><span class="material-symbols-outlined">logout</span><span>Sair da Conta</span></button><p class="versao-app">Versão 2.4.0</p>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
@@ -294,7 +294,19 @@
     <script src="script.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { 
+            getAuth, 
+            GoogleAuthProvider, 
+            signInWithPopup,
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB6OlOdx2p71kv57KF5XlRYoATZa8bWYvw",
@@ -308,6 +320,7 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
         let tipoUsuario = null;
@@ -331,20 +344,44 @@
                 const user = result.user;
                 const nome = user.displayName || "Usuário";
                 const email = user.email || "";
+                const foto = user.photoURL || "";
+                const uid = user.uid;
 
                 console.log("Usuário logado:", nome);
                 console.log("Tipo:", tipoUsuario);
+
+                if (tipoUsuario === 'cliente') {
+                    await setDoc(doc(db, "clientes", uid), {
+                        nome: nome,
+                        email: email,
+                        foto: foto,
+                        tipo: "cliente"
+                    }, { merge: true });
+                } else if (tipoUsuario === 'empresa') {
+                    await setDoc(doc(db, "empresas", uid), {
+                        nome: nome,
+                        email: email,
+                        foto: foto,
+                        tipo: "empresa"
+                    }, { merge: true });
+                }
 
                 // Salvar no localStorage para manter sessão
                 localStorage.setItem('tipoUsuario', tipoUsuario);
                 localStorage.setItem('nomeUsuario', nome);
                 localStorage.setItem('emailUsuario', email);
+                localStorage.setItem('fotoUsuario', foto);
 
                 // Atualiza perfil do cliente se existir
                 const nomePerfil = document.getElementById('nomePerfil');
                 const emailPerfil = document.getElementById('emailPerfil');
+                const fotoPerfil = document.getElementById('fotoPerfil');
+                
                 if (nomePerfil) nomePerfil.textContent = nome;
                 if (emailPerfil) emailPerfil.textContent = email;
+                if (fotoPerfil && foto) {
+                    fotoPerfil.style.backgroundImage = `url('${foto}')`;
+                }
 
                 if (tipoUsuario === 'cliente') {
                     mudarTela('tela-5'); // HOME CLIENTE
@@ -361,35 +398,51 @@
 
         // Função para sair da conta
         window.sairDaConta = function() {
-            auth.signOut().then(() => {
+            signOut(auth).then(() => {
                 tipoUsuario = null;
                 localStorage.removeItem('tipoUsuario');
                 localStorage.removeItem('nomeUsuario');
                 localStorage.removeItem('emailUsuario');
+                localStorage.removeItem('fotoUsuario');
                 mudarTela('tela-2');
             }).catch((error) => {
                 console.error("Erro ao sair:", error);
             });
         };
 
-        // Verifica se já tem sessão salva ao carregar
-        window.addEventListener('DOMContentLoaded', function() {
-            const tipoSalvo = localStorage.getItem('tipoUsuario');
-            const nomeSalvo = localStorage.getItem('nomeUsuario');
-            const emailSalvo = localStorage.getItem('emailUsuario');
-            
-            if (tipoSalvo && nomeSalvo) {
-                tipoUsuario = tipoSalvo;
-                const nomePerfil = document.getElementById('nomePerfil');
-                const emailPerfil = document.getElementById('emailPerfil');
-                if (nomePerfil) nomePerfil.textContent = nomeSalvo;
-                if (emailPerfil) emailPerfil.textContent = emailSalvo;
-                
-                if (tipoSalvo === 'cliente') {
+        // onAuthStateChanged - Recupera dados automaticamente
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const uid = user.uid;
+                const clienteRef = doc(db, "clientes", uid);
+                const empresaRef = doc(db, "empresas", uid);
+                const clienteSnap = await getDoc(clienteRef);
+                const empresaSnap = await getDoc(empresaRef);
+
+                if (clienteSnap.exists()) {
+                    const dados = clienteSnap.data();
+                    const nomePerfil = document.getElementById('nomePerfil');
+                    const emailPerfil = document.getElementById('emailPerfil');
+                    const fotoPerfil = document.getElementById('fotoPerfil');
+                    
+                    if (nomePerfil) nomePerfil.textContent = dados.nome;
+                    if (emailPerfil) emailPerfil.textContent = dados.email;
+                    if (fotoPerfil && dados.foto) {
+                        fotoPerfil.style.backgroundImage = `url('${dados.foto}')`;
+                    }
+                    tipoUsuario = 'cliente';
+                    localStorage.setItem('tipoUsuario', 'cliente');
                     mudarTela('tela-5');
-                } else if (tipoSalvo === 'empresa') {
+                } else if (empresaSnap.exists()) {
+                    tipoUsuario = 'empresa';
+                    localStorage.setItem('tipoUsuario', 'empresa');
                     mudarTela('tela-10');
+                } else {
+                    // Usuário logado mas não tem dados no banco ainda
+                    mudarTela('tela-2');
                 }
+            } else {
+                mudarTela('tela-2');
             }
         });
     </script>
