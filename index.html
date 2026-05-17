@@ -274,7 +274,13 @@
                         <div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div>
                         <div class="detalhe-conteudo">
                             <span class="detalhe-rotulo">Telefone</span>
-                            <input type="tel" id="telefonePerfil" class="input-perfil" placeholder="Adicionar número">
+                            <input
+                                type="tel"
+                                id="telefonePerfil"
+                                class="input-perfil"
+                                placeholder="(00) 00000-0000"
+                                maxlength="15"
+                            />
                         </div>
                     </div>
                     <div class="detalhe-item">
@@ -286,8 +292,14 @@
                         <button class="btn-editar"><span class="material-symbols-outlined">edit</span></button>
                     </div>
                 </div>
-                <button onclick="sairDaConta()" class="btn-sair"><span class="material-symbols-outlined">logout</span><span>Sair da Conta</span></button><p class="versao-app">Versão 2.4.0</p>
-                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
+                <button onclick="sairDaConta()" class="btn-sair"><span class="material-symbols-outlined">logout</span><span>Sair da Conta</span></button>
+                <p class="versao-app">Versão 2.4.0</p>
+                <nav class="navegacao-inferior">
+                    <button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                    <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
+                    <button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
+                    <button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button>
+                </nav>
             </section>
 
             <!-- TELA 10: MINHA LOJA -->
@@ -325,7 +337,6 @@
     </div>
 
     <script src="script.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=SUA_API_KEY_AQUI&libraries=places"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { 
@@ -427,9 +438,9 @@
                 if (emailPerfil) emailPerfil.textContent = email;
 
                 if (tipoUsuario === 'cliente') {
-                    mudarTela('tela-5'); // HOME CLIENTE
+                    mudarTela('tela-5');
                 } else if (tipoUsuario === 'empresa') {
-                    mudarTela('tela-4'); // CADASTRO EMPRESA
+                    mudarTela('tela-4');
                 } else {
                     mudarTela('tela-5');
                 }
@@ -452,46 +463,6 @@
                 console.error("Erro ao sair:", error);
             });
         };
-
-        // TELEFONE - salvar automaticamente quando mudar
-        const telefoneInput = document.getElementById('telefonePerfil');
-        if (telefoneInput) {
-            telefoneInput.addEventListener('change', async () => {
-                const user = auth.currentUser;
-                if (!user) return;
-                await setDoc(doc(db, "clientes", user.uid), {
-                    telefone: telefoneInput.value
-                }, { merge: true });
-            });
-        }
-
-        // ENDEREÇO COM GOOGLE MAPS AUTOCOMPLETE
-        const enderecoInput = document.getElementById('localidadePerfil');
-        if (enderecoInput && typeof google !== 'undefined') {
-            const autocomplete = new google.maps.places.Autocomplete(enderecoInput, {
-                componentRestrictions: { country: "br" }
-            });
-
-            autocomplete.addListener("place_changed", async () => {
-                const place = autocomplete.getPlace();
-                if (!place.geometry) return;
-                
-                const endereco = place.formatted_address;
-                const latitude = place.geometry.location.lat();
-                const longitude = place.geometry.location.lng();
-
-                enderecoInput.value = endereco;
-
-                const user = auth.currentUser;
-                if (user) {
-                    await setDoc(doc(db, "clientes", user.uid), {
-                        endereco: endereco,
-                        latitude: latitude,
-                        longitude: longitude
-                    }, { merge: true });
-                }
-            });
-        }
 
         // FOTO DE PERFIL - Câmera e upload
         const btnCamera = document.getElementById('btnCamera');
