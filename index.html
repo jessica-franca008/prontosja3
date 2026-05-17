@@ -251,8 +251,31 @@
             <!-- TELA 9: PERFIL CLIENTE -->
             <section id="tela-9" class="tela">
                 <div class="perfil-cabecalho"><h1>Meu Perfil</h1></div>
-                <div class="perfil-conteudo"><div class="perfil-foto-container"><div class="perfil-foto" id="fotoPerfil" style="background-image: url('')"></div><button class="btn-camera"><span class="material-symbols-outlined">camera_alt</span></button></div><h2 id="nomePerfil">Carregando...</h2><button class="btn-mudar-perfil">Mudar Perfil</button></div>
-                <div class="perfil-detalhes"><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">mail</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Email</span><span class="detalhe-valor" id="emailPerfil">Carregando...</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Número</span><span class="detalhe-valor">(11) 98765-4321</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">location_on</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Localidade</span><span class="detalhe-valor">Rua das Flores, 123 - São Paulo</span></div><button class="btn-editar"><span class="material-symbols-outlined">edit</span></button></div></div>
+                <div class="perfil-conteudo"><div class="perfil-foto-container"><div class="perfil-foto" id="fotoPerfil"></div><button class="btn-camera"><span class="material-symbols-outlined">camera_alt</span></button></div><h2 id="nomePerfil">Carregando...</h2><button class="btn-mudar-perfil">Mudar Perfil</button></div>
+                <div class="perfil-detalhes">
+                    <div class="detalhe-item">
+                        <div class="detalhe-icone"><span class="material-symbols-outlined">mail</span></div>
+                        <div class="detalhe-conteudo">
+                            <span class="detalhe-rotulo">Email</span>
+                            <span class="detalhe-valor" id="emailPerfil">Carregando...</span>
+                        </div>
+                    </div>
+                    <div class="detalhe-item">
+                        <div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div>
+                        <div class="detalhe-conteudo">
+                            <span class="detalhe-rotulo">Telefone</span>
+                            <span class="detalhe-valor" id="telefonePerfil">Adicionar</span>
+                        </div>
+                    </div>
+                    <div class="detalhe-item">
+                        <div class="detalhe-icone"><span class="material-symbols-outlined">location_on</span></div>
+                        <div class="detalhe-conteudo">
+                            <span class="detalhe-rotulo">Endereço</span>
+                            <span class="detalhe-valor" id="localidadePerfil">Adicionar endereço</span>
+                        </div>
+                        <button class="btn-editar"><span class="material-symbols-outlined">edit</span></button>
+                    </div>
+                </div>
                 <button onclick="sairDaConta()" class="btn-sair"><span class="material-symbols-outlined">logout</span><span>Sair da Conta</span></button><p class="versao-app">Versão 2.4.0</p>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
@@ -350,6 +373,12 @@
                 console.log("Usuário logado:", nome);
                 console.log("Tipo:", tipoUsuario);
 
+                // Salvar foto no perfil
+                const fotoPerfil = document.getElementById('fotoPerfil');
+                if (fotoPerfil && foto) {
+                    fotoPerfil.style.backgroundImage = `url('${foto}')`;
+                }
+
                 if (tipoUsuario === 'cliente') {
                     await setDoc(doc(db, "clientes", uid), {
                         nome: nome,
@@ -375,13 +404,9 @@
                 // Atualiza perfil do cliente se existir
                 const nomePerfil = document.getElementById('nomePerfil');
                 const emailPerfil = document.getElementById('emailPerfil');
-                const fotoPerfil = document.getElementById('fotoPerfil');
                 
                 if (nomePerfil) nomePerfil.textContent = nome;
                 if (emailPerfil) emailPerfil.textContent = email;
-                if (fotoPerfil && foto) {
-                    fotoPerfil.style.backgroundImage = `url('${foto}')`;
-                }
 
                 if (tipoUsuario === 'cliente') {
                     mudarTela('tela-5'); // HOME CLIENTE
@@ -410,6 +435,49 @@
             });
         };
 
+        // TELEFONE - clicar para adicionar
+        const telefonePerfil = document.getElementById('telefonePerfil');
+        if (telefonePerfil) {
+            telefonePerfil.addEventListener('click', async () => {
+                const telefone = prompt("Digite seu número de telefone:");
+                if (!telefone) return;
+                const user = auth.currentUser;
+                if (user) {
+                    await setDoc(doc(db, "clientes", user.uid), {
+                        telefone: telefone
+                    }, { merge: true });
+                    telefonePerfil.textContent = telefone;
+                }
+            });
+        }
+
+        // LOCALIDADE - clicar para adicionar com geolocalização
+        const localidadePerfil = document.getElementById('localidadePerfil');
+        if (localidadePerfil) {
+            localidadePerfil.addEventListener('click', () => {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        const endereco = `Lat: ${latitude}, Long: ${longitude}`;
+                        const user = auth.currentUser;
+                        if (user) {
+                            await setDoc(doc(db, "clientes", user.uid), {
+                                endereco: endereco,
+                                latitude: latitude,
+                                longitude: longitude
+                            }, { merge: true });
+                            localidadePerfil.textContent = endereco;
+                        }
+                    },
+                    (erro) => {
+                        alert("Não foi possível pegar sua localização. Por favor, verifique as permissões.");
+                        console.error(erro);
+                    }
+                );
+            });
+        }
+
         // onAuthStateChanged - Recupera dados automaticamente
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -424,12 +492,21 @@
                     const nomePerfil = document.getElementById('nomePerfil');
                     const emailPerfil = document.getElementById('emailPerfil');
                     const fotoPerfil = document.getElementById('fotoPerfil');
+                    const telefoneEl = document.getElementById('telefonePerfil');
+                    const localidadeEl = document.getElementById('localidadePerfil');
                     
                     if (nomePerfil) nomePerfil.textContent = dados.nome;
                     if (emailPerfil) emailPerfil.textContent = dados.email;
                     if (fotoPerfil && dados.foto) {
                         fotoPerfil.style.backgroundImage = `url('${dados.foto}')`;
                     }
+                    if (telefoneEl && dados.telefone) {
+                        telefoneEl.textContent = dados.telefone;
+                    }
+                    if (localidadeEl && dados.endereco) {
+                        localidadeEl.textContent = dados.endereco;
+                    }
+                    
                     tipoUsuario = 'cliente';
                     localStorage.setItem('tipoUsuario', 'cliente');
                     mudarTela('tela-5');
