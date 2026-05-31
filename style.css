@@ -1475,10 +1475,7 @@ body {
     margin: 8px 0 16px;
 }
 
-/* ========================================== */
-/* TELA 10: MINHA LOJA (EMPRESA) */
-/* ========================================== */
-
+/* TELA 10: MINHA LOJA */
 .loja-header {
     padding: 50px 16px 16px;
     font-size: 17px;
@@ -1622,10 +1619,7 @@ body {
     background: #b80511;
 }
 
-/* ========================================== */
 /* TELA 11: CARDÁPIO DIGITAL */
-/* ========================================== */
-
 .cardapio-header {
     background: white;
     border-bottom: 1px solid var(--border-light);
@@ -1797,10 +1791,7 @@ body {
     font-size: 24px;
 }
 
-/* ========================================== */
 /* TELA 12: MENSAGENS */
-/* ========================================== */
-
 .mensagens-cabecalho {
     background: white;
     border-bottom: 1px solid var(--border-light);
@@ -1938,10 +1929,7 @@ body {
     text-overflow: ellipsis;
 }
 
-/* ========================================== */
-/* TELA 13: AJUSTES / PERFIL DA EMPRESA */
-/* ========================================== */
-
+/* TELA 13: AJUSTES */
 .ajustes-cabecalho {
     background: white;
     border-bottom: 1px solid var(--border-light);
@@ -2077,6 +2065,284 @@ body {
     background: rgba(229, 6, 21, 0.1);
 }
 
+/* ========================================== */
+/* TELA 14: CADASTRAR PRODUTO - ESTILOS */
+/* ========================================== */
+
+.produto-conteudo {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 16px;
+    background: var(--background-light);
+}
+
+.form-card {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+}
+
+.photo-section {
+    margin-bottom: 24px;
+}
+
+.photo-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+.photo-upload-area {
+    background-color: var(--background-light);
+    border: 1.5px dashed var(--border-light);
+    border-radius: 16px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.photo-upload-area:hover {
+    background-color: #f1edef;
+    border-color: var(--primary);
+}
+
+.upload-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(229, 6, 21, 0.1);
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.upload-icon .material-symbols-outlined {
+    font-size: 28px;
+    color: var(--primary);
+}
+
+.photo-upload-area span:first-of-type {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-main);
+    margin-bottom: 6px;
+}
+
+.photo-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+}
+
+.photo-preview {
+    display: none;
+    margin-top: 12px;
+    align-items: center;
+    gap: 14px;
+    background: var(--background-light);
+    border-radius: 16px;
+    padding: 12px 16px;
+    border: 1px solid var(--border-light);
+}
+
+.preview-img {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #E9EDF2;
+}
+
+.preview-info {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.preview-info small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.remove-photo {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 6px;
+    border-radius: 40px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-photo:hover {
+    color: var(--primary);
+    background: rgba(229, 6, 21, 0.1);
+}
+
+.campo-input-produto {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.campo-input-produto label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 6px;
+    margin-left: 4px;
+}
+
+.input-wrapper-produto {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper-produto .material-symbols-outlined {
+    position: absolute;
+    left: 14px;
+    color: var(--primary);
+    font-size: 20px;
+    z-index: 1;
+}
+
+.input-wrapper-produto input,
+.input-wrapper-produto select,
+.input-wrapper-produto textarea {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    background: white;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text-main);
+    transition: all 0.3s;
+}
+
+.input-wrapper-produto textarea {
+    padding: 12px 16px 12px 44px;
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.4;
+}
+
+.input-wrapper-produto input:focus,
+.input-wrapper-produto select:focus,
+.input-wrapper-produto textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(229, 6, 21, 0.1);
+}
+
+.price-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.price-input-wrapper .currency-symbol {
+    position: absolute;
+    left: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.price-input-wrapper input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    background: white;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text-main);
+}
+
+.price-input-wrapper input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(229, 6, 21, 0.1);
+}
+
+.btn-salvar-produto {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: var(--shadow-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.btn-salvar-produto:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.btn-salvar-produto:active {
+    transform: translateY(0);
+}
+
+/* Toast message */
+.toast-message {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    background-color: var(--text-main);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 40px;
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+    font-family: 'Work Sans', sans-serif;
+    box-shadow: var(--shadow);
+}
+
+.toast-message.show {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
 /* AJUSTES PARA SAFE AREA */
 @supports (padding: max(0px)) {
     .home-cabecalho,
@@ -2104,9 +2370,12 @@ body {
     .cardapio-fab {
         bottom: max(80px, calc(80px + env(safe-area-inset-bottom)));
     }
+    
+    .toast-message {
+        bottom: max(80px, calc(80px + env(safe-area-inset-bottom)));
+    }
 }
 
-/* Garantir que nada ultrapasse os limites */
 .phone {
     overflow: hidden;
 }
