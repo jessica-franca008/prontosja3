@@ -29,6 +29,326 @@ function mudarTela(idTela) {
     if (idTela === 'tela-13') {
         setTimeout(inicializarAjustes, 100);
     }
+    
+    if (idTela === 'tela-14') {
+        setTimeout(inicializarCadastroProduto, 100);
+    }
+}
+
+// ==========================================
+// FUNCIONALIDADES DO CADASTRO DE PRODUTO
+// ==========================================
+
+let currentImageData = null;
+let currentFile = null;
+
+function inicializarCadastroProduto() {
+    // Elementos DOM
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('productPhotoInput');
+    const previewContainer = document.getElementById('photoPreviewContainer');
+    const previewImg = document.getElementById('previewImg');
+    const previewFileNameSpan = document.getElementById('previewFileName');
+    const removePhotoBtn = document.getElementById('removePhotoBtn');
+    const productNameInput = document.getElementById('productName');
+    const categorySelect = document.getElementById('productCategory');
+    const priceInput = document.getElementById('productPrice');
+    const descriptionTextarea = document.getElementById('productDescription');
+    
+    if (!uploadArea) return;
+    
+    // Remove listeners antigos para evitar duplicação
+    const newUploadArea = uploadArea.cloneNode(true);
+    uploadArea.parentNode.replaceChild(newUploadArea, uploadArea);
+    
+    const newRemovePhotoBtn = removePhotoBtn ? removePhotoBtn.cloneNode(true) : null;
+    if (removePhotoBtn && newRemovePhotoBtn) {
+        removePhotoBtn.parentNode.replaceChild(newRemovePhotoBtn, removePhotoBtn);
+    }
+    
+    const finalUploadArea = document.getElementById('uploadArea');
+    const finalFileInput = document.getElementById('productPhotoInput');
+    const finalPreviewContainer = document.getElementById('photoPreviewContainer');
+    const finalPreviewImg = document.getElementById('previewImg');
+    const finalPreviewFileNameSpan = document.getElementById('previewFileName');
+    const finalRemovePhotoBtn = document.getElementById('removePhotoBtn');
+    const finalPriceInput = document.getElementById('productPrice');
+    
+    // Função para mostrar preview
+    function showPreview(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            currentImageData = e.target.result;
+            if (finalPreviewImg) finalPreviewImg.src = currentImageData;
+            if (finalPreviewFileNameSpan) {
+                finalPreviewFileNameSpan.innerText = file.name.length > 28 ? file.name.substring(0, 25) + '...' : file.name;
+            }
+            if (finalUploadArea) finalUploadArea.style.display = 'none';
+            if (finalPreviewContainer) finalPreviewContainer.style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
+        currentFile = file;
+    }
+    
+    // Função para resetar foto
+    function resetPhoto() {
+        currentImageData = null;
+        currentFile = null;
+        if (finalFileInput) finalFileInput.value = '';
+        if (finalPreviewImg) finalPreviewImg.src = '#';
+        if (finalPreviewContainer) finalPreviewContainer.style.display = 'none';
+        if (finalUploadArea) finalUploadArea.style.display = 'flex';
+    }
+    
+    // Evento de clique na área de upload
+    if (finalUploadArea) {
+        finalUploadArea.addEventListener('click', () => {
+            if (finalFileInput) finalFileInput.click();
+        });
+    }
+    
+    // Evento de seleção de arquivo
+    if (finalFileInput) {
+        finalFileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files.length > 0) {
+                const file = e.target.files[0];
+                if (file.type.startsWith('image/')) {
+                    showPreview(file);
+                } else {
+                    showToast('Por favor selecione uma imagem válida (PNG ou JPG)', true);
+                }
+            }
+        });
+    }
+    
+    // Evento de remover foto
+    if (finalRemovePhotoBtn) {
+        finalRemovePhotoBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetPhoto();
+        });
+    }
+    
+    // Máscara de preço
+    if (finalPriceInput) {
+        finalPriceInput.addEventListener('input', function(e) {
+            let raw = e.target.value;
+            let filtered = raw.replace(/[^\d,]/g, '');
+            let parts = filtered.split(',');
+            if (parts.length > 2) {
+                filtered = parts[0] + ',' + parts.slice(1).join('');
+            }
+            if (parts.length === 2 && parts[1].length > 2) {
+                filtered = parts[0] + ',' + parts[1].substring(0, 2);
+            }
+            e.target.value = filtered;
+        });
+        
+        finalPriceInput.addEventListener('blur', function() {
+            let val = this.value;
+            if (val === '') return;
+            if (val.endsWith(',')) {
+                this.value = val + '00';
+            } else {
+                let parts = val.split(',');
+                if (parts.length === 1 && parts[0].length > 0) {
+                    this.value = parts[0] + ',00';
+                } else if (parts.length === 2 && parts[1].length === 1) {
+                    this.value = parts[0] + ',' + parts[1] + '0';
+                }
+            }
+        });
+    }
+    
+    // Reset inicial
+    resetPhoto();
+    if (finalPriceInput) finalPriceInput.placeholder = "0,00";
+}
+
+// Função para salvar o produto
+window.salvarProduto = function() {
+    const productName = document.getElementById('productName');
+    const categorySelect = document.getElementById('productCategory');
+    const priceInput = document.getElementById('productPrice');
+    const descriptionTextarea = document.getElementById('productDescription');
+    
+    const nome = productName ? productName.value.trim() : '';
+    const categoria = categorySelect ? categorySelect.value : '';
+    const precoRaw = priceInput ? priceInput.value.trim() : '';
+    const descricao = descriptionTextarea ? descriptionTextarea.value.trim() : '';
+    
+    // Validações
+    if (nome === '') {
+        showToast('⚠️ Informe o nome do produto', true);
+        if (productName) productName.focus();
+        return;
+    }
+    
+    if (!categoria || categoria === '') {
+        showToast('📂 Selecione uma categoria', true);
+        if (categorySelect) categorySelect.focus();
+        return;
+    }
+    
+    if (precoRaw === '') {
+        showToast('💰 Defina um preço válido (ex: 15,90)', true);
+        if (priceInput) priceInput.focus();
+        return;
+    }
+    
+    let numericStr = precoRaw.replace(/\./g, '').replace(',', '.');
+    let precoNumerico = parseFloat(numericStr);
+    if (isNaN(precoNumerico) || precoNumerico < 0) {
+        showToast('Preço inválido, utilize formato 0,00', true);
+        if (priceInput) priceInput.focus();
+        return;
+    }
+    
+    if (descricao === '') {
+        showToast('✏️ Adicione uma descrição do produto', true);
+        if (descriptionTextarea) descriptionTextarea.focus();
+        return;
+    }
+    
+    // Criar objeto do produto
+    const novoProduto = {
+        id: Date.now(),
+        nome: nome,
+        categoria: categoria,
+        preco: precoNumerico,
+        precoFormatado: `R$ ${precoNumerico.toFixed(2).replace('.', ',')}`,
+        descricao: descricao,
+        disponivel: true,
+        temFoto: !!currentImageData,
+        fotoBase64: currentImageData || null,
+        dataCadastro: new Date().toISOString()
+    };
+    
+    // Salvar no localStorage
+    let produtos = JSON.parse(localStorage.getItem('produtosCardapio') || '[]');
+    produtos.push(novoProduto);
+    localStorage.setItem('produtosCardapio', JSON.stringify(produtos));
+    
+    // Adicionar ao cardápio visualmente
+    adicionarProdutoAoCardapio(novoProduto);
+    
+    console.log('📦 Produto cadastrado:', novoProduto);
+    showToast(`✅ "${nome}" salvo com sucesso!`, false);
+    
+    // Limpar formulário
+    if (productName) productName.value = '';
+    if (categorySelect) categorySelect.value = '';
+    if (priceInput) priceInput.value = '';
+    if (descriptionTextarea) descriptionTextarea.value = '';
+    
+    // Resetar foto
+    const uploadArea = document.getElementById('uploadArea');
+    const previewContainer = document.getElementById('photoPreviewContainer');
+    const fileInput = document.getElementById('productPhotoInput');
+    const previewImg = document.getElementById('previewImg');
+    
+    currentImageData = null;
+    currentFile = null;
+    if (fileInput) fileInput.value = '';
+    if (previewImg) previewImg.src = '#';
+    if (previewContainer) previewContainer.style.display = 'none';
+    if (uploadArea) uploadArea.style.display = 'flex';
+    
+    // Voltar para o cardápio após 1.5 segundos
+    setTimeout(() => {
+        mudarTela('tela-11');
+        setTimeout(() => {
+            location.reload();
+        }, 100);
+    }, 1500);
+};
+
+// Função para adicionar produto ao cardápio visualmente
+function adicionarProdutoAoCardapio(produto) {
+    const cardapioContent = document.getElementById('cardapio-content');
+    if (!cardapioContent) return;
+    
+    // Verificar se já existe a categoria
+    let categoriaExists = false;
+    const categorias = cardapioContent.querySelectorAll('h3');
+    categorias.forEach(cat => {
+        if (cat.textContent === produto.categoria) {
+            categoriaExists = true;
+        }
+    });
+    
+    // Se a categoria não existe, criar nova seção
+    if (!categoriaExists && produto.categoria !== '') {
+        const newCategoryHeader = document.createElement('h3');
+        newCategoryHeader.textContent = produto.categoria;
+        cardapioContent.appendChild(newCategoryHeader);
+    }
+    
+    // Encontrar onde inserir (após o header da categoria)
+    let targetSection = null;
+    const headers = cardapioContent.querySelectorAll('h3');
+    for (let i = 0; i < headers.length; i++) {
+        if (headers[i].textContent === produto.categoria) {
+            targetSection = headers[i];
+            break;
+        }
+    }
+    
+    // Criar o item do produto
+    const newItem = document.createElement('div');
+    newItem.className = 'cardapio-item';
+    newItem.setAttribute('data-id', produto.id);
+    newItem.innerHTML = `
+        <div>
+            <h4>${produto.nome}</h4>
+            <p>${produto.descricao}</p>
+            <span class="cardapio-price">${produto.precoFormatado}</span>
+        </div>
+        <label class="cardapio-switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+        </label>
+    `;
+    
+    // Inserir após o header da categoria
+    if (targetSection && targetSection.nextSibling) {
+        if (targetSection.nextSibling.classList && targetSection.nextSibling.classList.contains('cardapio-item')) {
+            // Inserir antes do próximo item
+            cardapioContent.insertBefore(newItem, targetSection.nextSibling);
+        } else {
+            cardapioContent.insertBefore(newItem, targetSection.nextSibling);
+        }
+    } else if (targetSection) {
+        cardapioContent.appendChild(newItem);
+    } else {
+        cardapioContent.appendChild(newItem);
+    }
+}
+
+// Função para mostrar toast
+function showToast(message, isError = false) {
+    let toast = document.querySelector('.toast-message');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.className = 'toast-message';
+        document.body.appendChild(toast);
+    }
+    
+    toast.innerText = message;
+    if (isError) {
+        toast.style.backgroundColor = '#dc2626';
+    } else {
+        toast.style.backgroundColor = 'var(--text-main)';
+    }
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        if (isError) {
+            toast.style.backgroundColor = 'var(--text-main)';
+        }
+    }, 2400);
 }
 
 // FUNCIONALIDADE DO CHAT
@@ -293,6 +613,16 @@ function inicializarBuscaCardapio() {
         });
     });
     buscaInput.hasListener = true;
+    
+    // Carregar produtos salvos do localStorage
+    carregarProdutosSalvos();
+}
+
+function carregarProdutosSalvos() {
+    const produtos = JSON.parse(localStorage.getItem('produtosCardapio') || '[]');
+    produtos.forEach(produto => {
+        adicionarProdutoAoCardapio(produto);
+    });
 }
 
 // BUSCA MENSAGENS
@@ -351,36 +681,15 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// MÁSCARA DE TELEFONE PROFISSIONAL
-const telefoneInput = document.getElementById('telefonePerfil');
-
-if (telefoneInput) {
-    telefoneInput.addEventListener('input', (e) => {
-        let valor = e.target.value;
-        
-        // remove tudo que não for número
-        valor = valor.replace(/\D/g, '');
-        
-        // coloca parênteses no DDD
-        if (valor.length >= 2) {
-            valor = valor.replace(/^(\d{2})(\d)/g, '($1) $2');
-        }
-        
-        // coloca hífen
-        if (valor.length >= 11) {
-            valor = valor.replace(/(\d{5})(\d)/, '$1-$2');
-        }
-        
-        // limite máximo
-        valor = valor.substring(0, 15);
-        
-        e.target.value = valor;
-    });
-}
+// Função para abrir o cadastro de produto
+window.abrirCadastroProduto = function() {
+    mudarTela('tela-14');
+};
 
 // INICIALIZAÇÃO
 window.addEventListener('DOMContentLoaded', function() {
     mudarTela('tela-1');
+    
     const buscaPesquisa = document.querySelector('#tela-6 .pesquisa-busca input');
     if (buscaPesquisa) {
         buscaPesquisa.addEventListener('input', function(e) {
