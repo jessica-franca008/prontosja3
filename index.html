@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProntosJá</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>ProntosJá - Cardápio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +28,7 @@
                 </div>
             </section>
 
-            <!-- TELA 2: SELEÇÃO (Cliente ou Empresa) -->
+            <!-- TELA 2: SELEÇÃO -->
             <section id="tela-2" class="tela">
                 <div class="tela-conteudo">
                     <div class="selecao-logo"></div>
@@ -47,7 +47,7 @@
                 </div>
             </section>
 
-            <!-- TELA LOGIN: LOGIN COM GOOGLE -->
+            <!-- TELA LOGIN -->
             <section id="tela-login" class="tela">
                 <div class="tela-cabecalho">
                     <button onclick="mudarTela('tela-2')" class="btn-voltar">
@@ -75,7 +75,7 @@
                 </div>
             </section>
 
-            <!-- TELA 3: CADASTRO CLIENTE (sem Google) -->
+            <!-- TELA 3: CADASTRO CLIENTE -->
             <section id="tela-3" class="tela">
                 <div class="tela-cabecalho">
                     <button onclick="mudarTela('tela-2')" class="btn-voltar">
@@ -267,26 +267,113 @@
                 <nav class="navegacao-inferior"><button class="nav-item ativo" onclick="mudarTela('tela-10')"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item" onclick="mudarTela('tela-11')"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button class="nav-item" onclick="mudarTela('tela-12')"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item" onclick="mudarTela('tela-13')"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
-            <!-- TELA 11: CARDÁPIO -->
+            <!-- TELA 11: CARDÁPIO (com FAB para cadastrar produto) -->
             <section id="tela-11" class="tela">
                 <div class="cardapio-header"><div class="cardapio-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Cardápio Digital</h1></div><div class="cardapio-search"><span class="material-symbols-outlined">search</span><input type="text" id="cardapio-busca" placeholder="Buscar produtos..."></div></div>
-                <div class="cardapio-content" id="cardapio-content"><h3>Hambúrgueres</h3><div class="cardapio-item"><div><h4>Hambúrguer Artesanal</h4><p>Pão artesanal, hambúrguer 180g, queijo, alface e tomate</p><span class="cardapio-price">R$ 32,90</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Hambúrguer Bacon</h4><p>Pão, hambúrguer 180g, bacon crocante, queijo e molho especial</p><span class="cardapio-price">R$ 38,90</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Hambúrguer Vegetariano</h4><p>Pão integral, hambúrguer de grão-de-bico, queijo e vegetais</p><span class="cardapio-price">R$ 28,90</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div><h3>Bebidas</h3><div class="cardapio-item"><div><h4>Refrigerante</h4><p>Lata 350ml</p><span class="cardapio-price">R$ 6,00</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Suco Natural</h4><p>Laranja, limão ou abacaxi - 500ml</p><span class="cardapio-price">R$ 8,00</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Água Mineral</h4><p>Garrafa 500ml</p><span class="cardapio-price">R$ 3,50</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div><h3>Sobremesas</h3><div class="cardapio-item"><div><h4>Petit Gateau</h4><p>Com sorvete de creme e calda de chocolate</p><span class="cardapio-price">R$ 18,90</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Torta de Limão</h4><p>Massa crocante com recheio cremoso</p><span class="cardapio-price">R$ 12,90</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div></div>
-                <button class="cardapio-fab" onclick="alert('Adicionar novo produto - Em desenvolvimento')"><span class="material-symbols-outlined">add</span></button>
+                <div class="cardapio-content" id="cardapio-content">
+                    <h3>Hambúrgueres</h3>
+                    <div class="cardapio-item" data-id="1"><div><h4>Hambúrguer Artesanal</h4><p>Pão artesanal, hambúrguer 180g, queijo, alface e tomate</p><span class="cardapio-price">R$ 32,90</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                    <div class="cardapio-item" data-id="2"><div><h4>Hambúrguer Bacon</h4><p>Pão, hambúrguer 180g, bacon crocante, queijo e molho especial</p><span class="cardapio-price">R$ 38,90</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                    <div class="cardapio-item" data-id="3"><div><h4>Hambúrguer Vegetariano</h4><p>Pão integral, hambúrguer de grão-de-bico, queijo e vegetais</p><span class="cardapio-price">R$ 28,90</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div>
+                    <h3>Bebidas</h3>
+                    <div class="cardapio-item" data-id="4"><div><h4>Refrigerante</h4><p>Lata 350ml</p><span class="cardapio-price">R$ 6,00</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                    <div class="cardapio-item" data-id="5"><div><h4>Suco Natural</h4><p>Laranja, limão ou abacaxi - 500ml</p><span class="cardapio-price">R$ 8,00</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div>
+                    <div class="cardapio-item" data-id="6"><div><h4>Água Mineral</h4><p>Garrafa 500ml</p><span class="cardapio-price">R$ 3,50</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+                    <h3>Sobremesas</h3>
+                    <div class="cardapio-item" data-id="7"><div><h4>Petit Gateau</h4><p>Com sorvete de creme e calda de chocolate</p><span class="cardapio-price">R$ 18,90</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div>
+                    <div class="cardapio-item" data-id="8"><div><h4>Torta de Limão</h4><p>Massa crocante com recheio cremoso</p><span class="cardapio-price">R$ 12,90</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div>
+                </div>
+                <!-- Botão FAB que ABRE a tela de cadastrar produto -->
+                <button class="cardapio-fab" onclick="abrirCadastroProduto()">
+                    <span class="material-symbols-outlined">add</span>
+                </button>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
             <!-- TELA 12: MENSAGENS -->
             <section id="tela-12" class="tela">
                 <div class="mensagens-cabecalho"><div class="mensagens-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Mensagens</h1></div><div class="mensagens-busca"><div class="busca-box"><span class="material-symbols-outlined">search</span><input type="text" id="mensagens-busca-input" placeholder="Buscar conversas..."></div></div></div>
-                <div class="mensagens-lista" id="mensagens-lista"><div class="mensagem-item" data-nome="Maria Silva" data-id="2847"><div class="avatar avatar1">MS</div><div class="mensagem-info"><div class="mensagem-topo"><h3>Maria Silva</h3><span class="badge">2</span></div><div class="mensagem-id">#2847</div><div class="mensagem-preview">Obrigado! Aguardo a entrega.</div></div></div><div class="mensagem-item" data-nome="João Santos" data-id="2846"><div class="avatar avatar2">JS</div><div class="mensagem-info"><div class="mensagem-topo"><h3>João Santos</h3><span class="badge">1</span></div><div class="mensagem-id">#2846</div><div class="mensagem-preview">Pode enviar sem cebola?</div></div></div><div class="mensagem-item" data-nome="Ana Costa" data-id="2845"><div class="avatar avatar3">AC</div><div class="mensagem-info"><div class="mensagem-topo"><h3>Ana Costa</h3><span class="badge">3</span></div><div class="mensagem-id">#2845</div><div class="mensagem-preview">Quanto tempo para entrega?</div></div></div><div class="mensagem-item" data-nome="Carlos Oliveira" data-id="2844"><div class="avatar avatar4">CO</div><div class="mensagem-info"><div class="mensagem-topo"><h3>Carlos Oliveira</h3></div><div class="mensagem-id">#2844</div><div class="mensagem-preview">Pedido já foi enviado?</div></div></div><div class="mensagem-item" data-nome="Fernanda Lima" data-id="2843"><div class="avatar avatar5">FL</div><div class="mensagem-info"><div class="mensagem-topo"><h3>Fernanda Lima</h3></div><div class="mensagem-id">#2843</div><div class="mensagem-preview">Tudo perfeito, muito obrigada!</div></div></div></div>
+                <div class="mensagens-lista" id="mensagens-lista"><div class="mensagem-item" data-nome="Maria Silva" data-id="2847"><div class="avatar avatar1">MS</div><div class="mensagem-info"><div class="mensagem-topo"><h3>Maria Silva</h3><span class="badge">2</span></div><div class="mensagem-id">#2847</div><div class="mensagem-preview">Obrigado! Aguardo a entrega.</div></div></div><div class="mensagem-item" data-nome="João Santos" data-id="2846"><div class="avatar avatar2">JS</div><div class="mensagem-info"><div class="mensagem-topo"><h3>João Santos</h3><span class="badge">1</span></div><div class="mensagem-id">#2846</div><div class="mensagem-preview">Pode enviar sem cebola?</div></div></div></div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
             <!-- TELA 13: AJUSTES -->
             <section id="tela-13" class="tela">
                 <div class="ajustes-cabecalho"><div class="ajustes-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Ajustes</h1></div></div>
-                <div class="ajustes-conteudo"><div class="card-loja"><div class="icone-loja"><span class="material-symbols-outlined">store</span></div><div class="info-loja"><h3>Hamburgueria do João</h3><span>CNPJ: 12.345.678/0001-90</span></div></div><div class="ajustes-lista"><div class="ajustes-item" onclick="alert('Dados da Loja - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">store</span><p>Dados da Loja</p></div><span class="material-symbols-outlined seta">chevron_right</span></div><div class="ajustes-item" onclick="alert('Horário de Funcionamento - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">schedule</span><p>Horário de Funcionamento</p></div><span class="material-symbols-outlined seta">chevron_right</span></div><div class="ajustes-item" onclick="alert('Área de Entrega - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">location_on</span><p>Área de Entrega</p></div><span class="material-symbols-outlined seta">chevron_right</span></div><div class="ajustes-item" onclick="alert('Formas de Pagamento - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">credit_card</span><p>Formas de Pagamento</p></div><span class="material-symbols-outlined seta">chevron_right</span></div></div><div class="btn-sair-ajustes"><button onclick="sairDaConta()"><span class="material-symbols-outlined">logout</span>Sair da Conta</button></div></div>
+                <div class="ajustes-conteudo"><div class="card-loja"><div class="icone-loja"><span class="material-symbols-outlined">store</span></div><div class="info-loja"><h3>Hamburgueria do João</h3><span>CNPJ: 12.345.678/0001-90</span></div></div><div class="ajustes-lista"><div class="ajustes-item" onclick="alert('Dados da Loja - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">store</span><p>Dados da Loja</p></div><span class="material-symbols-outlined seta">chevron_right</span></div></div><div class="btn-sair-ajustes"><button onclick="sairDaConta()"><span class="material-symbols-outlined">logout</span>Sair da Conta</button></div></div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
+            </section>
+
+            <!-- TELA 14: CADASTRAR PRODUTO (NOVA TELA) -->
+            <section id="tela-14" class="tela">
+                <div class="tela-cabecalho">
+                    <button onclick="fecharCadastroProduto()" class="btn-voltar">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <h1>Cadastrar Produto</h1>
+                </div>
+                <div class="produto-conteudo">
+                    <div class="form-card">
+                        <div class="photo-section">
+                            <div class="photo-label">Adicionar foto do produto</div>
+                            <div id="uploadArea" class="photo-upload-area">
+                                <div class="upload-icon"><span class="material-symbols-outlined">cloud_upload</span></div>
+                                <span>Clique para adicionar imagem</span>
+                                <div class="photo-hint">PNG, JPG até 5MB</div>
+                            </div>
+                            <div id="photoPreviewContainer" class="photo-preview">
+                                <img id="previewImg" class="preview-img" src="#" alt="pré-visualização">
+                                <div class="preview-info"><span id="previewFileName">foto_selecionada.jpg</span><small>imagem adicionada</small></div>
+                                <button id="removePhotoBtn" class="remove-photo"><span class="material-symbols-outlined">close</span></button>
+                            </div>
+                            <input type="file" id="productPhotoInput" accept="image/png, image/jpeg, image/jpg" style="display: none;">
+                        </div>
+
+                        <div class="campo-input-produto">
+                            <label>Nome do Produto</label>
+                            <div class="input-wrapper-produto">
+                                <span class="material-symbols-outlined">sell</span>
+                                <input type="text" id="productName" placeholder="Ex: Hambúrguer Artesanal" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="campo-input-produto">
+                            <label>Categoria</label>
+                            <div class="input-wrapper-produto">
+                                <span class="material-symbols-outlined">category</span>
+                                <select id="productCategory">
+                                    <option value="" disabled selected>Selecione a categoria...</option>
+                                    <option value="Hambúrgueres">Hambúrgueres</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Sobremesas">Sobremesas</option>
+                                    <option value="Acompanhamentos">Acompanhamentos</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="campo-input-produto">
+                            <label>Preço</label>
+                            <div class="price-input-wrapper">
+                                <span class="currency-symbol">R$</span>
+                                <input type="text" id="productPrice" placeholder="0,00" value="">
+                            </div>
+                        </div>
+
+                        <div class="campo-input-produto">
+                            <label>Descrição</label>
+                            <div class="input-wrapper-produto">
+                                <span class="material-symbols-outlined">description</span>
+                                <textarea id="productDescription" rows="3" placeholder="Insira os ingredientes, composição ou detalhes do item..."></textarea>
+                            </div>
+                        </div>
+
+                        <button onclick="salvarProduto()" class="btn-salvar-produto">
+                            <span class="material-symbols-outlined">save</span>
+                            Salvar Produto
+                        </button>
+                    </div>
+                </div>
+                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
         </div>
     </div>
@@ -309,57 +396,40 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
-
         let tipoUsuario = null;
 
-        // Salva o tipo escolhido e vai para tela de login
         window.irParaLogin = function(tipo) {
             tipoUsuario = tipo;
             mudarTela('tela-login');
         };
 
-        // Login com Google - redireciona baseado no tipoUsuario
         window.loginComGoogle = async function() {
             if (!tipoUsuario) {
                 alert("Erro: Tipo de usuário não definido.");
                 mudarTela('tela-2');
                 return;
             }
-
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
                 const nome = user.displayName || "Usuário";
                 const email = user.email || "";
-
-                console.log("Usuário logado:", nome);
-                console.log("Tipo:", tipoUsuario);
-
-                // Salvar no localStorage para manter sessão
                 localStorage.setItem('tipoUsuario', tipoUsuario);
                 localStorage.setItem('nomeUsuario', nome);
                 localStorage.setItem('emailUsuario', email);
-
-                // Atualiza perfil do cliente se existir
                 const nomePerfil = document.getElementById('nomePerfil');
                 const emailPerfil = document.getElementById('emailPerfil');
                 if (nomePerfil) nomePerfil.textContent = nome;
                 if (emailPerfil) emailPerfil.textContent = email;
-
-                if (tipoUsuario === 'cliente') {
-                    mudarTela('tela-5'); // HOME CLIENTE
-                } else if (tipoUsuario === 'empresa') {
-                    mudarTela('tela-4'); // CADASTRO EMPRESA
-                } else {
-                    mudarTela('tela-5');
-                }
+                if (tipoUsuario === 'cliente') mudarTela('tela-5');
+                else if (tipoUsuario === 'empresa') mudarTela('tela-10');
+                else mudarTela('tela-5');
             } catch (error) {
                 console.error("Erro no login:", error);
                 alert("Erro ao fazer login: " + error.message);
             }
         };
 
-        // Função para sair da conta
         window.sairDaConta = function() {
             auth.signOut().then(() => {
                 tipoUsuario = null;
@@ -367,29 +437,32 @@
                 localStorage.removeItem('nomeUsuario');
                 localStorage.removeItem('emailUsuario');
                 mudarTela('tela-2');
-            }).catch((error) => {
-                console.error("Erro ao sair:", error);
-            });
+            }).catch((error) => console.error("Erro ao sair:", error));
         };
 
-        // Verifica se já tem sessão salva ao carregar
+        // Função para abrir o cadastro de produto
+        window.abrirCadastroProduto = function() {
+            mudarTela('tela-14');
+            setTimeout(inicializarCadastroProduto, 100);
+        };
+
+        // Função para fechar e voltar ao cardápio
+        window.fecharCadastroProduto = function() {
+            mudarTela('tela-11');
+        };
+
         window.addEventListener('DOMContentLoaded', function() {
             const tipoSalvo = localStorage.getItem('tipoUsuario');
             const nomeSalvo = localStorage.getItem('nomeUsuario');
             const emailSalvo = localStorage.getItem('emailUsuario');
-            
             if (tipoSalvo && nomeSalvo) {
                 tipoUsuario = tipoSalvo;
                 const nomePerfil = document.getElementById('nomePerfil');
                 const emailPerfil = document.getElementById('emailPerfil');
                 if (nomePerfil) nomePerfil.textContent = nomeSalvo;
                 if (emailPerfil) emailPerfil.textContent = emailSalvo;
-                
-                if (tipoSalvo === 'cliente') {
-                    mudarTela('tela-5');
-                } else if (tipoSalvo === 'empresa') {
-                    mudarTela('tela-10');
-                }
+                if (tipoSalvo === 'cliente') mudarTela('tela-5');
+                else if (tipoSalvo === 'empresa') mudarTela('tela-10');
             }
         });
     </script>
