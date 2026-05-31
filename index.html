@@ -144,7 +144,7 @@
                             <label>Nome da Loja</label>
                             <div class="input-wrapper">
                                 <span class="material-symbols-outlined">store</span>
-                                <input type="text" placeholder="Ex: Pizzaria do João">
+                                <input type="text" id="nomeLoja" placeholder="Ex: Pizzaria do João">
                             </div>
                         </div>
                         <div class="campo-input">
@@ -158,7 +158,7 @@
                             <label>Categoria</label>
                             <div class="input-wrapper">
                                 <span class="material-symbols-outlined">restaurant_menu</span>
-                                <select>
+                                <select id="categoriaLoja">
                                     <option value="">Selecione o tipo de loja</option>
                                     <option value="restaurante">Restaurante</option>
                                     <option value="mercado">Mercado</option>
@@ -184,7 +184,7 @@
                             <p class="info-senha">Mínimo de 8 caracteres.</p>
                         </div>
                     </div>
-                    <button onclick="mudarTela('tela-10')" class="btn-principal btn-salvar">
+                    <button onclick="salvarCadastroEmpresa()" class="btn-principal btn-salvar">
                         <span>Salvar</span>
                         <span class="material-symbols-outlined">arrow_forward</span>
                     </button>
@@ -210,12 +210,12 @@
                 <div class="home-conteudo">
                     <h2>O que você precisa?</h2>
                     <div class="categorias-grid">
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant</span></div><span>Restaurantes</span></button>
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">storefront</span></div><span>Mercado</span></button>
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">medication</span></div><span>Farmácia</span></button>
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">liquor</span></div><span>Bebidas</span></button>
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">pets</span></div><span>Pet Shop</span></button>
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">two_wheeler</span></div><span>Entregas</span></button>
+                        <button class="categoria" data-categoria="Restaurantes"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant</span></div><span>Restaurantes</span></button>
+                        <button class="categoria" data-categoria="Mercado"><div class="categoria-icone"><span class="material-symbols-outlined">storefront</span></div><span>Mercado</span></button>
+                        <button class="categoria" data-categoria="Farmácia"><div class="categoria-icone"><span class="material-symbols-outlined">medication</span></div><span>Farmácia</span></button>
+                        <button class="categoria" data-categoria="Bebidas"><div class="categoria-icone"><span class="material-symbols-outlined">liquor</span></div><span>Bebidas</span></button>
+                        <button class="categoria" data-categoria="Pet Shop"><div class="categoria-icone"><span class="material-symbols-outlined">pets</span></div><span>Pet Shop</span></button>
+                        <button class="categoria" data-categoria="Entregas"><div class="categoria-icone"><span class="material-symbols-outlined">two_wheeler</span></div><span>Entregas</span></button>
                     </div>
                 </div>
                 <nav class="navegacao-inferior">
@@ -251,49 +251,10 @@
             <!-- TELA 9: PERFIL CLIENTE -->
             <section id="tela-9" class="tela">
                 <div class="perfil-cabecalho"><h1>Meu Perfil</h1></div>
-                <div class="perfil-conteudo">
-                    <div class="perfil-foto-container">
-                        <div class="perfil-foto" id="fotoPerfil"></div>
-                        <input type="file" id="inputFoto" accept="image/*" style="display:none">
-                        <button class="btn-camera" id="btnCamera">
-                            <span class="material-symbols-outlined">camera_alt</span>
-                        </button>
-                    </div>
-                    <h2 id="nomePerfil">Carregando...</h2>
-                    <button class="btn-mudar-perfil">Mudar Perfil</button>
-                </div>
-                <div class="perfil-detalhes">
-                    <div class="detalhe-item">
-                        <div class="detalhe-icone"><span class="material-symbols-outlined">mail</span></div>
-                        <div class="detalhe-conteudo">
-                            <span class="detalhe-rotulo">Email</span>
-                            <span class="detalhe-valor" id="emailPerfil">Carregando...</span>
-                        </div>
-                    </div>
-                    <div class="detalhe-item">
-                        <div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div>
-                        <div class="detalhe-conteudo">
-                            <span class="detalhe-rotulo">Telefone</span>
-                            <input type="tel" id="telefonePerfil" class="input-perfil" placeholder="(00) 00000-0000" maxlength="15">
-                        </div>
-                    </div>
-                    <div class="detalhe-item">
-                        <div class="detalhe-icone"><span class="material-symbols-outlined">location_on</span></div>
-                        <div class="detalhe-conteudo">
-                            <span class="detalhe-rotulo">Endereço</span>
-                            <input type="text" id="localidadePerfil" class="input-perfil" placeholder="Selecionar endereço">
-                        </div>
-                        <button class="btn-editar"><span class="material-symbols-outlined">edit</span></button>
-                    </div>
-                </div>
-                <button onclick="sairDaConta()" class="btn-sair"><span class="material-symbols-outlined">logout</span><span>Sair da Conta</span></button>
-                <p class="versao-app">Versão 2.4.0</p>
-                <nav class="navegacao-inferior">
-                    <button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
-                    <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
-                    <button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
-                    <button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button>
-                </nav>
+                <div class="perfil-conteudo"><div class="perfil-foto-container"><div class="perfil-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdfNGj9M5PWs6ndJyrqKlftGJxQCay23IDeqSjrZr2uEE5rpgzA_W7x_sj50n3uEwXXuBP_1X1wnpueL20XuVppn2evqajkJWmkjHwpoohbJKGtGLNYILf_hal-eRCwK678boFLs2v2RXByyR1S1D_eXIhkOkDymsi52Roq2wJMGPB64Xur8Eswjq3TwZVxEVCXw87w5qW_joqA8ezHd-ljbU1BLcFkFrB9PZxwnQJ5iuBhnS_QkjhJaZIFk-q6RxpvVp9gMipJ_Y')"></div><button class="btn-camera"><span class="material-symbols-outlined">camera_alt</span></button></div><h2 id="nomePerfil">Maria Silva</h2><button class="btn-mudar-perfil">Mudar Perfil</button></div>
+                <div class="perfil-detalhes"><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">mail</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Email</span><span class="detalhe-valor" id="emailPerfil">maria.silva@email.com</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Número</span><span class="detalhe-valor">(11) 98765-4321</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">location_on</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Localidade</span><span class="detalhe-valor">Rua das Flores, 123 - São Paulo</span></div><button class="btn-editar"><span class="material-symbols-outlined">edit</span></button></div></div>
+                <button onclick="sairDaConta()" class="btn-sair"><span class="material-symbols-outlined">logout</span><span>Sair da Conta</span></button><p class="versao-app">Versão 2.4.0</p>
+                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
 
             <!-- TELA 10: MINHA LOJA -->
@@ -309,8 +270,52 @@
             <!-- TELA 11: CARDÁPIO -->
             <section id="tela-11" class="tela">
                 <div class="cardapio-header"><div class="cardapio-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Cardápio Digital</h1></div><div class="cardapio-search"><span class="material-symbols-outlined">search</span><input type="text" id="cardapio-busca" placeholder="Buscar produtos..."></div></div>
-                <div class="cardapio-content" id="cardapio-content"><h3>Hambúrgueres</h3><div class="cardapio-item"><div><h4>Hambúrguer Artesanal</h4><p>Pão artesanal, hambúrguer 180g, queijo, alface e tomate</p><span class="cardapio-price">R$ 32,90</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Hambúrguer Bacon</h4><p>Pão, hambúrguer 180g, bacon crocante, queijo e molho especial</p><span class="cardapio-price">R$ 38,90</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Hambúrguer Vegetariano</h4><p>Pão integral, hambúrguer de grão-de-bico, queijo e vegetais</p><span class="cardapio-price">R$ 28,90</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div><h3>Bebidas</h3><div class="cardapio-item"><div><h4>Refrigerante</h4><p>Lata 350ml</p><span class="cardapio-price">R$ 6,00</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Suco Natural</h4><p>Laranja, limão ou abacaxi - 500ml</p><span class="cardapio-price">R$ 8,00</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Água Mineral</h4><p>Garrafa 500ml</p><span class="cardapio-price">R$ 3,50</span></div><label class="cardapio-switch"><input type="checkbox" checked><span class="slider"></span></label></div><h3>Sobremesas</h3><div class="cardapio-item"><div><h4>Petit Gateau</h4><p>Com sorvete de creme e calda de chocolate</p><span class="cardapio-price">R$ 18,90</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div><div class="cardapio-item"><div><h4>Torta de Limão</h4><p>Massa crocante com recheio cremoso</p><span class="cardapio-price">R$ 12,90</span></div><label class="cardapio-switch"><input type="checkbox"><span class="slider"></span></label></div></div>
-                <button class="cardapio-fab" onclick="alert('Adicionar novo produto - Em desenvolvimento')"><span class="material-symbols-outlined">add</span></button>
+                <div class="cardapio-content" id="cardapio-content">
+                    <p style="text-align:center; color:#999;">Carregando produtos...</p>
+                </div>
+                <button class="cardapio-fab" onclick="abrirModalProduto()">
+                    <span class="material-symbols-outlined">add</span>
+                </button>
+                
+                <!-- MODAL CADASTRAR PRODUTO -->
+                <div id="modal-produto" class="modal-produto" style="display: none;">
+                    <div class="modal-conteudo">
+                        <div class="modal-header">
+                            <h3>Novo Produto</h3>
+                            <button onclick="fecharModalProduto()" class="modal-fechar">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <label>Nome do produto</label>
+                            <input type="text" id="prod-nome" placeholder="Ex: Pizza Margherita">
+
+                            <label>Descrição</label>
+                            <textarea id="prod-desc" placeholder="Ingredientes..."></textarea>
+
+                            <label>Preço (R$)</label>
+                            <input type="number" id="prod-preco" step="0.01" placeholder="29,90">
+
+                            <label>Categoria</label>
+                            <select id="prod-categoria">
+                                <option value="Restaurantes">Restaurantes</option>
+                                <option value="Mercado">Mercado</option>
+                                <option value="Farmácia">Farmácia</option>
+                                <option value="Bebidas">Bebidas</option>
+                                <option value="Pet Shop">Pet Shop</option>
+                            </select>
+
+                            <label>Imagem (URL)</label>
+                            <input type="text" id="prod-imagem" placeholder="https://via.placeholder.com/100">
+
+                            <label>Disponível?</label>
+                            <input type="checkbox" id="prod-disponivel" checked> Sim
+                        </div>
+                        <div class="modal-footer">
+                            <button onclick="fecharModalProduto()" class="btn-cancelar">Cancelar</button>
+                            <button onclick="salvarProdutoFirebase()" class="btn-salvar-produto">Salvar Produto</button>
+                        </div>
+                    </div>
+                </div>
+                
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
@@ -333,25 +338,8 @@
     <script src="script.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { 
-            getAuth, 
-            GoogleAuthProvider, 
-            signInWithPopup,
-            onAuthStateChanged,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import {
-            getFirestore,
-            doc,
-            setDoc,
-            getDoc
-        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-        import {
-            getStorage,
-            ref,
-            uploadBytes,
-            getDownloadURL
-        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB6OlOdx2p71kv57KF5XlRYoATZa8bWYvw",
@@ -366,18 +354,15 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const storage = getStorage(app);
         const provider = new GoogleAuthProvider();
 
         let tipoUsuario = null;
 
-        // Salva o tipo escolhido e vai para tela de login
         window.irParaLogin = function(tipo) {
             tipoUsuario = tipo;
             mudarTela('tela-login');
         };
 
-        // Login com Google
         window.loginComGoogle = async function() {
             if (!tipoUsuario) {
                 alert("Erro: Tipo de usuário não definido.");
@@ -390,46 +375,29 @@
                 const user = result.user;
                 const nome = user.displayName || "Usuário";
                 const email = user.email || "";
-                const foto = user.photoURL || "";
-                const uid = user.uid;
-
-                const fotoPerfil = document.getElementById('fotoPerfil');
-                if (fotoPerfil && foto) {
-                    fotoPerfil.style.backgroundImage = `url('${foto}')`;
-                }
-
-                if (tipoUsuario === 'cliente') {
-                    await setDoc(doc(db, "clientes", uid), {
-                        nome: nome,
-                        email: email,
-                        foto: foto,
-                        tipo: "cliente"
-                    }, { merge: true });
-                } else if (tipoUsuario === 'empresa') {
-                    await setDoc(doc(db, "empresas", uid), {
-                        nome: nome,
-                        email: email,
-                        foto: foto,
-                        tipo: "empresa"
-                    }, { merge: true });
-                }
 
                 localStorage.setItem('tipoUsuario', tipoUsuario);
                 localStorage.setItem('nomeUsuario', nome);
                 localStorage.setItem('emailUsuario', email);
+                
+                if (tipoUsuario === 'empresa') {
+                    localStorage.setItem('empresaId', user.uid);
+                    localStorage.setItem('empresaNome', nome);
+                }
 
                 const nomePerfil = document.getElementById('nomePerfil');
                 const emailPerfil = document.getElementById('emailPerfil');
-                
                 if (nomePerfil) nomePerfil.textContent = nome;
                 if (emailPerfil) emailPerfil.textContent = email;
 
                 if (tipoUsuario === 'cliente') {
                     mudarTela('tela-5');
+                    setTimeout(() => {
+                        carregarProdutosCliente();
+                        configurarCategoriasCliente();
+                    }, 100);
                 } else if (tipoUsuario === 'empresa') {
                     mudarTela('tela-4');
-                } else {
-                    mudarTela('tela-5');
                 }
             } catch (error) {
                 console.error("Erro no login:", error);
@@ -437,95 +405,222 @@
             }
         };
 
-        // Sair da conta
+        window.salvarCadastroEmpresa = function() {
+            const nomeLoja = document.getElementById('nomeLoja').value;
+            if (nomeLoja) {
+                localStorage.setItem('empresaNome', nomeLoja);
+                mudarTela('tela-10');
+            } else {
+                alert('Digite o nome da loja');
+            }
+        };
+
         window.sairDaConta = function() {
-            signOut(auth).then(() => {
+            auth.signOut().then(() => {
                 tipoUsuario = null;
                 localStorage.removeItem('tipoUsuario');
                 localStorage.removeItem('nomeUsuario');
                 localStorage.removeItem('emailUsuario');
+                localStorage.removeItem('empresaId');
+                localStorage.removeItem('empresaNome');
                 mudarTela('tela-2');
             }).catch((error) => {
                 console.error("Erro ao sair:", error);
             });
         };
 
-        // Upload de foto
-        const btnCamera = document.getElementById('btnCamera');
-        const inputFoto = document.getElementById('inputFoto');
+        // ========== PRODUTOS - FIREBASE ==========
 
-        if (btnCamera && inputFoto) {
-            btnCamera.addEventListener('click', () => {
-                inputFoto.click();
-            });
+        window.abrirModalProduto = function() {
+            document.getElementById('modal-produto').style.display = 'flex';
+        };
 
-            inputFoto.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
+        window.fecharModalProduto = function() {
+            document.getElementById('modal-produto').style.display = 'none';
+            document.getElementById('prod-nome').value = '';
+            document.getElementById('prod-desc').value = '';
+            document.getElementById('prod-preco').value = '';
+            document.getElementById('prod-categoria').value = 'Restaurantes';
+            document.getElementById('prod-imagem').value = '';
+            document.getElementById('prod-disponivel').checked = true;
+        };
 
-                const user = auth.currentUser;
-                if (!user) {
-                    alert("Faça login primeiro!");
-                    return;
+        window.salvarProdutoFirebase = async function() {
+            const nome = document.getElementById('prod-nome').value.trim();
+            const desc = document.getElementById('prod-desc').value.trim();
+            const preco = parseFloat(document.getElementById('prod-preco').value);
+            const categoria = document.getElementById('prod-categoria').value;
+            const imagem = document.getElementById('prod-imagem').value.trim() || 'https://via.placeholder.com/100';
+            const disponivel = document.getElementById('prod-disponivel').checked;
+            
+            if (!nome) {
+                alert('Digite o nome do produto');
+                return;
+            }
+            if (isNaN(preco) || preco <= 0) {
+                alert('Digite um preço válido');
+                return;
+            }
+            
+            try {
+                const empresaId = localStorage.getItem('empresaId') || 'loja_padrao';
+                const empresaNome = localStorage.getItem('empresaNome') || 'Minha Loja';
+                
+                const produto = {
+                    nome: nome,
+                    descricao: desc,
+                    preco: preco,
+                    categoria: categoria,
+                    imagem: imagem,
+                    disponivel: disponivel,
+                    empresaId: empresaId,
+                    empresaNome: empresaNome,
+                    criadoEm: new Date()
+                };
+                
+                await addDoc(collection(db, 'produtos'), produto);
+                alert('✅ Produto cadastrado com sucesso!');
+                fecharModalProduto();
+                carregarProdutosEmpresa();
+                await carregarProdutosCliente();
+                
+            } catch (error) {
+                console.error('Erro ao salvar produto:', error);
+                alert('❌ Erro ao salvar: ' + error.message);
+            }
+        };
+
+        window.carregarProdutosEmpresa = async function() {
+            const container = document.getElementById('cardapio-content');
+            if (!container) return;
+            
+            const empresaId = localStorage.getItem('empresaId') || 'loja_padrao';
+            
+            try {
+                const q = query(collection(db, 'produtos'), where('empresaId', '==', empresaId));
+                const querySnapshot = await getDocs(q);
+                
+                const produtosPorCategoria = {};
+                querySnapshot.forEach(doc => {
+                    const p = doc.data();
+                    if (!produtosPorCategoria[p.categoria]) {
+                        produtosPorCategoria[p.categoria] = [];
+                    }
+                    produtosPorCategoria[p.categoria].push({ id: doc.id, ...p });
+                });
+                
+                let html = '';
+                for (const [categoria, produtos] of Object.entries(produtosPorCategoria)) {
+                    html += `<h3>${categoria}</h3>`;
+                    produtos.forEach(p => {
+                        html += `
+                            <div class="cardapio-item" data-id="${p.id}">
+                                <div>
+                                    <h4>${p.nome}</h4>
+                                    <p>${p.descricao || 'Sem descrição'}</p>
+                                    <span class="cardapio-price">R$ ${p.preco.toFixed(2)}</span>
+                                </div>
+                                <label class="cardapio-switch">
+                                    <input type="checkbox" ${p.disponivel ? 'checked' : ''} onchange="alterarDisponibilidadeProduto('${p.id}', this.checked)">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        `;
+                    });
                 }
+                
+                if (html === '') {
+                    html = '<p style="text-align:center; color:#999;">Nenhum produto cadastrado. Clique no botão + para adicionar.</p>';
+                }
+                
+                container.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Erro ao carregar produtos:', error);
+                container.innerHTML = '<p style="text-align:center; color:#999;">Erro ao carregar produtos</p>';
+            }
+        };
 
-                const storageRef = ref(storage, `fotos/${user.uid}`);
-                await uploadBytes(storageRef, file);
-                const fotoURL = await getDownloadURL(storageRef);
+        window.alterarDisponibilidadeProduto = async function(produtoId, disponivel) {
+            try {
+                const produtoRef = doc(db, 'produtos', produtoId);
+                await updateDoc(produtoRef, { disponivel: disponivel });
+                console.log('Disponibilidade atualizada');
+                await carregarProdutosCliente();
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao atualizar disponibilidade');
+            }
+        };
 
-                await setDoc(doc(db, "clientes", user.uid), {
-                    foto: fotoURL
-                }, { merge: true });
+        window.carregarProdutosCliente = async function() {
+            try {
+                const q = query(collection(db, 'produtos'), where('disponivel', '==', true));
+                const querySnapshot = await getDocs(q);
+                
+                const produtos = [];
+                querySnapshot.forEach(doc => {
+                    produtos.push({ id: doc.id, ...doc.data() });
+                });
+                
+                localStorage.setItem('produtosCliente', JSON.stringify(produtos));
+                return produtos;
+            } catch (error) {
+                console.error('Erro ao carregar produtos para cliente:', error);
+                return [];
+            }
+        };
 
-                const fotoPerfil = document.getElementById('fotoPerfil');
-                if (fotoPerfil) {
-                    fotoPerfil.style.backgroundImage = `url('${fotoURL}')`;
+        window.mostrarProdutosPorCategoria = function(categoria) {
+            const produtos = JSON.parse(localStorage.getItem('produtosCliente') || '[]');
+            const filtrados = produtos.filter(p => p.categoria === categoria && p.disponivel === true);
+            
+            if (filtrados.length === 0) {
+                alert(`Nenhum produto encontrado na categoria ${categoria}`);
+                return;
+            }
+            
+            let mensagem = `📦 PRODUTOS - ${categoria}\n\n`;
+            filtrados.forEach(p => {
+                mensagem += `• ${p.nome} - R$ ${p.preco.toFixed(2)}\n   ${p.descricao || ''}\n\n`;
+            });
+            
+            alert(mensagem);
+        };
+
+        window.configurarCategoriasCliente = function() {
+            const botoes = document.querySelectorAll('#tela-5 .categoria');
+            botoes.forEach(botao => {
+                const categoria = botao.getAttribute('data-categoria');
+                if (categoria && categoria !== 'Entregas') {
+                    botao.onclick = () => mostrarProdutosPorCategoria(categoria);
                 }
             });
-        }
+        };
 
-        // onAuthStateChanged
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const uid = user.uid;
-                const clienteRef = doc(db, "clientes", uid);
-                const empresaRef = doc(db, "empresas", uid);
-                const clienteSnap = await getDoc(clienteRef);
-                const empresaSnap = await getDoc(empresaRef);
-
-                if (clienteSnap.exists()) {
-                    const dados = clienteSnap.data();
-                    const nomePerfil = document.getElementById('nomePerfil');
-                    const emailPerfil = document.getElementById('emailPerfil');
-                    const fotoPerfil = document.getElementById('fotoPerfil');
-                    const telefoneEl = document.getElementById('telefonePerfil');
-                    const localidadeEl = document.getElementById('localidadePerfil');
-                    
-                    if (nomePerfil) nomePerfil.textContent = dados.nome;
-                    if (emailPerfil) emailPerfil.textContent = dados.email;
-                    if (fotoPerfil && dados.foto) {
-                        fotoPerfil.style.backgroundImage = `url('${dados.foto}')`;
-                    }
-                    if (telefoneEl && dados.telefone) {
-                        telefoneEl.value = dados.telefone;
-                    }
-                    if (localidadeEl && dados.endereco) {
-                        localidadeEl.value = dados.endereco;
-                    }
-                    
-                    tipoUsuario = 'cliente';
-                    localStorage.setItem('tipoUsuario', 'cliente');
+        window.addEventListener('DOMContentLoaded', function() {
+            const tipoSalvo = localStorage.getItem('tipoUsuario');
+            const nomeSalvo = localStorage.getItem('nomeUsuario');
+            const emailSalvo = localStorage.getItem('emailUsuario');
+            
+            if (tipoSalvo && nomeSalvo) {
+                tipoUsuario = tipoSalvo;
+                const nomePerfil = document.getElementById('nomePerfil');
+                const emailPerfil = document.getElementById('emailPerfil');
+                if (nomePerfil) nomePerfil.textContent = nomeSalvo;
+                if (emailPerfil) emailPerfil.textContent = emailSalvo;
+                
+                if (tipoSalvo === 'cliente') {
                     mudarTela('tela-5');
-                } else if (empresaSnap.exists()) {
-                    tipoUsuario = 'empresa';
-                    localStorage.setItem('tipoUsuario', 'empresa');
+                    setTimeout(() => {
+                        carregarProdutosCliente();
+                        configurarCategoriasCliente();
+                    }, 100);
+                } else if (tipoSalvo === 'empresa') {
                     mudarTela('tela-10');
-                } else {
-                    mudarTela('tela-2');
                 }
             } else {
-                // Se não tem usuário, vai para tela de seleção
-                mudarTela('tela-2');
+                mudarTela('tela-1');
             }
         });
     </script>
