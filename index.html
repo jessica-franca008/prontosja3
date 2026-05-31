@@ -75,7 +75,7 @@
                 </div>
             </section>
 
-            <!-- TELA 3: CADASTRO CLIENTE (sem Google) -->
+            <!-- TELA 3: CADASTRO CLIENTE -->
             <section id="tela-3" class="tela">
                 <div class="tela-cabecalho">
                     <button onclick="mudarTela('tela-2')" class="btn-voltar">
@@ -210,12 +210,12 @@
                 <div class="home-conteudo">
                     <h2>O que você precisa?</h2>
                     <div class="categorias-grid">
-                        <button class="categoria" data-categoria="Restaurantes"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant</span></div><span>Restaurantes</span></button>
-                        <button class="categoria" data-categoria="Mercado"><div class="categoria-icone"><span class="material-symbols-outlined">storefront</span></div><span>Mercado</span></button>
-                        <button class="categoria" data-categoria="Farmácia"><div class="categoria-icone"><span class="material-symbols-outlined">medication</span></div><span>Farmácia</span></button>
-                        <button class="categoria" data-categoria="Bebidas"><div class="categoria-icone"><span class="material-symbols-outlined">liquor</span></div><span>Bebidas</span></button>
-                        <button class="categoria" data-categoria="Pet Shop"><div class="categoria-icone"><span class="material-symbols-outlined">pets</span></div><span>Pet Shop</span></button>
-                        <button class="categoria" data-categoria="Entregas"><div class="categoria-icone"><span class="material-symbols-outlined">two_wheeler</span></div><span>Entregas</span></button>
+                        <button class="categoria" data-cat="Restaurantes"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant</span></div><span>Restaurantes</span></button>
+                        <button class="categoria" data-cat="Mercado"><div class="categoria-icone"><span class="material-symbols-outlined">storefront</span></div><span>Mercado</span></button>
+                        <button class="categoria" data-cat="Farmácia"><div class="categoria-icone"><span class="material-symbols-outlined">medication</span></div><span>Farmácia</span></button>
+                        <button class="categoria" data-cat="Bebidas"><div class="categoria-icone"><span class="material-symbols-outlined">liquor</span></div><span>Bebidas</span></button>
+                        <button class="categoria" data-cat="Pet Shop"><div class="categoria-icone"><span class="material-symbols-outlined">pets</span></div><span>Pet Shop</span></button>
+                        <button class="categoria" data-cat="Entregas"><div class="categoria-icone"><span class="material-symbols-outlined">two_wheeler</span></div><span>Entregas</span></button>
                     </div>
                 </div>
                 <nav class="navegacao-inferior">
@@ -228,8 +228,8 @@
 
             <!-- TELA 6: PESQUISAR -->
             <section id="tela-6" class="tela">
-                <div class="pesquisa-cabecalho"><h1>Pesquisar</h1><div class="pesquisa-busca"><span class="material-symbols-outlined">search</span><input type="text" placeholder="O que você procura hoje?"></div></div>
-                <div class="pesquisa-conteudo"><div class="pesquisa-sugestoes"><h3>Sugestões para você</h3><button class="link-vermais">Ver mais</button></div><div class="pesquisa-resultados"><div class="resultado-item"><div class="resultado-imagem" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD1ujBixUSbXXODnGm9IUFKnoC3Go4ZkUHxcZMTJAzBrUMyJF9QbXOOBpeVz82oSAkNbq5sSpTBvMGBKO3jhy1ll3vnp_yRKbz6PqYVne91LvfxdxzMeqnKVR_ZO5WL_0zoHXbwZHt0oO8j_uKoT3-ZYUgMsX3WdJJk64lUcPDfYYCAKc6jKjGTcaiDBbraJyEXVuILUvA603OYsdugtz4osVvExytIc72MbSRjXNexjetm5rrVNlGwlIPe5VOfhWp_UGUAxjO5Gbo')"></div><div class="resultado-info"><div class="resultado-titulo"><h4>Burger King</h4><span class="avaliacao">4.8</span></div><p>Fast Food • Lanches</p><div class="resultado-detalhes"><span><span class="material-symbols-outlined">schedule</span> 30-40 min</span><span class="entrega-gratis"><span class="material-symbols-outlined">attach_money</span> Entrega Grátis</span></div></div></div></div></div>
+                <div class="pesquisa-cabecalho"><h1>Pesquisar</h1><div class="pesquisa-busca"><span class="material-symbols-outlined">search</span><input type="text" id="pesquisaInput" placeholder="O que você procura hoje?"></div></div>
+                <div class="pesquisa-conteudo"><div class="pesquisa-sugestoes"><h3>Sugestões para você</h3><button class="link-vermais">Ver mais</button></div><div class="pesquisa-resultados" id="pesquisaResultados"><div class="resultado-item"><div class="resultado-imagem" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD1ujBixUSbXXODnGm9IUFKnoC3Go4ZkUHxcZMTJAzBrUMyJF9QbXOOBpeVz82oSAkNbq5sSpTBvMGBKO3jhy1ll3vnp_yRKbz6PqYVne91LvfxdxzMeqnKVR_ZO5WL_0zoHXbwZHt0oO8j_uKoT3-ZYUgMsX3WdJJk64lUcPDfYYCAKc6jKjGTcaiDBbraJyEXVuILUvA603OYsdugtz4osVvExytIc72MbSRjXNexjetm5rrVNlGwlIPe5VOfhWp_UGUAxjO5Gbo')"></div><div class="resultado-info"><div class="resultado-titulo"><h4>Burger King</h4><span class="avaliacao">4.8</span></div><p>Fast Food • Lanches</p><div class="resultado-detalhes"><span><span class="material-symbols-outlined">schedule</span> 30-40 min</span><span class="entrega-gratis"><span class="material-symbols-outlined">attach_money</span> Entrega Grátis</span></div></div></div></div></div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
 
@@ -277,41 +277,21 @@
                     <span class="material-symbols-outlined">add</span>
                 </button>
                 
-                <!-- MODAL CADASTRAR PRODUTO -->
-                <div id="modal-produto" class="modal-produto" style="display: none;">
-                    <div class="modal-conteudo">
-                        <div class="modal-header">
-                            <h3>Novo Produto</h3>
-                            <button onclick="fecharModalProduto()" class="modal-fechar">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <label>Nome do produto</label>
-                            <input type="text" id="prod-nome" placeholder="Ex: Pizza Margherita">
-
-                            <label>Descrição</label>
-                            <textarea id="prod-desc" placeholder="Ingredientes..."></textarea>
-
-                            <label>Preço (R$)</label>
-                            <input type="number" id="prod-preco" step="0.01" placeholder="29,90">
-
-                            <label>Categoria</label>
-                            <select id="prod-categoria">
-                                <option value="Restaurantes">Restaurantes</option>
-                                <option value="Mercado">Mercado</option>
-                                <option value="Farmácia">Farmácia</option>
-                                <option value="Bebidas">Bebidas</option>
-                                <option value="Pet Shop">Pet Shop</option>
-                            </select>
-
-                            <label>Imagem (URL)</label>
-                            <input type="text" id="prod-imagem" placeholder="https://via.placeholder.com/100">
-
-                            <label>Disponível?</label>
-                            <input type="checkbox" id="prod-disponivel" checked> Sim
-                        </div>
-                        <div class="modal-footer">
-                            <button onclick="fecharModalProduto()" class="btn-cancelar">Cancelar</button>
-                            <button onclick="salvarProdutoFirebase()" class="btn-salvar-produto">Salvar Produto</button>
+                <!-- MODAL CADASTRO PRODUTO (SIMPLES E FUNCIONAL) -->
+                <div id="modalProduto" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; align-items: center; justify-content: center;">
+                    <div style="background: white; border-radius: 20px; width: 90%; max-width: 320px; padding: 20px;">
+                        <h3 style="margin-bottom: 15px; color: var(--text-main);">Novo Produto</h3>
+                        <input type="text" id="prodNome" placeholder="Nome do produto" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px;">
+                        <textarea id="prodDesc" placeholder="Descrição" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px; resize: vertical; min-height: 60px;"></textarea>
+                        <input type="number" id="prodPreco" placeholder="Preço (R$)" step="0.01" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px;">
+                        <select id="prodCategoria" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-light); border-radius: 12px; font-size: 14px;">
+                            <option value="Hambúrgueres">Hambúrgueres</option>
+                            <option value="Bebidas">Bebidas</option>
+                            <option value="Sobremesas">Sobremesas</option>
+                        </select>
+                        <div style="display: flex; gap: 10px;">
+                            <button onclick="fecharModalProduto()" style="flex: 1; padding: 12px; background: #f3f4f6; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">Cancelar</button>
+                            <button onclick="salvarProdutoFirebase()" style="flex: 1; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">Salvar</button>
                         </div>
                     </div>
                 </div>
@@ -329,7 +309,7 @@
             <!-- TELA 13: AJUSTES -->
             <section id="tela-13" class="tela">
                 <div class="ajustes-cabecalho"><div class="ajustes-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Ajustes</h1></div></div>
-                <div class="ajustes-conteudo"><div class="card-loja"><div class="icone-loja"><span class="material-symbols-outlined">store</span></div><div class="info-loja"><h3>Hamburgueria do João</h3><span>CNPJ: 12.345.678/0001-90</span></div></div><div class="ajustes-lista"><div class="ajustes-item" onclick="alert('Dados da Loja - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">store</span><p>Dados da Loja</p></div><span class="material-symbols-outlined seta">chevron_right</span></div><div class="ajustes-item" onclick="alert('Horário de Funcionamento - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">schedule</span><p>Horário de Funcionamento</p></div><span class="material-symbols-outlined seta">chevron_right</span></div><div class="ajustes-item" onclick="alert('Área de Entrega - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">location_on</span><p>Área de Entrega</p></div><span class="material-symbols-outlined seta">chevron_right</span></div><div class="ajustes-item" onclick="alert('Formas de Pagamento - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">credit_card</span><p>Formas de Pagamento</p></div><span class="material-symbols-outlined seta">chevron_right</span></div></div><div class="btn-sair-ajustes"><button onclick="sairDaConta()"><span class="material-symbols-outlined">logout</span>Sair da Conta</button></div></div>
+                <div class="ajustes-conteudo"><div class="card-loja"><div class="icone-loja"><span class="material-symbols-outlined">store</span></div><div class="info-loja"><h3 id="lojaNomeDisplay">Hamburgueria do João</h3><span>CNPJ: 12.345.678/0001-90</span></div></div><div class="ajustes-lista"><div class="ajustes-item" onclick="alert('Dados da Loja - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">store</span><p>Dados da Loja</p></div><span class="material-symbols-outlined seta">chevron_right</span></div><div class="ajustes-item" onclick="alert('Horário de Funcionamento - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">schedule</span><p>Horário de Funcionamento</p></div><span class="material-symbols-outlined seta">chevron_right</span></div><div class="ajustes-item" onclick="alert('Área de Entrega - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">location_on</span><p>Área de Entrega</p></div><span class="material-symbols-outlined seta">chevron_right</span></div><div class="ajustes-item" onclick="alert('Formas de Pagamento - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">credit_card</span><p>Formas de Pagamento</p></div><span class="material-symbols-outlined seta">chevron_right</span></div></div><div class="btn-sair-ajustes"><button onclick="sairDaConta()"><span class="material-symbols-outlined">logout</span>Sair da Conta</button></div></div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
         </div>
@@ -358,6 +338,38 @@
 
         let tipoUsuario = null;
 
+        // ========== FUNÇÕES DE TELA ==========
+        window.mudarTela = function(idTela) {
+            document.querySelectorAll('.tela').forEach(tela => {
+                tela.classList.remove('ativa');
+            });
+            document.getElementById(idTela).classList.add('ativa');
+            window.scrollTo(0, 0);
+            
+            if (idTela === 'tela-8') setTimeout(inicializarChat, 100);
+            if (idTela === 'tela-10') setTimeout(inicializarSwitchLoja, 100);
+            if (idTela === 'tela-11') {
+                setTimeout(() => {
+                    carregarCardapioEmpresa();
+                    inicializarBuscaCardapio();
+                }, 100);
+            }
+            if (idTela === 'tela-12') {
+                setTimeout(() => {
+                    inicializarBuscaMensagens();
+                    inicializarCliquesMensagens();
+                }, 100);
+            }
+            if (idTela === 'tela-13') setTimeout(inicializarAjustes, 100);
+            if (idTela === 'tela-5') {
+                setTimeout(() => {
+                    carregarProdutosCliente();
+                    configurarCategoriasCliente();
+                }, 100);
+            }
+        };
+
+        // ========== LOGIN ==========
         window.irParaLogin = function(tipo) {
             tipoUsuario = tipo;
             mudarTela('tela-login');
@@ -369,7 +381,6 @@
                 mudarTela('tela-2');
                 return;
             }
-
             try {
                 const result = await signInWithPopup(auth, provider);
                 const user = result.user;
@@ -392,10 +403,6 @@
 
                 if (tipoUsuario === 'cliente') {
                     mudarTela('tela-5');
-                    setTimeout(() => {
-                        carregarProdutosCliente();
-                        configurarCategoriasCliente();
-                    }, 100);
                 } else if (tipoUsuario === 'empresa') {
                     mudarTela('tela-4');
                 }
@@ -409,6 +416,8 @@
             const nomeLoja = document.getElementById('nomeLoja').value;
             if (nomeLoja) {
                 localStorage.setItem('empresaNome', nomeLoja);
+                const lojaNomeDisplay = document.getElementById('lojaNomeDisplay');
+                if (lojaNomeDisplay) lojaNomeDisplay.textContent = nomeLoja;
                 mudarTela('tela-10');
             } else {
                 alert('Digite o nome da loja');
@@ -429,68 +438,47 @@
             });
         };
 
-        // ========== PRODUTOS - FIREBASE ==========
-
+        // ========== PRODUTOS FIREBASE ==========
         window.abrirModalProduto = function() {
-            document.getElementById('modal-produto').style.display = 'flex';
+            document.getElementById('modalProduto').style.display = 'flex';
         };
 
         window.fecharModalProduto = function() {
-            document.getElementById('modal-produto').style.display = 'none';
-            document.getElementById('prod-nome').value = '';
-            document.getElementById('prod-desc').value = '';
-            document.getElementById('prod-preco').value = '';
-            document.getElementById('prod-categoria').value = 'Restaurantes';
-            document.getElementById('prod-imagem').value = '';
-            document.getElementById('prod-disponivel').checked = true;
+            document.getElementById('modalProduto').style.display = 'none';
+            document.getElementById('prodNome').value = '';
+            document.getElementById('prodDesc').value = '';
+            document.getElementById('prodPreco').value = '';
         };
 
         window.salvarProdutoFirebase = async function() {
-            const nome = document.getElementById('prod-nome').value.trim();
-            const desc = document.getElementById('prod-desc').value.trim();
-            const preco = parseFloat(document.getElementById('prod-preco').value);
-            const categoria = document.getElementById('prod-categoria').value;
-            const imagem = document.getElementById('prod-imagem').value.trim() || 'https://via.placeholder.com/100';
-            const disponivel = document.getElementById('prod-disponivel').checked;
+            const nome = document.getElementById('prodNome').value.trim();
+            const desc = document.getElementById('prodDesc').value.trim();
+            const preco = parseFloat(document.getElementById('prodPreco').value);
+            const categoria = document.getElementById('prodCategoria').value;
             
-            if (!nome) {
-                alert('Digite o nome do produto');
-                return;
-            }
-            if (isNaN(preco) || preco <= 0) {
-                alert('Digite um preço válido');
-                return;
-            }
+            if (!nome) return;
+            if (isNaN(preco) || preco <= 0) return;
             
             try {
                 const empresaId = localStorage.getItem('empresaId') || 'loja_padrao';
-                const empresaNome = localStorage.getItem('empresaNome') || 'Minha Loja';
-                
-                const produto = {
+                await addDoc(collection(db, 'produtos'), {
                     nome: nome,
                     descricao: desc,
                     preco: preco,
                     categoria: categoria,
-                    imagem: imagem,
-                    disponivel: disponivel,
+                    disponivel: true,
                     empresaId: empresaId,
-                    empresaNome: empresaNome,
                     criadoEm: new Date()
-                };
-                
-                await addDoc(collection(db, 'produtos'), produto);
-                alert('✅ Produto cadastrado com sucesso!');
+                });
                 fecharModalProduto();
-                carregarProdutosEmpresa();
+                await carregarCardapioEmpresa();
                 await carregarProdutosCliente();
-                
             } catch (error) {
-                console.error('Erro ao salvar produto:', error);
-                alert('❌ Erro ao salvar: ' + error.message);
+                console.error('Erro:', error);
             }
         };
 
-        window.carregarProdutosEmpresa = async function() {
+        window.carregarCardapioEmpresa = async function() {
             const container = document.getElementById('cardapio-content');
             if (!container) return;
             
@@ -498,30 +486,28 @@
             
             try {
                 const q = query(collection(db, 'produtos'), where('empresaId', '==', empresaId));
-                const querySnapshot = await getDocs(q);
+                const snapshot = await getDocs(q);
                 
-                const produtosPorCategoria = {};
-                querySnapshot.forEach(doc => {
+                const grupos = {};
+                snapshot.forEach(doc => {
                     const p = doc.data();
-                    if (!produtosPorCategoria[p.categoria]) {
-                        produtosPorCategoria[p.categoria] = [];
-                    }
-                    produtosPorCategoria[p.categoria].push({ id: doc.id, ...p });
+                    if (!grupos[p.categoria]) grupos[p.categoria] = [];
+                    grupos[p.categoria].push({ id: doc.id, ...p });
                 });
                 
                 let html = '';
-                for (const [categoria, produtos] of Object.entries(produtosPorCategoria)) {
+                for (const [categoria, produtos] of Object.entries(grupos)) {
                     html += `<h3>${categoria}</h3>`;
                     produtos.forEach(p => {
                         html += `
-                            <div class="cardapio-item" data-id="${p.id}">
+                            <div class="cardapio-item">
                                 <div>
                                     <h4>${p.nome}</h4>
-                                    <p>${p.descricao || 'Sem descrição'}</p>
+                                    <p>${p.descricao || ''}</p>
                                     <span class="cardapio-price">R$ ${p.preco.toFixed(2)}</span>
                                 </div>
                                 <label class="cardapio-switch">
-                                    <input type="checkbox" ${p.disponivel ? 'checked' : ''} onchange="alterarDisponibilidadeProduto('${p.id}', this.checked)">
+                                    <input type="checkbox" ${p.disponivel ? 'checked' : ''} onchange="toggleDisponibilidade('${p.id}', this.checked)">
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -530,74 +516,64 @@
                 }
                 
                 if (html === '') {
-                    html = '<p style="text-align:center; color:#999;">Nenhum produto cadastrado. Clique no botão + para adicionar.</p>';
+                    html = '<p style="text-align:center; color:#999;">Nenhum produto. Clique no + para adicionar.</p>';
                 }
-                
                 container.innerHTML = html;
-                
             } catch (error) {
-                console.error('Erro ao carregar produtos:', error);
-                container.innerHTML = '<p style="text-align:center; color:#999;">Erro ao carregar produtos</p>';
+                console.error('Erro:', error);
             }
         };
 
-        window.alterarDisponibilidadeProduto = async function(produtoId, disponivel) {
+        window.toggleDisponibilidade = async function(produtoId, disponivel) {
             try {
-                const produtoRef = doc(db, 'produtos', produtoId);
-                await updateDoc(produtoRef, { disponivel: disponivel });
-                console.log('Disponibilidade atualizada');
+                await updateDoc(doc(db, 'produtos', produtoId), { disponivel: disponivel });
                 await carregarProdutosCliente();
             } catch (error) {
                 console.error('Erro:', error);
-                alert('Erro ao atualizar disponibilidade');
             }
         };
 
         window.carregarProdutosCliente = async function() {
             try {
                 const q = query(collection(db, 'produtos'), where('disponivel', '==', true));
-                const querySnapshot = await getDocs(q);
-                
+                const snapshot = await getDocs(q);
                 const produtos = [];
-                querySnapshot.forEach(doc => {
+                snapshot.forEach(doc => {
                     produtos.push({ id: doc.id, ...doc.data() });
                 });
-                
                 localStorage.setItem('produtosCliente', JSON.stringify(produtos));
-                return produtos;
             } catch (error) {
-                console.error('Erro ao carregar produtos para cliente:', error);
-                return [];
+                console.error('Erro:', error);
             }
         };
 
-        window.mostrarProdutosPorCategoria = function(categoria) {
+        window.mostrarProdutosCategoria = function(categoria) {
             const produtos = JSON.parse(localStorage.getItem('produtosCliente') || '[]');
-            const filtrados = produtos.filter(p => p.categoria === categoria && p.disponivel === true);
+            const filtrados = produtos.filter(p => p.categoria === categoria);
             
             if (filtrados.length === 0) {
-                alert(`Nenhum produto encontrado na categoria ${categoria}`);
+                alert(`Nenhum produto disponível em ${categoria}`);
                 return;
             }
             
-            let mensagem = `📦 PRODUTOS - ${categoria}\n\n`;
+            let msg = `📦 ${categoria}\n\n`;
             filtrados.forEach(p => {
-                mensagem += `• ${p.nome} - R$ ${p.preco.toFixed(2)}\n   ${p.descricao || ''}\n\n`;
+                msg += `🍔 ${p.nome}\n   R$ ${p.preco.toFixed(2)}\n   ${p.descricao || ''}\n\n`;
             });
-            
-            alert(mensagem);
+            alert(msg);
         };
 
         window.configurarCategoriasCliente = function() {
             const botoes = document.querySelectorAll('#tela-5 .categoria');
             botoes.forEach(botao => {
-                const categoria = botao.getAttribute('data-categoria');
-                if (categoria && categoria !== 'Entregas') {
-                    botao.onclick = () => mostrarProdutosPorCategoria(categoria);
+                const cat = botao.getAttribute('data-cat');
+                if (cat && cat !== 'Entregas') {
+                    botao.onclick = () => mostrarProdutosCategoria(cat);
                 }
             });
         };
 
+        // ========== INICIALIZAÇÃO ==========
         window.addEventListener('DOMContentLoaded', function() {
             const tipoSalvo = localStorage.getItem('tipoUsuario');
             const nomeSalvo = localStorage.getItem('nomeUsuario');
@@ -612,10 +588,6 @@
                 
                 if (tipoSalvo === 'cliente') {
                     mudarTela('tela-5');
-                    setTimeout(() => {
-                        carregarProdutosCliente();
-                        configurarCategoriasCliente();
-                    }, 100);
                 } else if (tipoSalvo === 'empresa') {
                     mudarTela('tela-10');
                 }
