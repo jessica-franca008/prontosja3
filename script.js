@@ -16,7 +16,10 @@ function mudarTela(idTela) {
     }
     
     if (idTela === 'tela-11') {
-        setTimeout(inicializarBuscaCardapio, 100);
+        setTimeout(() => {
+            inicializarBuscaCardapio();
+            if (typeof carregarProdutos === 'function') carregarProdutos();
+        }, 100);
     }
     
     if (idTela === 'tela-12') {
@@ -33,6 +36,12 @@ function mudarTela(idTela) {
     if (idTela === 'tela-14') {
         setTimeout(inicializarCadastroProduto, 100);
     }
+    
+    if (idTela === 'tela-15') {
+        setTimeout(() => {
+            if (typeof carregarProdutosCliente === 'function') carregarProdutosCliente();
+        }, 100);
+    }
 }
 
 // ==========================================
@@ -43,7 +52,6 @@ let currentImageData = null;
 let currentFile = null;
 
 function inicializarCadastroProduto() {
-    // Elementos DOM
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('productPhotoInput');
     const previewContainer = document.getElementById('photoPreviewContainer');
@@ -57,7 +65,6 @@ function inicializarCadastroProduto() {
     
     if (!uploadArea) return;
     
-    // Remove listeners antigos para evitar duplicação
     const newUploadArea = uploadArea.cloneNode(true);
     uploadArea.parentNode.replaceChild(newUploadArea, uploadArea);
     
@@ -74,7 +81,6 @@ function inicializarCadastroProduto() {
     const finalRemovePhotoBtn = document.getElementById('removePhotoBtn');
     const finalPriceInput = document.getElementById('productPrice');
     
-    // Função para mostrar preview
     function showPreview(file) {
         if (!file) return;
         const reader = new FileReader();
@@ -91,7 +97,6 @@ function inicializarCadastroProduto() {
         currentFile = file;
     }
     
-    // Função para resetar foto
     function resetPhoto() {
         currentImageData = null;
         currentFile = null;
@@ -101,14 +106,12 @@ function inicializarCadastroProduto() {
         if (finalUploadArea) finalUploadArea.style.display = 'flex';
     }
     
-    // Evento de clique na área de upload
     if (finalUploadArea) {
         finalUploadArea.addEventListener('click', () => {
             if (finalFileInput) finalFileInput.click();
         });
     }
     
-    // Evento de seleção de arquivo
     if (finalFileInput) {
         finalFileInput.addEventListener('change', (e) => {
             if (e.target.files && e.target.files.length > 0) {
@@ -122,7 +125,6 @@ function inicializarCadastroProduto() {
         });
     }
     
-    // Evento de remover foto
     if (finalRemovePhotoBtn) {
         finalRemovePhotoBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -130,7 +132,6 @@ function inicializarCadastroProduto() {
         });
     }
     
-    // Máscara de preço
     if (finalPriceInput) {
         finalPriceInput.addEventListener('input', function(e) {
             let raw = e.target.value;
@@ -161,172 +162,10 @@ function inicializarCadastroProduto() {
         });
     }
     
-    // Reset inicial
     resetPhoto();
     if (finalPriceInput) finalPriceInput.placeholder = "0,00";
 }
 
-// Função para salvar o produto
-window.salvarProduto = function() {
-    const productName = document.getElementById('productName');
-    const categorySelect = document.getElementById('productCategory');
-    const priceInput = document.getElementById('productPrice');
-    const descriptionTextarea = document.getElementById('productDescription');
-    
-    const nome = productName ? productName.value.trim() : '';
-    const categoria = categorySelect ? categorySelect.value : '';
-    const precoRaw = priceInput ? priceInput.value.trim() : '';
-    const descricao = descriptionTextarea ? descriptionTextarea.value.trim() : '';
-    
-    // Validações
-    if (nome === '') {
-        showToast('⚠️ Informe o nome do produto', true);
-        if (productName) productName.focus();
-        return;
-    }
-    
-    if (!categoria || categoria === '') {
-        showToast('📂 Selecione uma categoria', true);
-        if (categorySelect) categorySelect.focus();
-        return;
-    }
-    
-    if (precoRaw === '') {
-        showToast('💰 Defina um preço válido (ex: 15,90)', true);
-        if (priceInput) priceInput.focus();
-        return;
-    }
-    
-    let numericStr = precoRaw.replace(/\./g, '').replace(',', '.');
-    let precoNumerico = parseFloat(numericStr);
-    if (isNaN(precoNumerico) || precoNumerico < 0) {
-        showToast('Preço inválido, utilize formato 0,00', true);
-        if (priceInput) priceInput.focus();
-        return;
-    }
-    
-    if (descricao === '') {
-        showToast('✏️ Adicione uma descrição do produto', true);
-        if (descriptionTextarea) descriptionTextarea.focus();
-        return;
-    }
-    
-    // Criar objeto do produto
-    const novoProduto = {
-        id: Date.now(),
-        nome: nome,
-        categoria: categoria,
-        preco: precoNumerico,
-        precoFormatado: `R$ ${precoNumerico.toFixed(2).replace('.', ',')}`,
-        descricao: descricao,
-        disponivel: true,
-        temFoto: !!currentImageData,
-        fotoBase64: currentImageData || null,
-        dataCadastro: new Date().toISOString()
-    };
-    
-    // Salvar no localStorage
-    let produtos = JSON.parse(localStorage.getItem('produtosCardapio') || '[]');
-    produtos.push(novoProduto);
-    localStorage.setItem('produtosCardapio', JSON.stringify(produtos));
-    
-    // Adicionar ao cardápio visualmente
-    adicionarProdutoAoCardapio(novoProduto);
-    
-    console.log('📦 Produto cadastrado:', novoProduto);
-    showToast(`✅ "${nome}" salvo com sucesso!`, false);
-    
-    // Limpar formulário
-    if (productName) productName.value = '';
-    if (categorySelect) categorySelect.value = '';
-    if (priceInput) priceInput.value = '';
-    if (descriptionTextarea) descriptionTextarea.value = '';
-    
-    // Resetar foto
-    const uploadArea = document.getElementById('uploadArea');
-    const previewContainer = document.getElementById('photoPreviewContainer');
-    const fileInput = document.getElementById('productPhotoInput');
-    const previewImg = document.getElementById('previewImg');
-    
-    currentImageData = null;
-    currentFile = null;
-    if (fileInput) fileInput.value = '';
-    if (previewImg) previewImg.src = '#';
-    if (previewContainer) previewContainer.style.display = 'none';
-    if (uploadArea) uploadArea.style.display = 'flex';
-    
-    // Voltar para o cardápio após 1.5 segundos
-    setTimeout(() => {
-        mudarTela('tela-11');
-        setTimeout(() => {
-            location.reload();
-        }, 100);
-    }, 1500);
-};
-
-// Função para adicionar produto ao cardápio visualmente
-function adicionarProdutoAoCardapio(produto) {
-    const cardapioContent = document.getElementById('cardapio-content');
-    if (!cardapioContent) return;
-    
-    // Verificar se já existe a categoria
-    let categoriaExists = false;
-    const categorias = cardapioContent.querySelectorAll('h3');
-    categorias.forEach(cat => {
-        if (cat.textContent === produto.categoria) {
-            categoriaExists = true;
-        }
-    });
-    
-    // Se a categoria não existe, criar nova seção
-    if (!categoriaExists && produto.categoria !== '') {
-        const newCategoryHeader = document.createElement('h3');
-        newCategoryHeader.textContent = produto.categoria;
-        cardapioContent.appendChild(newCategoryHeader);
-    }
-    
-    // Encontrar onde inserir (após o header da categoria)
-    let targetSection = null;
-    const headers = cardapioContent.querySelectorAll('h3');
-    for (let i = 0; i < headers.length; i++) {
-        if (headers[i].textContent === produto.categoria) {
-            targetSection = headers[i];
-            break;
-        }
-    }
-    
-    // Criar o item do produto
-    const newItem = document.createElement('div');
-    newItem.className = 'cardapio-item';
-    newItem.setAttribute('data-id', produto.id);
-    newItem.innerHTML = `
-        <div>
-            <h4>${produto.nome}</h4>
-            <p>${produto.descricao}</p>
-            <span class="cardapio-price">${produto.precoFormatado}</span>
-        </div>
-        <label class="cardapio-switch">
-            <input type="checkbox" checked>
-            <span class="slider"></span>
-        </label>
-    `;
-    
-    // Inserir após o header da categoria
-    if (targetSection && targetSection.nextSibling) {
-        if (targetSection.nextSibling.classList && targetSection.nextSibling.classList.contains('cardapio-item')) {
-            // Inserir antes do próximo item
-            cardapioContent.insertBefore(newItem, targetSection.nextSibling);
-        } else {
-            cardapioContent.insertBefore(newItem, targetSection.nextSibling);
-        }
-    } else if (targetSection) {
-        cardapioContent.appendChild(newItem);
-    } else {
-        cardapioContent.appendChild(newItem);
-    }
-}
-
-// Função para mostrar toast
 function showToast(message, isError = false) {
     let toast = document.querySelector('.toast-message');
     if (!toast) {
@@ -485,7 +324,7 @@ function pararGravacao() {
 
 function exibirAudioGravado(audioBlob) {
     const chatMessages = document.getElementById('chat-mensagens');
-    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-minute' });
     
     const audioDiv = document.createElement('div');
     audioDiv.className = 'mensagem mensagem-enviada';
@@ -613,16 +452,6 @@ function inicializarBuscaCardapio() {
         });
     });
     buscaInput.hasListener = true;
-    
-    // Carregar produtos salvos do localStorage
-    carregarProdutosSalvos();
-}
-
-function carregarProdutosSalvos() {
-    const produtos = JSON.parse(localStorage.getItem('produtosCardapio') || '[]');
-    produtos.forEach(produto => {
-        adicionarProdutoAoCardapio(produto);
-    });
 }
 
 // BUSCA MENSAGENS
@@ -680,11 +509,6 @@ document.addEventListener('click', function(e) {
         }
     }
 });
-
-// Função para abrir o cadastro de produto
-window.abrirCadastroProduto = function() {
-    mudarTela('tela-14');
-};
 
 // INICIALIZAÇÃO
 window.addEventListener('DOMContentLoaded', function() {
