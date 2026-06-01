@@ -2509,3 +2509,58 @@ body {
         font-size: 18px;
     }
 }
+
+/* Estilos para o cardápio do cliente */
+.cardapio-item-cliente {
+    margin-bottom: 12px;
+}
+
+.btn-adicionar {
+    background: var(--primary);
+    border: none;
+    border-radius: 30px;
+    width: 36px;
+    height: 36px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-adicionar:hover {
+    background: var(--primary-dark);
+    transform: scale(1.05);
+}
+
+.btn-adicionar:active {
+    transform: scale(0.95);
+}
+
+.toast-message {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    background-color: var(--text-main);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 40px;
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+    font-family: 'Work Sans', sans-serif;
+    box-shadow: var(--shadow);
+}
+
+.toast-message.show {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
