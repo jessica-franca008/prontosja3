@@ -16,7 +16,7 @@ function mudarTela(idTela) {
     }
     
     if (idTela === 'tela-11') {
-        setTimeout(inicializarBuscaCardapio, 100);
+        setTimeout(inicializarBuscaCardapioEmpresa, 100);
     }
     
     if (idTela === 'tela-12') {
@@ -33,6 +33,10 @@ function mudarTela(idTela) {
     if (idTela === 'tela-14') {
         setTimeout(inicializarCadastroProduto, 100);
     }
+    
+    if (idTela === 'tela-15') {
+        setTimeout(inicializarBuscaCliente, 100);
+    }
 }
 
 // ==========================================
@@ -43,21 +47,15 @@ let currentImageData = null;
 let currentFile = null;
 
 function inicializarCadastroProduto() {
-    // Elementos DOM
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('productPhotoInput');
     const previewContainer = document.getElementById('photoPreviewContainer');
     const previewImg = document.getElementById('previewImg');
     const previewFileNameSpan = document.getElementById('previewFileName');
     const removePhotoBtn = document.getElementById('removePhotoBtn');
-    const productNameInput = document.getElementById('productName');
-    const categorySelect = document.getElementById('productCategory');
-    const priceInput = document.getElementById('productPrice');
-    const descriptionTextarea = document.getElementById('productDescription');
     
     if (!uploadArea) return;
     
-    // Remove listeners antigos para evitar duplicação
     const newUploadArea = uploadArea.cloneNode(true);
     uploadArea.parentNode.replaceChild(newUploadArea, uploadArea);
     
@@ -74,7 +72,6 @@ function inicializarCadastroProduto() {
     const finalRemovePhotoBtn = document.getElementById('removePhotoBtn');
     const finalPriceInput = document.getElementById('productPrice');
     
-    // Função para mostrar preview
     function showPreview(file) {
         if (!file) return;
         const reader = new FileReader();
@@ -91,7 +88,6 @@ function inicializarCadastroProduto() {
         currentFile = file;
     }
     
-    // Função para resetar foto
     function resetPhoto() {
         currentImageData = null;
         currentFile = null;
@@ -101,14 +97,12 @@ function inicializarCadastroProduto() {
         if (finalUploadArea) finalUploadArea.style.display = 'flex';
     }
     
-    // Evento de clique na área de upload
     if (finalUploadArea) {
         finalUploadArea.addEventListener('click', () => {
             if (finalFileInput) finalFileInput.click();
         });
     }
     
-    // Evento de seleção de arquivo
     if (finalFileInput) {
         finalFileInput.addEventListener('change', (e) => {
             if (e.target.files && e.target.files.length > 0) {
@@ -122,7 +116,6 @@ function inicializarCadastroProduto() {
         });
     }
     
-    // Evento de remover foto
     if (finalRemovePhotoBtn) {
         finalRemovePhotoBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -130,7 +123,6 @@ function inicializarCadastroProduto() {
         });
     }
     
-    // Máscara de preço
     if (finalPriceInput) {
         finalPriceInput.addEventListener('input', function(e) {
             let raw = e.target.value;
@@ -161,13 +153,12 @@ function inicializarCadastroProduto() {
         });
     }
     
-    // Reset inicial
     resetPhoto();
     if (finalPriceInput) finalPriceInput.placeholder = "0,00";
 }
 
-// Função para salvar o produto
-window.salvarProduto = function() {
+// Função para salvar o produto no FIREBASE
+window.salvarProduto = async function() {
     const productName = document.getElementById('productName');
     const categorySelect = document.getElementById('productCategory');
     const priceInput = document.getElementById('productPrice');
@@ -177,8 +168,9 @@ window.salvarProduto = function() {
     const categoria = categorySelect ? categorySelect.value : '';
     const precoRaw = priceInput ? priceInput.value.trim() : '';
     const descricao = descriptionTextarea ? descriptionTextarea.value.trim() : '';
+    const lojaId = localStorage.getItem('userUID') || 'loja_principal';
+    const nomeLoja = localStorage.getItem('nomeUsuario') || 'Minha Loja';
     
-    // Validações
     if (nome === '') {
         showToast('⚠️ Informe o nome do produto', true);
         if (productName) productName.focus();
@@ -187,13 +179,11 @@ window.salvarProduto = function() {
     
     if (!categoria || categoria === '') {
         showToast('📂 Selecione uma categoria', true);
-        if (categorySelect) categorySelect.focus();
         return;
     }
     
     if (precoRaw === '') {
         showToast('💰 Defina um preço válido (ex: 15,90)', true);
-        if (priceInput) priceInput.focus();
         return;
     }
     
@@ -201,132 +191,340 @@ window.salvarProduto = function() {
     let precoNumerico = parseFloat(numericStr);
     if (isNaN(precoNumerico) || precoNumerico < 0) {
         showToast('Preço inválido, utilize formato 0,00', true);
-        if (priceInput) priceInput.focus();
         return;
     }
     
     if (descricao === '') {
         showToast('✏️ Adicione uma descrição do produto', true);
-        if (descriptionTextarea) descriptionTextarea.focus();
         return;
     }
     
-    // Criar objeto do produto
-    const novoProduto = {
-        id: Date.now(),
-        nome: nome,
-        categoria: categoria,
-        preco: precoNumerico,
-        precoFormatado: `R$ ${precoNumerico.toFixed(2).replace('.', ',')}`,
-        descricao: descricao,
-        disponivel: true,
-        temFoto: !!currentImageData,
-        fotoBase64: currentImageData || null,
-        dataCadastro: new Date().toISOString()
-    };
+    showToast('📤 Salvando produto no servidor...', false);
     
-    // Salvar no localStorage
-    let produtos = JSON.parse(localStorage.getItem('produtosCardapio') || '[]');
-    produtos.push(novoProduto);
-    localStorage.setItem('produtosCardapio', JSON.stringify(produtos));
-    
-    // Adicionar ao cardápio visualmente
-    adicionarProdutoAoCardapio(novoProduto);
-    
-    console.log('📦 Produto cadastrado:', novoProduto);
-    showToast(`✅ "${nome}" salvo com sucesso!`, false);
-    
-    // Limpar formulário
-    if (productName) productName.value = '';
-    if (categorySelect) categorySelect.value = '';
-    if (priceInput) priceInput.value = '';
-    if (descriptionTextarea) descriptionTextarea.value = '';
-    
-    // Resetar foto
-    const uploadArea = document.getElementById('uploadArea');
-    const previewContainer = document.getElementById('photoPreviewContainer');
-    const fileInput = document.getElementById('productPhotoInput');
-    const previewImg = document.getElementById('previewImg');
-    
-    currentImageData = null;
-    currentFile = null;
-    if (fileInput) fileInput.value = '';
-    if (previewImg) previewImg.src = '#';
-    if (previewContainer) previewContainer.style.display = 'none';
-    if (uploadArea) uploadArea.style.display = 'flex';
-    
-    // Voltar para o cardápio após 1.5 segundos
-    setTimeout(() => {
-        mudarTela('tela-11');
+    try {
+        let fotoURL = null;
+        
+        if (currentFile) {
+            const fileName = `produtos/${lojaId}/${Date.now()}_${currentFile.name}`;
+            const storageRef = firebase.storage().ref(fileName);
+            const uploadTask = await storageRef.put(currentFile);
+            fotoURL = await uploadTask.ref.getDownloadURL();
+        }
+        
+        const novoProduto = {
+            nome: nome,
+            categoria: categoria,
+            preco: precoNumerico,
+            precoFormatado: `R$ ${precoNumerico.toFixed(2).replace('.', ',')}`,
+            descricao: descricao,
+            disponivel: true,
+            fotoURL: fotoURL,
+            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+            lojaId: lojaId,
+            nomeLoja: nomeLoja
+        };
+        
+        const docRef = await firebase.firestore().collection('produtos').add(novoProduto);
+        
+        console.log('✅ Produto salvo no Firebase com ID:', docRef.id);
+        showToast(`✅ "${nome}" salvo com sucesso!`, false);
+        
+        if (productName) productName.value = '';
+        if (categorySelect) categorySelect.value = '';
+        if (priceInput) priceInput.value = '';
+        if (descriptionTextarea) descriptionTextarea.value = '';
+        
+        const uploadArea = document.getElementById('uploadArea');
+        const previewContainer = document.getElementById('photoPreviewContainer');
+        const fileInput = document.getElementById('productPhotoInput');
+        const previewImg = document.getElementById('previewImg');
+        
+        currentImageData = null;
+        currentFile = null;
+        if (fileInput) fileInput.value = '';
+        if (previewImg) previewImg.src = '#';
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (uploadArea) uploadArea.style.display = 'flex';
+        
         setTimeout(() => {
-            location.reload();
-        }, 100);
-    }, 1500);
+            mudarTela('tela-11');
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Erro ao salvar produto:', error);
+        showToast('❌ Erro ao salvar! Verifique sua internet.', true);
+    }
 };
 
-// Função para adicionar produto ao cardápio visualmente
-function adicionarProdutoAoCardapio(produto) {
+// ==========================================
+// CARDÁPIO DA EMPRESA (COM SYNC EM TEMPO REAL)
+// ==========================================
+
+let unsubscribeEmpresa = null;
+
+function inicializarBuscaCardapioEmpresa() {
+    const buscaInput = document.getElementById('cardapio-busca');
+    if (!buscaInput) return;
+    
+    const newBuscaInput = buscaInput.cloneNode(true);
+    buscaInput.parentNode.replaceChild(newBuscaInput, buscaInput);
+    
+    const finalBuscaInput = document.getElementById('cardapio-busca');
+    finalBuscaInput.addEventListener('input', function(e) {
+        aplicarFiltroEmpresa(e.target.value);
+    });
+    
+    carregarProdutosEmpresa();
+}
+
+function carregarProdutosEmpresa() {
     const cardapioContent = document.getElementById('cardapio-content');
     if (!cardapioContent) return;
     
-    // Verificar se já existe a categoria
-    let categoriaExists = false;
-    const categorias = cardapioContent.querySelectorAll('h3');
-    categorias.forEach(cat => {
-        if (cat.textContent === produto.categoria) {
-            categoriaExists = true;
+    if (unsubscribeEmpresa) {
+        unsubscribeEmpresa();
+    }
+    
+    const lojaId = localStorage.getItem('userUID') || 'loja_principal';
+    
+    cardapioContent.innerHTML = '<p style="text-align:center; padding:20px;">🔄 Carregando cardápio...</p>';
+    
+    const produtosQuery = firebase.firestore()
+        .collection('produtos')
+        .where('lojaId', '==', lojaId)
+        .orderBy('categoria')
+        .orderBy('dataCadastro', 'desc');
+    
+    unsubscribeEmpresa = produtosQuery.onSnapshot((snapshot) => {
+        const produtos = [];
+        snapshot.forEach(doc => {
+            produtos.push({ id: doc.id, ...doc.data() });
+        });
+        
+        if (produtos.length === 0) {
+            cardapioContent.innerHTML = '<p style="text-align:center; padding:20px; color:#999;">📭 Nenhum produto cadastrado. Clique no + para adicionar.</p>';
+            return;
         }
+        
+        const categoriasMap = new Map();
+        produtos.forEach(produto => {
+            if (!categoriasMap.has(produto.categoria)) {
+                categoriasMap.set(produto.categoria, []);
+            }
+            categoriasMap.get(produto.categoria).push(produto);
+        });
+        
+        let html = '';
+        for (const [categoria, produtosCat] of categoriasMap) {
+            html += `<h3>${categoria}</h3>`;
+            produtosCat.forEach(produto => {
+                html += `
+                    <div class="cardapio-item" data-id="${produto.id}" data-nome="${produto.nome.toLowerCase()}" data-descricao="${produto.descricao.toLowerCase()}">
+                        <div style="display:flex; gap:12px; width:100%;">
+                            ${produto.fotoURL ? `<img src="${produto.fotoURL}" style="width:56px; height:56px; border-radius:12px; object-fit:cover;">` : ''}
+                            <div style="flex:1;">
+                                <h4>${produto.nome}</h4>
+                                <p>${produto.descricao.substring(0, 80)}${produto.descricao.length > 80 ? '...' : ''}</p>
+                                <span class="cardapio-price">${produto.precoFormatado}</span>
+                            </div>
+                        </div>
+                        <label class="cardapio-switch">
+                            <input type="checkbox" ${produto.disponivel ? 'checked' : ''} onchange="toggleDisponibilidadeProduto('${produto.id}', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                `;
+            });
+        }
+        
+        cardapioContent.innerHTML = html;
+        
+        const buscaValor = document.getElementById('cardapio-busca');
+        if (buscaValor && buscaValor.value) {
+            aplicarFiltroEmpresa(buscaValor.value);
+        }
+        
+    }, (error) => {
+        console.error('Erro ao carregar produtos:', error);
+        cardapioContent.innerHTML = '<p style="text-align:center; padding:20px; color:red;">⚠️ Erro ao carregar cardápio.</p>';
     });
-    
-    // Se a categoria não existe, criar nova seção
-    if (!categoriaExists && produto.categoria !== '') {
-        const newCategoryHeader = document.createElement('h3');
-        newCategoryHeader.textContent = produto.categoria;
-        cardapioContent.appendChild(newCategoryHeader);
-    }
-    
-    // Encontrar onde inserir (após o header da categoria)
-    let targetSection = null;
-    const headers = cardapioContent.querySelectorAll('h3');
-    for (let i = 0; i < headers.length; i++) {
-        if (headers[i].textContent === produto.categoria) {
-            targetSection = headers[i];
-            break;
-        }
-    }
-    
-    // Criar o item do produto
-    const newItem = document.createElement('div');
-    newItem.className = 'cardapio-item';
-    newItem.setAttribute('data-id', produto.id);
-    newItem.innerHTML = `
-        <div>
-            <h4>${produto.nome}</h4>
-            <p>${produto.descricao}</p>
-            <span class="cardapio-price">${produto.precoFormatado}</span>
-        </div>
-        <label class="cardapio-switch">
-            <input type="checkbox" checked>
-            <span class="slider"></span>
-        </label>
-    `;
-    
-    // Inserir após o header da categoria
-    if (targetSection && targetSection.nextSibling) {
-        if (targetSection.nextSibling.classList && targetSection.nextSibling.classList.contains('cardapio-item')) {
-            // Inserir antes do próximo item
-            cardapioContent.insertBefore(newItem, targetSection.nextSibling);
-        } else {
-            cardapioContent.insertBefore(newItem, targetSection.nextSibling);
-        }
-    } else if (targetSection) {
-        cardapioContent.appendChild(newItem);
-    } else {
-        cardapioContent.appendChild(newItem);
-    }
 }
 
-// Função para mostrar toast
+window.toggleDisponibilidadeProduto = async function(produtoId, disponivel) {
+    try {
+        await firebase.firestore().collection('produtos').doc(produtoId).update({
+            disponivel: disponivel
+        });
+        console.log(`Produto ${produtoId} agora está ${disponivel ? 'disponível' : 'indisponível'}`);
+    } catch (error) {
+        console.error('Erro ao atualizar disponibilidade:', error);
+        showToast('❌ Erro ao atualizar status', true);
+    }
+};
+
+function aplicarFiltroEmpresa(termo) {
+    termo = termo.toLowerCase();
+    const items = document.querySelectorAll('#cardapio-content .cardapio-item');
+    const categorias = document.querySelectorAll('#cardapio-content h3');
+    
+    items.forEach(item => {
+        const nome = item.getAttribute('data-nome') || '';
+        const descricao = item.getAttribute('data-descricao') || '';
+        const match = termo === '' || nome.includes(termo) || descricao.includes(termo);
+        item.style.display = match ? 'flex' : 'none';
+    });
+    
+    categorias.forEach(categoria => {
+        let nextItem = categoria.nextElementSibling;
+        let hasVisibleItem = false;
+        while (nextItem && nextItem.classList && nextItem.classList.contains('cardapio-item')) {
+            if (nextItem.style.display !== 'none') {
+                hasVisibleItem = true;
+                break;
+            }
+            nextItem = nextItem.nextElementSibling;
+        }
+        categoria.style.display = hasVisibleItem ? 'block' : 'none';
+    });
+}
+
+// ==========================================
+// CARDÁPIO DO CLIENTE
+// ==========================================
+
+let unsubscribeCliente = null;
+
+window.abrirCardapioCliente = function() {
+    const nomeLoja = localStorage.getItem('nomeUsuario') || 'Nosso Cardápio';
+    const nomeLojaElem = document.getElementById('nomeLojaCardapio');
+    if (nomeLojaElem) nomeLojaElem.textContent = nomeLoja;
+    
+    carregarProdutosCliente();
+    mudarTela('tela-15');
+};
+
+function carregarProdutosCliente() {
+    const cardapioContent = document.getElementById('cardapio-cliente-content');
+    if (!cardapioContent) return;
+    
+    if (unsubscribeCliente) {
+        unsubscribeCliente();
+    }
+    
+    cardapioContent.innerHTML = '<p style="text-align:center; padding:20px;">🔄 Carregando cardápio...</p>';
+    
+    const produtosQuery = firebase.firestore()
+        .collection('produtos')
+        .where('disponivel', '==', true)
+        .orderBy('categoria')
+        .orderBy('dataCadastro', 'desc');
+    
+    unsubscribeCliente = produtosQuery.onSnapshot((snapshot) => {
+        const produtos = [];
+        snapshot.forEach(doc => {
+            produtos.push({ id: doc.id, ...doc.data() });
+        });
+        
+        if (produtos.length === 0) {
+            cardapioContent.innerHTML = '<p style="text-align:center; padding:20px; color:#999;">📭 Nenhum produto disponível no momento.</p>';
+            return;
+        }
+        
+        const categoriasMap = new Map();
+        produtos.forEach(produto => {
+            if (!categoriasMap.has(produto.categoria)) {
+                categoriasMap.set(produto.categoria, []);
+            }
+            categoriasMap.get(produto.categoria).push(produto);
+        });
+        
+        let html = '';
+        for (const [categoria, produtosCat] of categoriasMap) {
+            html += `<h3>${categoria}</h3>`;
+            produtosCat.forEach(produto => {
+                html += `
+                    <div class="cardapio-item-cliente" data-id="${produto.id}" data-nome="${produto.nome.toLowerCase()}" data-preco="${produto.preco}">
+                        <div style="display: flex; gap: 12px; width: 100%; align-items: center;">
+                            ${produto.fotoURL ? `<img src="${produto.fotoURL}" style="width: 60px; height: 60px; border-radius: 12px; object-fit: cover;">` : ''}
+                            <div style="flex: 1;">
+                                <h4 style="font-size: 14px; font-weight: 700;">${produto.nome}</h4>
+                                <p style="font-size: 12px; color: #666; margin: 4px 0;">${produto.descricao.substring(0, 60)}${produto.descricao.length > 60 ? '...' : ''}</p>
+                                <span class="cardapio-price" style="font-weight: 700; color: var(--primary); font-size: 13px;">${produto.precoFormatado}</span>
+                            </div>
+                            <button class="btn-adicionar" onclick="adicionarAoCarrinho('${produto.id}', '${produto.nome.replace(/'/g, "\\'")}', ${produto.preco})">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        cardapioContent.innerHTML = html;
+        
+        const buscaInput = document.getElementById('cardapio-cliente-busca');
+        if (buscaInput && buscaInput.value) {
+            aplicarFiltroCliente(buscaInput.value);
+        }
+        
+    }, (error) => {
+        console.error('Erro ao carregar cardápio do cliente:', error);
+        cardapioContent.innerHTML = '<p style="text-align:center; padding:20px; color:red;">⚠️ Erro ao carregar cardápio.</p>';
+    });
+}
+
+function inicializarBuscaCliente() {
+    const buscaInput = document.getElementById('cardapio-cliente-busca');
+    if (!buscaInput) return;
+    
+    buscaInput.addEventListener('input', function(e) {
+        aplicarFiltroCliente(e.target.value);
+    });
+}
+
+function aplicarFiltroCliente(termo) {
+    termo = termo.toLowerCase();
+    const items = document.querySelectorAll('#cardapio-cliente-content .cardapio-item-cliente');
+    const categorias = document.querySelectorAll('#cardapio-cliente-content h3');
+    
+    items.forEach(item => {
+        const nome = item.getAttribute('data-nome') || '';
+        item.style.display = (termo === '' || nome.includes(termo)) ? 'block' : 'none';
+    });
+    
+    categorias.forEach(categoria => {
+        let nextItem = categoria.nextElementSibling;
+        let hasVisibleItem = false;
+        while (nextItem && nextItem.classList && nextItem.classList.contains('cardapio-item-cliente')) {
+            if (nextItem.style.display !== 'none') {
+                hasVisibleItem = true;
+                break;
+            }
+            nextItem = nextItem.nextElementSibling;
+        }
+        categoria.style.display = hasVisibleItem ? 'block' : 'none';
+    });
+}
+
+// Carrinho simples
+let carrinho = [];
+
+window.adicionarAoCarrinho = function(id, nome, preco) {
+    const itemExistente = carrinho.find(item => item.id === id);
+    if (itemExistente) {
+        itemExistente.quantidade++;
+    } else {
+        carrinho.push({ id, nome, preco, quantidade: 1 });
+    }
+    
+    showToast(`🛒 ${nome} adicionado ao carrinho!`, false);
+    console.log('Carrinho:', carrinho);
+};
+
+// ==========================================
+// FUNCIONALIDADES EXISTENTES (CHAT, SWITCH, ETC)
+// ==========================================
+
 function showToast(message, isError = false) {
     let toast = document.querySelector('.toast-message');
     if (!toast) {
@@ -586,45 +784,6 @@ function aceitarPedido(botao) {
     }
 }
 
-// BUSCA CARDÁPIO
-function inicializarBuscaCardapio() {
-    const buscaInput = document.getElementById('cardapio-busca');
-    if (!buscaInput || buscaInput.hasListener) return;
-    
-    buscaInput.addEventListener('input', function(e) {
-        const termo = e.target.value.toLowerCase();
-        const items = document.querySelectorAll('#cardapio-content .cardapio-item');
-        const categorias = document.querySelectorAll('#cardapio-content h3');
-        
-        items.forEach(item => {
-            const nome = item.querySelector('h4').textContent.toLowerCase();
-            const descricao = item.querySelector('p').textContent.toLowerCase();
-            item.style.display = (termo === '' || nome.includes(termo) || descricao.includes(termo)) ? 'flex' : 'none';
-        });
-        
-        categorias.forEach(categoria => {
-            let nextItem = categoria.nextElementSibling;
-            let hasVisibleItem = false;
-            while (nextItem && nextItem.classList && nextItem.classList.contains('cardapio-item')) {
-                if (nextItem.style.display !== 'none') { hasVisibleItem = true; break; }
-                nextItem = nextItem.nextElementSibling;
-            }
-            categoria.style.display = (hasVisibleItem || termo === '') ? 'block' : 'none';
-        });
-    });
-    buscaInput.hasListener = true;
-    
-    // Carregar produtos salvos do localStorage
-    carregarProdutosSalvos();
-}
-
-function carregarProdutosSalvos() {
-    const produtos = JSON.parse(localStorage.getItem('produtosCardapio') || '[]');
-    produtos.forEach(produto => {
-        adicionarProdutoAoCardapio(produto);
-    });
-}
-
 // BUSCA MENSAGENS
 function inicializarBuscaMensagens() {
     const buscaInput = document.getElementById('mensagens-busca-input');
@@ -684,6 +843,10 @@ document.addEventListener('click', function(e) {
 // Função para abrir o cadastro de produto
 window.abrirCadastroProduto = function() {
     mudarTela('tela-14');
+};
+
+window.fecharCadastroProduto = function() {
+    mudarTela('tela-11');
 };
 
 // INICIALIZAÇÃO
