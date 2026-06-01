@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>ProntosJá - Cardápio</title>
+    <title>ProntosJá - Delivery</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -130,7 +130,7 @@
                             <button class="btn-visibilidade"><span class="material-symbols-outlined">visibility</span></button>
                         </div>
                     </div>
-                    <button onclick="mudarTela('tela-5')" class="btn-principal">Cadastrar</button>
+                    <button onclick="cadastrarCliente()" class="btn-principal">Cadastrar</button>
                 </div>
             </section>
 
@@ -157,7 +157,7 @@
                             <label>CNPJ</label>
                             <div class="input-wrapper">
                                 <span class="material-symbols-outlined">badge</span>
-                                <input type="text" placeholder="00.000.000/0000-00">
+                                <input type="text" id="cnpjLoja" placeholder="00.000.000/0000-00">
                             </div>
                         </div>
                         <div class="campo-input">
@@ -179,15 +179,6 @@
                                 <input type="text" id="enderecoLoja" placeholder="Buscar endereço...">
                                 <span class="material-symbols-outlined icone-local">location_on</span>
                             </div>
-                        </div>
-                        <div class="campo-input">
-                            <label>Senha</label>
-                            <div class="input-wrapper">
-                                <span class="material-symbols-outlined">lock</span>
-                                <input type="password" placeholder="Crie uma senha forte">
-                                <button class="btn-visibilidade"><span class="material-symbols-outlined">visibility_off</span></button>
-                            </div>
-                            <p class="info-senha">Mínimo de 8 caracteres.</p>
                         </div>
                     </div>
                     <button onclick="salvarDadosEmpresa()" class="btn-principal btn-salvar">
@@ -291,7 +282,7 @@
                 <nav class="navegacao-inferior"><button class="nav-item ativo" onclick="mudarTela('tela-10')"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item" onclick="mudarTela('tela-11')"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button class="nav-item" onclick="mudarTela('tela-12')"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item" onclick="mudarTela('tela-13')"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
-            <!-- TELA 11: CARDÁPIO EMPRESA (com FAB para cadastrar produto) -->
+            <!-- TELA 11: CARDÁPIO EMPRESA -->
             <section id="tela-11" class="tela">
                 <div class="cardapio-header"><div class="cardapio-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Cardápio Digital</h1></div><div class="cardapio-search"><span class="material-symbols-outlined">search</span><input type="text" id="cardapio-busca" placeholder="Buscar produtos..."></div></div>
                 <div class="cardapio-content" id="cardapio-content">
@@ -360,6 +351,8 @@
                                     <option value="Bebidas">Bebidas</option>
                                     <option value="Sobremesas">Sobremesas</option>
                                     <option value="Acompanhamentos">Acompanhamentos</option>
+                                    <option value="Pizzas">Pizzas</option>
+                                    <option value="Massas">Massas</option>
                                 </select>
                             </div>
                         </div>
@@ -475,8 +468,6 @@
                 if (tipoUsuario === 'cliente') {
                     mudarTela('tela-5');
                 } else if (tipoUsuario === 'empresa') {
-                    // Carregar dados da empresa se existir
-                    carregarDadosEmpresa(email);
                     mudarTela('tela-10');
                 } else {
                     mudarTela('tela-5');
@@ -487,57 +478,26 @@
             }
         };
 
+        window.cadastrarCliente = function() {
+            mudarTela('tela-5');
+        };
+
+        window.salvarDadosEmpresa = function() {
+            const nomeLoja = document.getElementById('nomeLoja').value;
+            if (!nomeLoja) {
+                alert("Digite o nome da loja");
+                return;
+            }
+            localStorage.setItem('nomeLoja', nomeLoja);
+            mudarTela('tela-10');
+        };
+
         window.sairDaConta = function() {
             auth.signOut().then(() => {
                 tipoUsuario = null;
-                localStorage.removeItem('tipoUsuario');
-                localStorage.removeItem('nomeUsuario');
-                localStorage.removeItem('emailUsuario');
-                localStorage.removeItem('userUID');
+                localStorage.clear();
                 mudarTela('tela-2');
             }).catch((error) => console.error("Erro ao sair:", error));
-        };
-
-        function carregarDadosEmpresa(email) {
-            db.collection('empresas').where('email', '==', email).get()
-                .then((querySnapshot) => {
-                    if (!querySnapshot.empty) {
-                        const empresa = querySnapshot.docs[0].data();
-                        const nomeLojaElem = document.getElementById('nomeLojaAjustes');
-                        if (nomeLojaElem) nomeLojaElem.textContent = empresa.nomeLoja || "Minha Loja";
-                    }
-                })
-                .catch(error => console.error("Erro ao carregar empresa:", error));
-        }
-
-        window.salvarDadosEmpresa = async function() {
-            const nomeLoja = document.getElementById('nomeLoja').value;
-            const categoriaLoja = document.getElementById('categoriaLoja').value;
-            const enderecoLoja = document.getElementById('enderecoLoja').value;
-            const email = localStorage.getItem('emailUsuario');
-            const uid = localStorage.getItem('userUID');
-            
-            if (!nomeLoja) {
-                showToast('⚠️ Informe o nome da loja', true);
-                return;
-            }
-            
-            try {
-                await db.collection('empresas').doc(uid).set({
-                    nomeLoja: nomeLoja,
-                    categoria: categoriaLoja,
-                    endereco: enderecoLoja,
-                    email: email,
-                    uid: uid,
-                    dataCadastro: new Date().toISOString()
-                });
-                
-                showToast('✅ Dados salvos com sucesso!', false);
-                setTimeout(() => mudarTela('tela-10'), 1500);
-            } catch (error) {
-                console.error("Erro ao salvar empresa:", error);
-                showToast('❌ Erro ao salvar dados', true);
-            }
         };
 
         window.addEventListener('DOMContentLoaded', function() {
