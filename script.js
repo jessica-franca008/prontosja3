@@ -16,7 +16,7 @@ function mudarTela(idTela) {
     }
     
     if (idTela === 'tela-11') {
-        setTimeout(inicializarBuscaCardapioEmpresa, 100);
+        setTimeout(carregarProdutosEmpresa, 100);
     }
     
     if (idTela === 'tela-12') {
@@ -26,25 +26,26 @@ function mudarTela(idTela) {
         }, 100);
     }
     
-    if (idTela === 'tela-13') {
-        setTimeout(inicializarAjustes, 100);
-    }
-    
     if (idTela === 'tela-14') {
         setTimeout(inicializarCadastroProduto, 100);
     }
     
     if (idTela === 'tela-15') {
-        setTimeout(inicializarBuscaCliente, 100);
+        setTimeout(carregarProdutosCliente, 100);
     }
 }
 
 // ==========================================
-// FUNCIONALIDADES DO CADASTRO DE PRODUTO
+// VARIÁVEIS GLOBAIS
 // ==========================================
-
 let currentImageData = null;
 let currentFile = null;
+let unsubscribeEmpresa = null;
+let unsubscribeCliente = null;
+
+// ==========================================
+// FUNCIONALIDADES DO CADASTRO DE PRODUTO
+// ==========================================
 
 function inicializarCadastroProduto() {
     const uploadArea = document.getElementById('uploadArea');
@@ -53,36 +54,27 @@ function inicializarCadastroProduto() {
     const previewImg = document.getElementById('previewImg');
     const previewFileNameSpan = document.getElementById('previewFileName');
     const removePhotoBtn = document.getElementById('removePhotoBtn');
+    const priceInput = document.getElementById('productPrice');
     
     if (!uploadArea) return;
     
-    const newUploadArea = uploadArea.cloneNode(true);
-    uploadArea.parentNode.replaceChild(newUploadArea, uploadArea);
-    
-    const newRemovePhotoBtn = removePhotoBtn ? removePhotoBtn.cloneNode(true) : null;
-    if (removePhotoBtn && newRemovePhotoBtn) {
-        removePhotoBtn.parentNode.replaceChild(newRemovePhotoBtn, removePhotoBtn);
-    }
-    
-    const finalUploadArea = document.getElementById('uploadArea');
-    const finalFileInput = document.getElementById('productPhotoInput');
-    const finalPreviewContainer = document.getElementById('photoPreviewContainer');
-    const finalPreviewImg = document.getElementById('previewImg');
-    const finalPreviewFileNameSpan = document.getElementById('previewFileName');
-    const finalRemovePhotoBtn = document.getElementById('removePhotoBtn');
-    const finalPriceInput = document.getElementById('productPrice');
+    // Resetar formulário
+    document.getElementById('productName').value = '';
+    document.getElementById('productCategory').value = '';
+    document.getElementById('productPrice').value = '';
+    document.getElementById('productDescription').value = '';
     
     function showPreview(file) {
         if (!file) return;
         const reader = new FileReader();
         reader.onload = function(e) {
             currentImageData = e.target.result;
-            if (finalPreviewImg) finalPreviewImg.src = currentImageData;
-            if (finalPreviewFileNameSpan) {
-                finalPreviewFileNameSpan.innerText = file.name.length > 28 ? file.name.substring(0, 25) + '...' : file.name;
+            if (previewImg) previewImg.src = currentImageData;
+            if (previewFileNameSpan) {
+                previewFileNameSpan.innerText = file.name.length > 28 ? file.name.substring(0, 25) + '...' : file.name;
             }
-            if (finalUploadArea) finalUploadArea.style.display = 'none';
-            if (finalPreviewContainer) finalPreviewContainer.style.display = 'flex';
+            if (uploadArea) uploadArea.style.display = 'none';
+            if (previewContainer) previewContainer.style.display = 'flex';
         };
         reader.readAsDataURL(file);
         currentFile = file;
@@ -91,11 +83,19 @@ function inicializarCadastroProduto() {
     function resetPhoto() {
         currentImageData = null;
         currentFile = null;
-        if (finalFileInput) finalFileInput.value = '';
-        if (finalPreviewImg) finalPreviewImg.src = '#';
-        if (finalPreviewContainer) finalPreviewContainer.style.display = 'none';
-        if (finalUploadArea) finalUploadArea.style.display = 'flex';
+        if (fileInput) fileInput.value = '';
+        if (previewImg) previewImg.src = '#';
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (uploadArea) uploadArea.style.display = 'flex';
     }
+    
+    // Remover listeners antigos
+    const newUploadArea = uploadArea.cloneNode(true);
+    uploadArea.parentNode.replaceChild(newUploadArea, uploadArea);
+    
+    const finalUploadArea = document.getElementById('uploadArea');
+    const finalFileInput = document.getElementById('productPhotoInput');
+    const finalRemovePhotoBtn = document.getElementById('removePhotoBtn');
     
     if (finalUploadArea) {
         finalUploadArea.addEventListener('click', () => {
@@ -110,21 +110,23 @@ function inicializarCadastroProduto() {
                 if (file.type.startsWith('image/')) {
                     showPreview(file);
                 } else {
-                    showToast('Por favor selecione uma imagem válida (PNG ou JPG)', true);
+                    showToast('Por favor selecione uma imagem válida', true);
                 }
             }
         });
     }
     
     if (finalRemovePhotoBtn) {
-        finalRemovePhotoBtn.addEventListener('click', (e) => {
+        const newRemoveBtn = finalRemovePhotoBtn.cloneNode(true);
+        finalRemovePhotoBtn.parentNode.replaceChild(newRemoveBtn, finalRemovePhotoBtn);
+        document.getElementById('removePhotoBtn').addEventListener('click', (e) => {
             e.stopPropagation();
             resetPhoto();
         });
     }
     
-    if (finalPriceInput) {
-        finalPriceInput.addEventListener('input', function(e) {
+    if (priceInput) {
+        priceInput.addEventListener('input', function(e) {
             let raw = e.target.value;
             let filtered = raw.replace(/[^\d,]/g, '');
             let parts = filtered.split(',');
@@ -136,29 +138,16 @@ function inicializarCadastroProduto() {
             }
             e.target.value = filtered;
         });
-        
-        finalPriceInput.addEventListener('blur', function() {
-            let val = this.value;
-            if (val === '') return;
-            if (val.endsWith(',')) {
-                this.value = val + '00';
-            } else {
-                let parts = val.split(',');
-                if (parts.length === 1 && parts[0].length > 0) {
-                    this.value = parts[0] + ',00';
-                } else if (parts.length === 2 && parts[1].length === 1) {
-                    this.value = parts[0] + ',' + parts[1] + '0';
-                }
-            }
-        });
     }
     
     resetPhoto();
-    if (finalPriceInput) finalPriceInput.placeholder = "0,00";
+    if (priceInput) priceInput.placeholder = "0,00";
 }
 
-// Função para salvar o produto no FIREBASE
+// SALVAR PRODUTO NO FIREBASE
 window.salvarProduto = async function() {
+    console.log("🔵 FUNÇÃO SALVAR PRODUTO EXECUTADA");
+    
     const productName = document.getElementById('productName');
     const categorySelect = document.getElementById('productCategory');
     const priceInput = document.getElementById('productPrice');
@@ -168,22 +157,20 @@ window.salvarProduto = async function() {
     const categoria = categorySelect ? categorySelect.value : '';
     const precoRaw = priceInput ? priceInput.value.trim() : '';
     const descricao = descriptionTextarea ? descriptionTextarea.value.trim() : '';
-    const lojaId = localStorage.getItem('userUID') || 'loja_principal';
-    const nomeLoja = localStorage.getItem('nomeUsuario') || 'Minha Loja';
     
+    console.log("Dados:", { nome, categoria, precoRaw });
+    
+    // Validações
     if (nome === '') {
         showToast('⚠️ Informe o nome do produto', true);
-        if (productName) productName.focus();
         return;
     }
-    
     if (!categoria || categoria === '') {
         showToast('📂 Selecione uma categoria', true);
         return;
     }
-    
     if (precoRaw === '') {
-        showToast('💰 Defina um preço válido (ex: 15,90)', true);
+        showToast('💰 Defina um preço válido', true);
         return;
     }
     
@@ -195,23 +182,32 @@ window.salvarProduto = async function() {
     }
     
     if (descricao === '') {
-        showToast('✏️ Adicione uma descrição do produto', true);
+        showToast('✏️ Adicione uma descrição', true);
         return;
     }
     
-    showToast('📤 Salvando produto no servidor...', false);
+    // Verificar Firebase
+    if (!firebase || !firebase.firestore) {
+        console.error("❌ Firebase não carregado!");
+        showToast('❌ Erro: Firebase não inicializado', true);
+        return;
+    }
+    
+    showToast('📤 Salvando...', false);
     
     try {
         let fotoURL = null;
         
+        // Upload da foto se existir
         if (currentFile) {
-            const fileName = `produtos/${lojaId}/${Date.now()}_${currentFile.name}`;
+            const fileName = `produtos/${Date.now()}_${currentFile.name}`;
             const storageRef = firebase.storage().ref(fileName);
             const uploadTask = await storageRef.put(currentFile);
             fotoURL = await uploadTask.ref.getDownloadURL();
         }
         
-        const novoProduto = {
+        // Salvar no Firestore
+        const produto = {
             nome: nome,
             categoria: categoria,
             preco: precoNumerico,
@@ -219,30 +215,31 @@ window.salvarProduto = async function() {
             descricao: descricao,
             disponivel: true,
             fotoURL: fotoURL,
-            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
-            lojaId: lojaId,
-            nomeLoja: nomeLoja
+            dataCadastro: new Date().toISOString(),
+            lojaId: localStorage.getItem('userUID') || 'loja_teste',
+            lojaNome: localStorage.getItem('nomeUsuario') || 'Minha Loja'
         };
         
-        const docRef = await firebase.firestore().collection('produtos').add(novoProduto);
+        console.log("Enviando produto:", produto);
         
-        console.log('✅ Produto salvo no Firebase com ID:', docRef.id);
+        const docRef = await firebase.firestore().collection('produtos').add(produto);
+        
+        console.log("✅ PRODUTO SALVO! ID:", docRef.id);
         showToast(`✅ "${nome}" salvo com sucesso!`, false);
         
+        // Limpar formulário
         if (productName) productName.value = '';
         if (categorySelect) categorySelect.value = '';
         if (priceInput) priceInput.value = '';
         if (descriptionTextarea) descriptionTextarea.value = '';
         
-        const uploadArea = document.getElementById('uploadArea');
-        const previewContainer = document.getElementById('photoPreviewContainer');
-        const fileInput = document.getElementById('productPhotoInput');
-        const previewImg = document.getElementById('previewImg');
-        
+        // Resetar foto
         currentImageData = null;
         currentFile = null;
+        const fileInput = document.getElementById('productPhotoInput');
         if (fileInput) fileInput.value = '';
-        if (previewImg) previewImg.src = '#';
+        const previewContainer = document.getElementById('photoPreviewContainer');
+        const uploadArea = document.getElementById('uploadArea');
         if (previewContainer) previewContainer.style.display = 'none';
         if (uploadArea) uploadArea.style.display = 'flex';
         
@@ -251,85 +248,64 @@ window.salvarProduto = async function() {
         }, 1500);
         
     } catch (error) {
-        console.error('Erro ao salvar produto:', error);
-        showToast('❌ Erro ao salvar! Verifique sua internet.', true);
+        console.error("❌ ERRO:", error);
+        showToast(`❌ Erro: ${error.message}`, true);
     }
 };
 
 // ==========================================
-// CARDÁPIO DA EMPRESA (COM SYNC EM TEMPO REAL)
+// CARDÁPIO DA EMPRESA
 // ==========================================
 
-let unsubscribeEmpresa = null;
-
-function inicializarBuscaCardapioEmpresa() {
-    const buscaInput = document.getElementById('cardapio-busca');
-    if (!buscaInput) return;
-    
-    const newBuscaInput = buscaInput.cloneNode(true);
-    buscaInput.parentNode.replaceChild(newBuscaInput, buscaInput);
-    
-    const finalBuscaInput = document.getElementById('cardapio-busca');
-    finalBuscaInput.addEventListener('input', function(e) {
-        aplicarFiltroEmpresa(e.target.value);
-    });
-    
-    carregarProdutosEmpresa();
-}
-
 function carregarProdutosEmpresa() {
-    const cardapioContent = document.getElementById('cardapio-content');
-    if (!cardapioContent) return;
+    const container = document.getElementById('cardapio-content');
+    if (!container) return;
     
-    if (unsubscribeEmpresa) {
-        unsubscribeEmpresa();
-    }
+    if (unsubscribeEmpresa) unsubscribeEmpresa();
     
-    const lojaId = localStorage.getItem('userUID') || 'loja_principal';
+    const lojaId = localStorage.getItem('userUID') || 'loja_teste';
     
-    cardapioContent.innerHTML = '<p style="text-align:center; padding:20px;">🔄 Carregando cardápio...</p>';
+    container.innerHTML = '<p style="text-align:center; padding:20px;">🔄 Carregando...</p>';
     
-    const produtosQuery = firebase.firestore()
+    const query = firebase.firestore()
         .collection('produtos')
         .where('lojaId', '==', lojaId)
-        .orderBy('categoria')
         .orderBy('dataCadastro', 'desc');
     
-    unsubscribeEmpresa = produtosQuery.onSnapshot((snapshot) => {
+    unsubscribeEmpresa = query.onSnapshot((snapshot) => {
         const produtos = [];
         snapshot.forEach(doc => {
             produtos.push({ id: doc.id, ...doc.data() });
         });
         
         if (produtos.length === 0) {
-            cardapioContent.innerHTML = '<p style="text-align:center; padding:20px; color:#999;">📭 Nenhum produto cadastrado. Clique no + para adicionar.</p>';
+            container.innerHTML = '<p style="text-align:center; padding:20px;">📭 Nenhum produto. Clique no + para adicionar.</p>';
             return;
         }
         
-        const categoriasMap = new Map();
-        produtos.forEach(produto => {
-            if (!categoriasMap.has(produto.categoria)) {
-                categoriasMap.set(produto.categoria, []);
-            }
-            categoriasMap.get(produto.categoria).push(produto);
+        // Agrupar por categoria
+        const grupos = {};
+        produtos.forEach(p => {
+            if (!grupos[p.categoria]) grupos[p.categoria] = [];
+            grupos[p.categoria].push(p);
         });
         
         let html = '';
-        for (const [categoria, produtosCat] of categoriasMap) {
-            html += `<h3>${categoria}</h3>`;
-            produtosCat.forEach(produto => {
+        for (const [categoria, items] of Object.entries(grupos)) {
+            html += `<h3 style="margin-top: 16px;">${categoria}</h3>`;
+            items.forEach(p => {
                 html += `
-                    <div class="cardapio-item" data-id="${produto.id}" data-nome="${produto.nome.toLowerCase()}" data-descricao="${produto.descricao.toLowerCase()}">
-                        <div style="display:flex; gap:12px; width:100%;">
-                            ${produto.fotoURL ? `<img src="${produto.fotoURL}" style="width:56px; height:56px; border-radius:12px; object-fit:cover;">` : ''}
-                            <div style="flex:1;">
-                                <h4>${produto.nome}</h4>
-                                <p>${produto.descricao.substring(0, 80)}${produto.descricao.length > 80 ? '...' : ''}</p>
-                                <span class="cardapio-price">${produto.precoFormatado}</span>
+                    <div class="cardapio-item">
+                        <div style="display:flex; gap:12px; flex:1;">
+                            ${p.fotoURL ? `<img src="${p.fotoURL}" style="width:56px; height:56px; border-radius:12px; object-fit:cover;">` : ''}
+                            <div>
+                                <h4>${p.nome}</h4>
+                                <p style="font-size:12px; color:#666;">${p.descricao.substring(0, 60)}...</p>
+                                <span class="cardapio-price">${p.precoFormatado}</span>
                             </div>
                         </div>
                         <label class="cardapio-switch">
-                            <input type="checkbox" ${produto.disponivel ? 'checked' : ''} onchange="toggleDisponibilidadeProduto('${produto.id}', this.checked)">
+                            <input type="checkbox" ${p.disponivel ? 'checked' : ''} onchange="toggleProduto('${p.id}', this.checked)">
                             <span class="slider"></span>
                         </label>
                     </div>
@@ -337,192 +313,118 @@ function carregarProdutosEmpresa() {
             });
         }
         
-        cardapioContent.innerHTML = html;
+        container.innerHTML = html;
         
-        const buscaValor = document.getElementById('cardapio-busca');
-        if (buscaValor && buscaValor.value) {
-            aplicarFiltroEmpresa(buscaValor.value);
+        // Aplicar busca
+        const busca = document.getElementById('cardapio-busca');
+        if (busca && busca.value) {
+            filtrarProdutosEmpresa(busca.value);
         }
-        
-    }, (error) => {
-        console.error('Erro ao carregar produtos:', error);
-        cardapioContent.innerHTML = '<p style="text-align:center; padding:20px; color:red;">⚠️ Erro ao carregar cardápio.</p>';
     });
 }
 
-window.toggleDisponibilidadeProduto = async function(produtoId, disponivel) {
-    try {
-        await firebase.firestore().collection('produtos').doc(produtoId).update({
-            disponivel: disponivel
-        });
-        console.log(`Produto ${produtoId} agora está ${disponivel ? 'disponível' : 'indisponível'}`);
-    } catch (error) {
-        console.error('Erro ao atualizar disponibilidade:', error);
-        showToast('❌ Erro ao atualizar status', true);
-    }
-};
-
-function aplicarFiltroEmpresa(termo) {
+function filtrarProdutosEmpresa(termo) {
     termo = termo.toLowerCase();
     const items = document.querySelectorAll('#cardapio-content .cardapio-item');
-    const categorias = document.querySelectorAll('#cardapio-content h3');
-    
     items.forEach(item => {
-        const nome = item.getAttribute('data-nome') || '';
-        const descricao = item.getAttribute('data-descricao') || '';
-        const match = termo === '' || nome.includes(termo) || descricao.includes(termo);
-        item.style.display = match ? 'flex' : 'none';
-    });
-    
-    categorias.forEach(categoria => {
-        let nextItem = categoria.nextElementSibling;
-        let hasVisibleItem = false;
-        while (nextItem && nextItem.classList && nextItem.classList.contains('cardapio-item')) {
-            if (nextItem.style.display !== 'none') {
-                hasVisibleItem = true;
-                break;
-            }
-            nextItem = nextItem.nextElementSibling;
-        }
-        categoria.style.display = hasVisibleItem ? 'block' : 'none';
+        const nome = item.querySelector('h4')?.textContent.toLowerCase() || '';
+        item.style.display = nome.includes(termo) ? 'flex' : 'none';
     });
 }
+
+window.toggleProduto = async function(id, disponivel) {
+    try {
+        await firebase.firestore().collection('produtos').doc(id).update({ disponivel: disponivel });
+        console.log(`Produto ${id} agora ${disponivel ? 'disponível' : 'indisponível'}`);
+    } catch (error) {
+        console.error("Erro:", error);
+    }
+};
 
 // ==========================================
 // CARDÁPIO DO CLIENTE
 // ==========================================
 
-let unsubscribeCliente = null;
-
 window.abrirCardapioCliente = function() {
-    const nomeLoja = localStorage.getItem('nomeUsuario') || 'Nosso Cardápio';
-    const nomeLojaElem = document.getElementById('nomeLojaCardapio');
-    if (nomeLojaElem) nomeLojaElem.textContent = nomeLoja;
-    
-    carregarProdutosCliente();
     mudarTela('tela-15');
 };
 
 function carregarProdutosCliente() {
-    const cardapioContent = document.getElementById('cardapio-cliente-content');
-    if (!cardapioContent) return;
+    const container = document.getElementById('cardapio-cliente-content');
+    if (!container) return;
     
-    if (unsubscribeCliente) {
-        unsubscribeCliente();
-    }
+    if (unsubscribeCliente) unsubscribeCliente();
     
-    cardapioContent.innerHTML = '<p style="text-align:center; padding:20px;">🔄 Carregando cardápio...</p>';
+    container.innerHTML = '<p style="text-align:center; padding:20px;">🔄 Carregando cardápio...</p>';
     
-    const produtosQuery = firebase.firestore()
+    const query = firebase.firestore()
         .collection('produtos')
         .where('disponivel', '==', true)
-        .orderBy('categoria')
         .orderBy('dataCadastro', 'desc');
     
-    unsubscribeCliente = produtosQuery.onSnapshot((snapshot) => {
+    unsubscribeCliente = query.onSnapshot((snapshot) => {
         const produtos = [];
         snapshot.forEach(doc => {
             produtos.push({ id: doc.id, ...doc.data() });
         });
         
         if (produtos.length === 0) {
-            cardapioContent.innerHTML = '<p style="text-align:center; padding:20px; color:#999;">📭 Nenhum produto disponível no momento.</p>';
+            container.innerHTML = '<p style="text-align:center; padding:20px;">📭 Nenhum produto disponível no momento.</p>';
             return;
         }
         
-        const categoriasMap = new Map();
-        produtos.forEach(produto => {
-            if (!categoriasMap.has(produto.categoria)) {
-                categoriasMap.set(produto.categoria, []);
-            }
-            categoriasMap.get(produto.categoria).push(produto);
+        // Agrupar por categoria
+        const grupos = {};
+        produtos.forEach(p => {
+            if (!grupos[p.categoria]) grupos[p.categoria] = [];
+            grupos[p.categoria].push(p);
         });
         
         let html = '';
-        for (const [categoria, produtosCat] of categoriasMap) {
-            html += `<h3>${categoria}</h3>`;
-            produtosCat.forEach(produto => {
+        for (const [categoria, items] of Object.entries(grupos)) {
+            html += `<h3 style="margin-top: 16px;">${categoria}</h3>`;
+            items.forEach(p => {
                 html += `
-                    <div class="cardapio-item-cliente" data-id="${produto.id}" data-nome="${produto.nome.toLowerCase()}" data-preco="${produto.preco}">
-                        <div style="display: flex; gap: 12px; width: 100%; align-items: center;">
-                            ${produto.fotoURL ? `<img src="${produto.fotoURL}" style="width: 60px; height: 60px; border-radius: 12px; object-fit: cover;">` : ''}
-                            <div style="flex: 1;">
-                                <h4 style="font-size: 14px; font-weight: 700;">${produto.nome}</h4>
-                                <p style="font-size: 12px; color: #666; margin: 4px 0;">${produto.descricao.substring(0, 60)}${produto.descricao.length > 60 ? '...' : ''}</p>
-                                <span class="cardapio-price" style="font-weight: 700; color: var(--primary); font-size: 13px;">${produto.precoFormatado}</span>
+                    <div class="cardapio-item-cliente" style="background:white; border:1px solid #e9ced0; border-radius:12px; padding:12px; margin-bottom:12px;">
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            ${p.fotoURL ? `<img src="${p.fotoURL}" style="width:60px; height:60px; border-radius:12px; object-fit:cover;">` : '<div style="width:60px; height:60px; background:#f0f0f0; border-radius:12px;"></div>'}
+                            <div style="flex:1;">
+                                <h4 style="font-size:14px; margin:0 0 4px 0;">${p.nome}</h4>
+                                <p style="font-size:12px; color:#666; margin:0 0 4px 0;">${p.descricao.substring(0, 60)}...</p>
+                                <span style="font-weight:700; color:var(--primary);">${p.precoFormatado}</span>
                             </div>
-                            <button class="btn-adicionar" onclick="adicionarAoCarrinho('${produto.id}', '${produto.nome.replace(/'/g, "\\'")}', ${produto.preco})">
-                                +
-                            </button>
+                            <button class="btn-adicionar" onclick="adicionarAoCarrinho('${p.id}', '${p.nome.replace(/'/g, "\\'")}', ${p.preco})">+</button>
                         </div>
                     </div>
                 `;
             });
         }
         
-        cardapioContent.innerHTML = html;
+        container.innerHTML = html;
         
-        const buscaInput = document.getElementById('cardapio-cliente-busca');
-        if (buscaInput && buscaInput.value) {
-            aplicarFiltroCliente(buscaInput.value);
+        const busca = document.getElementById('cardapio-cliente-busca');
+        if (busca && busca.value) {
+            filtrarProdutosCliente(busca.value);
         }
-        
-    }, (error) => {
-        console.error('Erro ao carregar cardápio do cliente:', error);
-        cardapioContent.innerHTML = '<p style="text-align:center; padding:20px; color:red;">⚠️ Erro ao carregar cardápio.</p>';
     });
 }
 
-function inicializarBuscaCliente() {
-    const buscaInput = document.getElementById('cardapio-cliente-busca');
-    if (!buscaInput) return;
-    
-    buscaInput.addEventListener('input', function(e) {
-        aplicarFiltroCliente(e.target.value);
-    });
-}
-
-function aplicarFiltroCliente(termo) {
+function filtrarProdutosCliente(termo) {
     termo = termo.toLowerCase();
     const items = document.querySelectorAll('#cardapio-cliente-content .cardapio-item-cliente');
-    const categorias = document.querySelectorAll('#cardapio-cliente-content h3');
-    
     items.forEach(item => {
-        const nome = item.getAttribute('data-nome') || '';
-        item.style.display = (termo === '' || nome.includes(termo)) ? 'block' : 'none';
-    });
-    
-    categorias.forEach(categoria => {
-        let nextItem = categoria.nextElementSibling;
-        let hasVisibleItem = false;
-        while (nextItem && nextItem.classList && nextItem.classList.contains('cardapio-item-cliente')) {
-            if (nextItem.style.display !== 'none') {
-                hasVisibleItem = true;
-                break;
-            }
-            nextItem = nextItem.nextElementSibling;
-        }
-        categoria.style.display = hasVisibleItem ? 'block' : 'none';
+        const nome = item.querySelector('h4')?.textContent.toLowerCase() || '';
+        item.style.display = nome.includes(termo) ? 'block' : 'none';
     });
 }
 
-// Carrinho simples
-let carrinho = [];
-
 window.adicionarAoCarrinho = function(id, nome, preco) {
-    const itemExistente = carrinho.find(item => item.id === id);
-    if (itemExistente) {
-        itemExistente.quantidade++;
-    } else {
-        carrinho.push({ id, nome, preco, quantidade: 1 });
-    }
-    
     showToast(`🛒 ${nome} adicionado ao carrinho!`, false);
-    console.log('Carrinho:', carrinho);
+    console.log(`Carrinho: ${nome} - R$ ${preco}`);
 };
 
 // ==========================================
-// FUNCIONALIDADES EXISTENTES (CHAT, SWITCH, ETC)
+// TOAST
 // ==========================================
 
 function showToast(message, isError = false) {
@@ -534,22 +436,18 @@ function showToast(message, isError = false) {
     }
     
     toast.innerText = message;
-    if (isError) {
-        toast.style.backgroundColor = '#dc2626';
-    } else {
-        toast.style.backgroundColor = 'var(--text-main)';
-    }
+    toast.style.backgroundColor = isError ? '#dc2626' : 'var(--text-main)';
     toast.classList.add('show');
     
     setTimeout(() => {
         toast.classList.remove('show');
-        if (isError) {
-            toast.style.backgroundColor = 'var(--text-main)';
-        }
     }, 2400);
 }
 
-// FUNCIONALIDADE DO CHAT
+// ==========================================
+// CHAT
+// ==========================================
+
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
@@ -560,7 +458,7 @@ function inicializarChat() {
     const recordBtn = document.getElementById('record-btn');
     const sendBtn = document.getElementById('send-btn');
     
-    if (!chatInput || !recordBtn || !sendBtn) return;
+    if (!chatInput) return;
     
     const newSendBtn = sendBtn.cloneNode(true);
     sendBtn.parentNode.replaceChild(newSendBtn, sendBtn);
@@ -571,24 +469,21 @@ function inicializarChat() {
     const finalSendBtn = document.getElementById('send-btn');
     const finalRecordBtn = document.getElementById('record-btn');
     
-    finalSendBtn.addEventListener('click', function() {
-        const input = document.getElementById('chat-input');
-        if (input && input.value.trim()) {
-            enviarMensagem(input.value);
-            input.value = '';
+    finalSendBtn.addEventListener('click', () => {
+        if (chatInput.value.trim()) {
+            enviarMensagem(chatInput.value);
+            chatInput.value = '';
         }
     });
     
-    if (chatInput) {
-        chatInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && this.value.trim()) {
-                enviarMensagem(this.value);
-                this.value = '';
-            }
-        });
-    }
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && chatInput.value.trim()) {
+            enviarMensagem(chatInput.value);
+            chatInput.value = '';
+        }
+    });
     
-    finalRecordBtn.addEventListener('click', function() {
+    finalRecordBtn.addEventListener('click', () => {
         if (!isRecording) {
             iniciarGravacao();
         } else {
@@ -599,50 +494,34 @@ function inicializarChat() {
 
 function enviarMensagem(texto) {
     const chatMessages = document.getElementById('chat-mensagens');
-    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     
-    const mensagemDiv = document.createElement('div');
-    mensagemDiv.className = 'mensagem mensagem-enviada';
-    mensagemDiv.innerHTML = `
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'mensagem mensagem-enviada';
+    msgDiv.innerHTML = `
         <div class="mensagem-conteudo">
-            <div class="mensagem-balao mensagem-balao-enviada">
-                <p>${texto}</p>
-            </div>
-            <div class="mensagem-status">
-                <span class="mensagem-hora">${horaAtual}</span>
-                <span class="material-symbols-outlined">done_all</span>
-            </div>
+            <div class="mensagem-balao mensagem-balao-enviada"><p>${texto}</p></div>
+            <div class="mensagem-status"><span class="mensagem-hora">${hora}</span><span class="material-symbols-outlined">done_all</span></div>
         </div>
     `;
     
-    chatMessages.appendChild(mensagemDiv);
+    chatMessages.appendChild(msgDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     
     setTimeout(() => {
-        const respostas = [
-            "Entendido! O entregador já está a caminho.",
-            "Perfeito! Vamos atualizar o status do seu pedido.",
-            "Obrigado pela informação!",
-            "Seu pedido está sendo preparado.",
-            "O entregador está na sua região."
-        ];
+        const respostas = ["Entendido! O entregador já está a caminho.", "Seu pedido está sendo preparado.", "O entregador está na sua região."];
+        const resposta = respostas[Math.floor(Math.random() * respostas.length)];
+        const horaResp = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
         
-        const respostaAleatoria = respostas[Math.floor(Math.random() * respostas.length)];
-        const horaResposta = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        
-        const respostaDiv = document.createElement('div');
-        respostaDiv.className = 'mensagem mensagem-recebida';
-        respostaDiv.innerHTML = `
-            <div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div>
+        const respDiv = document.createElement('div');
+        respDiv.className = 'mensagem mensagem-recebida';
+        respDiv.innerHTML = `
             <div class="mensagem-conteudo">
-                <div class="mensagem-balao">
-                    <p>${respostaAleatoria}</p>
-                </div>
-                <span class="mensagem-hora">${horaResposta}</span>
+                <div class="mensagem-balao"><p>${resposta}</p></div>
+                <span class="mensagem-hora">${horaResp}</span>
             </div>
         `;
-        
-        chatMessages.appendChild(respostaDiv);
+        chatMessages.appendChild(respDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }, 2000);
 }
@@ -666,8 +545,8 @@ async function iniciarGravacao() {
         recordBtn.classList.add('gravando');
         recordBtn.innerHTML = '<span class="material-symbols-outlined">stop</span>';
     } catch (error) {
-        console.error('Erro ao acessar microfone:', error);
-        alert('Não foi possível acessar o microfone. Por favor, verifique as permissões.');
+        console.error('Erro:', error);
+        alert('Não foi possível acessar o microfone.');
     }
 }
 
@@ -683,108 +562,67 @@ function pararGravacao() {
 
 function exibirAudioGravado(audioBlob) {
     const chatMessages = document.getElementById('chat-mensagens');
-    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     
     const audioDiv = document.createElement('div');
     audioDiv.className = 'mensagem mensagem-enviada';
     audioDiv.innerHTML = `
         <div class="mensagem-conteudo">
             <div class="mensagem-balao mensagem-balao-enviada">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="material-symbols-outlined" style="font-size: 16px;">mic</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span class="material-symbols-outlined">mic</span>
                     <span>Áudio gravado</span>
-                    <span class="material-symbols-outlined audio-play" style="font-size: 16px; margin-left: auto; cursor: pointer;">play_arrow</span>
+                    <span class="material-symbols-outlined audio-play" style="cursor:pointer;">play_arrow</span>
                 </div>
             </div>
-            <div class="mensagem-status">
-                <span class="mensagem-hora">${horaAtual}</span>
-                <span class="material-symbols-outlined">done_all</span>
-            </div>
+            <div class="mensagem-status"><span class="mensagem-hora">${hora}</span><span class="material-symbols-outlined">done_all</span></div>
         </div>
     `;
     
     chatMessages.appendChild(audioDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     
-    const audioElement = new Audio(URL.createObjectURL(audioBlob));
-    const playButton = audioDiv.querySelector('.audio-play');
+    const audio = new Audio(URL.createObjectURL(audioBlob));
+    const playBtn = audioDiv.querySelector('.audio-play');
     
-    if (playButton) {
-        playButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (audioElement.paused) {
-                audioElement.play();
-                this.textContent = 'pause';
+    if (playBtn) {
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playBtn.textContent = 'pause';
             } else {
-                audioElement.pause();
-                this.textContent = 'play_arrow';
+                audio.pause();
+                playBtn.textContent = 'play_arrow';
             }
         });
     }
-    
-    audioElement.onended = function() {
-        if (playButton) playButton.textContent = 'play_arrow';
-    };
-    
-    setTimeout(() => {
-        const horaResposta = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        const respostaDiv = document.createElement('div');
-        respostaDiv.className = 'mensagem mensagem-recebida';
-        respostaDiv.innerHTML = `
-            <div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div>
-            <div class="mensagem-conteudo">
-                <div class="mensagem-balao">
-                    <p>Áudio recebido! Vou verificar isso.</p>
-                </div>
-                <span class="mensagem-hora">${horaResposta}</span>
-            </div>
-        `;
-        chatMessages.appendChild(respostaDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 3000);
 }
 
-// SWITCH DA LOJA
-let switchInicializado = false;
+// ==========================================
+// OUTRAS FUNÇÕES
+// ==========================================
 
 function inicializarSwitchLoja() {
-    if (switchInicializado) return;
     const switchBtn = document.getElementById("switch");
     const statusText = document.getElementById("status-text");
-    
     if (switchBtn && statusText && !switchBtn.hasListener) {
         switchBtn.onclick = () => {
             switchBtn.classList.toggle("off");
             statusText.textContent = switchBtn.classList.contains("off") ? "Fechado" : "Aberto";
         };
         switchBtn.hasListener = true;
-        switchInicializado = true;
     }
 }
 
-// ACEITAR PEDIDO
 function aceitarPedido(botao) {
     const pedidoDiv = botao.closest('.loja-pedido');
     if (pedidoDiv) {
         botao.textContent = 'Aceito!';
         botao.style.background = '#10b981';
         botao.disabled = true;
-        
-        const pendentesCard = document.querySelector('.loja-card:first-child h2');
-        if (pendentesCard) {
-            let pendentes = parseInt(pendentesCard.textContent);
-            if (!isNaN(pendentes) && pendentes > 0) pendentesCard.textContent = pendentes - 1;
-        }
-        
-        const preparoCard = document.querySelector('.loja-card:last-child h2');
-        if (preparoCard) {
-            let preparo = parseInt(preparoCard.textContent);
-            if (!isNaN(preparo)) preparoCard.textContent = preparo + 1;
-        }
     }
 }
 
-// BUSCA MENSAGENS
 function inicializarBuscaMensagens() {
     const buscaInput = document.getElementById('mensagens-busca-input');
     if (!buscaInput || buscaInput.hasListener) return;
@@ -792,55 +630,25 @@ function inicializarBuscaMensagens() {
     buscaInput.addEventListener('input', function(e) {
         const termo = e.target.value.toLowerCase();
         const items = document.querySelectorAll('#mensagens-lista .mensagem-item');
-        
         items.forEach(item => {
             const nome = item.getAttribute('data-nome')?.toLowerCase() || '';
-            const id = item.getAttribute('data-id') || '';
-            const preview = item.querySelector('.mensagem-preview')?.textContent.toLowerCase() || '';
-            item.style.display = (termo === '' || nome.includes(termo) || id.includes(termo) || preview.includes(termo)) ? 'flex' : 'none';
+            item.style.display = nome.includes(termo) ? 'flex' : 'none';
         });
     });
     buscaInput.hasListener = true;
 }
 
-function abrirChatCliente(nome, id) {
-    alert(`Abrindo conversa com ${nome} (Pedido #${id})`);
-}
-
 function inicializarCliquesMensagens() {
-    const mensagensItems = document.querySelectorAll('#mensagens-lista .mensagem-item');
-    mensagensItems.forEach(item => {
+    const items = document.querySelectorAll('#mensagens-lista .mensagem-item');
+    items.forEach(item => {
         if (item.hasClickListener) return;
         item.addEventListener('click', function() {
-            abrirChatCliente(this.getAttribute('data-nome'), this.getAttribute('data-id'));
+            alert(`Conversa com ${this.getAttribute('data-nome')}`);
         });
         item.hasClickListener = true;
     });
 }
 
-function inicializarAjustes() {
-    console.log('Tela de Ajustes carregada');
-}
-
-// TOGGLE VISIBILIDADE DE SENHA
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.btn-visibilidade')) {
-        const btn = e.target.closest('.btn-visibilidade');
-        const input = btn.parentElement.querySelector('input[type="password"], input[type="text"]');
-        const icon = btn.querySelector('.material-symbols-outlined');
-        if (!input || !icon) return;
-        
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.textContent = 'visibility';
-        } else {
-            input.type = 'password';
-            icon.textContent = 'visibility_off';
-        }
-    }
-});
-
-// Função para abrir o cadastro de produto
 window.abrirCadastroProduto = function() {
     mudarTela('tela-14');
 };
@@ -853,11 +661,16 @@ window.fecharCadastroProduto = function() {
 window.addEventListener('DOMContentLoaded', function() {
     mudarTela('tela-1');
     
-    const buscaPesquisa = document.querySelector('#tela-6 .pesquisa-busca input');
-    if (buscaPesquisa) {
-        buscaPesquisa.addEventListener('input', function(e) {
-            console.log('Pesquisando:', this.value);
-        });
+    // Busca no cardápio da empresa
+    const buscaEmpresa = document.getElementById('cardapio-busca');
+    if (buscaEmpresa) {
+        buscaEmpresa.addEventListener('input', (e) => filtrarProdutosEmpresa(e.target.value));
+    }
+    
+    // Busca no cardápio do cliente
+    const buscaCliente = document.getElementById('cardapio-cliente-busca');
+    if (buscaCliente) {
+        buscaCliente.addEventListener('input', (e) => filtrarProdutosCliente(e.target.value));
     }
 });
 
