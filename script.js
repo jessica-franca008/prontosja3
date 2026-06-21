@@ -1,4 +1,19 @@
+// ==========================================
+// VARIÁVEIS GLOBAIS DO CHAT
+// ==========================================
+let conversaAtual = null;
+let unsubscribeChat = null;
+let chatTipo = null;
+let isRecording = false;
+let mediaRecorder = null;
+let audioStream = null;
+let audioChunks = [];
+let currentImageData = null;
+let currentFile = null;
+
+// ==========================================
 // SISTEMA DE NAVEGAÇÃO ENTRE TELAS
+// ==========================================
 function mudarTela(idTela) {
     document.querySelectorAll('.tela').forEach(tela => {
         tela.classList.remove('ativa');
@@ -24,8 +39,8 @@ function mudarTela(idTela) {
     
     if (idTela === 'tela-12') {
         setTimeout(() => {
+            carregarConversasLoja();
             inicializarBuscaMensagens();
-            inicializarCliquesMensagens();
         }, 100);
     }
     
@@ -45,12 +60,497 @@ function mudarTela(idTela) {
 }
 
 // ==========================================
+// PASSO 7 & 8: CRIAR CONVERSA E ABRIR CHAT
+// ==========================================
+async function abrirChatPedido(pedidoId) {
+    const user = auth.currentUser;
+    if (!user) {
+        alert('Você precisa estar logado para usar o chat.');
+        return;
+    }
+
+    try {
+        // Buscar conversa existente para este pedido
+        const conversasRef = collection(db, "conversas");
+        const q = query(conversasRef, where("pedidoId", "==", pedidoId));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            // Conversa já existe
+            const doc = querySnapshot.docs[0];
+            conversaAtual = doc.id;
+            chatTipo = localStorage.getItem('tipoUsuario') || 'cliente';
+            
+            // Atualizar nome do contato no cabeçalho
+            const dados = doc.data();
+            const nomeContato = chatTipo === 'cliente' ? dados.lojaNome : dados.clienteNome;
+            document.getElementById('chatContatoNome').textContent = nomeContato || 'Contato';
+            
+            mudarTela('tela-8');
+            await carregarMensagens(conversaAtual);
+        } else {
+            // PASSO 7: Criar nova conversa
+            const tipoUsuario = localStorage.getItem('tipoUsuario') || 'cliente';
+            const nomeUsuario = localStorage.getItem('nomeUsuario') || 'Usuário';
+            
+            const novaConversa = {
+                pedidoId: pedidoId,
+                criadoEm: serverTimestamp()
+            };
+
+            if (tipoUsuario === 'cliente') {
+                novaConversa.clienteId = user.uid;
+                novaConversa.clienteNome = nomeUsuario;
+                // Para demo - em produção viria do pedido
+                novaConversa.lojaId = 'loja_demo_id';
+                novaConversa.lojaNome = 'Burger King';
+            } else {
+                novaConversa.lojaId = user.uid;
+                novaConversa.lojaNome = nomeUsuario;
+                novaConversa.clienteId = 'cliente_demo_id';
+                novaConversa.clienteNome = 'Maria Silva';
+            }
+
+            const docRef = await addDoc(collection(db, "conversas"), novaConversa);
+            conversaAtual = docRef.id;
+            chatTipo = tipoUsuario;
+            
+            const nomeContato = chatTipo === 'cliente' ? novaConversa.lojaNome : novaConversa.clienteNome;
+            document.getElementById('chatContatoNome').textContent = nomeContato || 'Contato';
+            
+            mudarTela('tela-8');
+            
+            // Mensagem inicial do sistema
+            await addDoc(collection(db, "conversas", conversaAtual, "mensagens"), {
+                texto: `🛵 Conversa iniciada para o pedido #${pedidoId}`,
+                usuarioId: 'sistema',
+                tipo: 'sistema',
+                timestamp: serverTimestamp()
+            });
+            
+            await carregarMensagens(conversaAtual);
+        }
+    } catch (error) {
+        console.error('Erro ao abrir chat:', error);
+        alert('Erro ao abrir conversa.');
+    }
+}
+
+// ==========================================
+// PASSO 5 & 6: ESCUTAR MENSAGENS EM TEMPO REAL
+// ==========================================
+async function carregarMensagens(conversaId) {
+    // Remover listener anterior
+    if (unsubscribeChat) {
+        unsubscribeChat();
+        unsubscribeChat = null;
+    }
+
+    const chatMessages = document.getElementById('chat-mensagens');
+    if (!chatMessages) return;
+
+    chatMessages.innerHTML = '<div class="chat-data">Carregando mensagens...</div>';
+
+    try {
+        const mensagensRef = collection(db, "conversas", conversaId, "mensagens");
+        const q = query(mensagensRef, orderBy("timestamp", "asc"));
+
+        unsubscribeChat = onSnapshot(q, (snapshot) => {
+            chatMessages.innerHTML = '';
+            
+            if (snapshot.empty) {
+                chatMessages.innerHTML = '<div class="chat-data">Nenhuma mensagem ainda. Envie uma mensagem!</div>';
+                return;
+            }
+
+            let lastDate = '';
+            const user = auth.currentUser;
+
+            snapshot.forEach((doc) => {
+                const msg = doc.data();
+                const data = msg.timestamp?.toDate?.() || new Date();
+                const dataStr = data.toLocaleDateString('pt-BR');
+                
+                // Separador de data
+                if (dataStr !== lastDate) {
+                    const dataDiv = document.createElement('div');
+                    dataDiv.className = 'chat-data';
+                    dataDiv.textContent = dataStr;
+                    chatMessages.appendChild(dataDiv);
+                    lastDate = dataStr;
+                }
+
+                // Mensagem do sistema
+                if (msg.tipo === 'sistema') {
+                    const systemDiv = document.createElement('div');
+                    systemDiv.className = 'mensagem-sistema';
+                    systemDiv.textContent = msg.texto;
+                    chatMessages.appendChild(systemDiv);
+                    return;
+                }
+
+                // Verificar se é mensagem enviada ou recebida
+                const isEnviada = msg.usuarioId === user?.uid;
+                const mensagemDiv = document.createElement('div');
+                mensagemDiv.className = `mensagem ${isEnviada ? 'mensagem-enviada' : 'mensagem-recebida'}`;
+
+                const hora = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                if (!isEnviada) {
+                    // Mensagem recebida
+                    mensagemDiv.innerHTML = `
+                        <div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div>
+                        <div class="mensagem-conteudo">
+                            <div class="mensagem-balao">
+                                <p>${msg.texto}</p>
+                            </div>
+                            <span class="mensagem-hora">${hora}</span>
+                        </div>
+                    `;
+                } else {
+                    // Mensagem enviada
+                    mensagemDiv.innerHTML = `
+                        <div class="mensagem-conteudo">
+                            <div class="mensagem-balao mensagem-balao-enviada">
+                                <p>${msg.texto}</p>
+                            </div>
+                            <div class="mensagem-status">
+                                <span class="mensagem-hora">${hora}</span>
+                                <span class="material-symbols-outlined">done_all</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                chatMessages.appendChild(mensagemDiv);
+            });
+
+            // Scroll para o final
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+
+    } catch (error) {
+        console.error('Erro ao carregar mensagens:', error);
+        chatMessages.innerHTML = '<div class="chat-data">Erro ao carregar mensagens</div>';
+    }
+}
+
+// ==========================================
+// PASSO 4: ENVIAR MENSAGEM PARA O FIRESTORE
+// ==========================================
+async function enviarMensagemFirestore(texto) {
+    if (!conversaAtual) {
+        alert('Nenhuma conversa ativa.');
+        return;
+    }
+
+    const user = auth.currentUser;
+    if (!user) {
+        alert('Você precisa estar logado.');
+        return;
+    }
+
+    if (!texto || texto.trim() === '') return;
+
+    try {
+        const tipoUsuario = localStorage.getItem('tipoUsuario') || 'cliente';
+        await addDoc(collection(db, "conversas", conversaAtual, "mensagens"), {
+            texto: texto.trim(),
+            usuarioId: user.uid,
+            tipo: tipoUsuario,
+            timestamp: serverTimestamp()
+        });
+
+        // Limpar input
+        const chatInput = document.getElementById('chat-input');
+        if (chatInput) chatInput.value = '';
+
+    } catch (error) {
+        console.error('Erro ao enviar mensagem:', error);
+        alert('Erro ao enviar mensagem.');
+    }
+}
+
+// ==========================================
+// PASSO 9: LISTA DE CONVERSAS DA LOJA
+// ==========================================
+async function carregarConversasLoja() {
+    const lista = document.getElementById('mensagens-lista');
+    if (!lista) return;
+
+    const user = auth.currentUser;
+    if (!user) {
+        lista.innerHTML = '<p style="text-align:center; padding:20px; color: #666;">Faça login para ver suas conversas</p>';
+        return;
+    }
+
+    try {
+        const tipoUsuario = localStorage.getItem('tipoUsuario');
+        let q;
+
+        if (tipoUsuario === 'empresa') {
+            q = query(
+                collection(db, "conversas"),
+                where("lojaId", "==", user.uid),
+                orderBy("criadoEm", "desc")
+            );
+        } else {
+            q = query(
+                collection(db, "conversas"),
+                where("clienteId", "==", user.uid),
+                orderBy("criadoEm", "desc")
+            );
+        }
+
+        const querySnapshot = await getDocs(q);
+        lista.innerHTML = '';
+
+        if (querySnapshot.empty) {
+            lista.innerHTML = '<p style="text-align:center; padding:20px; color: #666;">Nenhuma conversa ainda</p>';
+            return;
+        }
+
+        // Para cada conversa, buscar última mensagem
+        for (const doc of querySnapshot.docs) {
+            const conversa = doc.data();
+            const conversaId = doc.id;
+            
+            // Buscar última mensagem
+            const mensagensRef = collection(db, "conversas", conversaId, "mensagens");
+            const msgQuery = query(mensagensRef, orderBy("timestamp", "desc"), limit(1));
+            const msgSnapshot = await getDocs(msgQuery);
+            
+            let ultimaMensagem = 'Nenhuma mensagem';
+            let ultimaData = '';
+            
+            if (!msgSnapshot.empty) {
+                const ultima = msgSnapshot.docs[0].data();
+                ultimaMensagem = ultima.texto || 'Mensagem';
+                if (ultima.timestamp) {
+                    const data = ultima.timestamp.toDate();
+                    ultimaData = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                }
+            }
+
+            // Determinar nome do contato
+            let nomeContato = '';
+            if (tipoUsuario === 'empresa') {
+                nomeContato = conversa.clienteNome || 'Cliente';
+            } else {
+                nomeContato = conversa.lojaNome || 'Loja';
+            }
+
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'mensagem-item';
+            itemDiv.setAttribute('data-conversa-id', conversaId);
+            itemDiv.setAttribute('data-nome', nomeContato);
+            itemDiv.setAttribute('data-id', conversa.pedidoId || '');
+            
+            // Iniciais do nome
+            const iniciais = nomeContato.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            
+            // Cores aleatórias para os avatares
+            const cores = ['#667eea', '#f093fb', '#4facfe', '#43e97b', '#fa709a', '#fee140', '#a18cd1', '#fbc2eb'];
+            const cor = cores[Math.floor(Math.random() * cores.length)];
+            
+            itemDiv.innerHTML = `
+                <div class="avatar" style="background: ${cor}; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; width: 50px; height: 50px; border-radius: 50%; flex-shrink: 0;">${iniciais}</div>
+                <div class="mensagem-info">
+                    <div class="mensagem-topo">
+                        <h3>${nomeContato}</h3>
+                        <span class="badge" style="display: none;">0</span>
+                    </div>
+                    <div class="mensagem-id">Pedido #${conversa.pedidoId || 'N/A'}</div>
+                    <div class="mensagem-preview">${ultimaMensagem} ${ultimaData ? '• ' + ultimaData : ''}</div>
+                </div>
+            `;
+
+            itemDiv.addEventListener('click', function() {
+                const conversaId = this.getAttribute('data-conversa-id');
+                const nome = this.getAttribute('data-nome');
+                abrirConversaEspecifica(conversaId, nome);
+            });
+
+            lista.appendChild(itemDiv);
+        }
+
+    } catch (error) {
+        console.error('Erro ao carregar conversas:', error);
+        lista.innerHTML = '<p style="text-align:center; padding:20px; color: #666;">Erro ao carregar conversas</p>';
+    }
+}
+
+// ==========================================
+// PASSO 8: ABRIR CONVERSA ESPECÍFICA
+// ==========================================
+async function abrirConversaEspecifica(conversaId, nomeContato) {
+    conversaAtual = conversaId;
+    chatTipo = localStorage.getItem('tipoUsuario') || 'cliente';
+    
+    // Atualizar cabeçalho do chat
+    const nomeElement = document.getElementById('chatContatoNome');
+    if (nomeElement) nomeElement.textContent = nomeContato;
+    
+    mudarTela('tela-8');
+    await carregarMensagens(conversaId);
+}
+
+// ==========================================
+// FECHAR CHAT
+// ==========================================
+function fecharChat() {
+    if (unsubscribeChat) {
+        unsubscribeChat();
+        unsubscribeChat = null;
+    }
+    conversaAtual = null;
+    
+    const tipoUsuario = localStorage.getItem('tipoUsuario');
+    if (tipoUsuario === 'empresa') {
+        mudarTela('tela-12');
+    } else {
+        mudarTela('tela-7');
+    }
+}
+
+// ==========================================
+// FUNÇÕES DE CHAT (PASSO 3: SEM RESPOSTAS AUTOMÁTICAS)
+// ==========================================
+function inicializarChat() {
+    const chatInput = document.getElementById('chat-input');
+    const recordBtn = document.getElementById('record-btn');
+    const sendBtn = document.getElementById('send-btn');
+    
+    if (!chatInput || !recordBtn || !sendBtn) return;
+    
+    // Remover listeners antigos
+    const newSendBtn = sendBtn.cloneNode(true);
+    sendBtn.parentNode.replaceChild(newSendBtn, sendBtn);
+    
+    const newRecordBtn = recordBtn.cloneNode(true);
+    recordBtn.parentNode.replaceChild(newRecordBtn, recordBtn);
+    
+    const finalSendBtn = document.getElementById('send-btn');
+    const finalRecordBtn = document.getElementById('record-btn');
+    const finalChatInput = document.getElementById('chat-input');
+    
+    // Enviar com Enter
+    if (finalChatInput) {
+        finalChatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                enviarMensagemFirestore(this.value);
+            }
+        });
+    }
+    
+    // Botão enviar
+    if (finalSendBtn) {
+        finalSendBtn.addEventListener('click', function() {
+            const input = document.getElementById('chat-input');
+            if (input && input.value.trim()) {
+                enviarMensagemFirestore(input.value);
+            }
+        });
+    }
+    
+    // Gravar áudio
+    if (finalRecordBtn) {
+        finalRecordBtn.addEventListener('click', function() {
+            if (!isRecording) {
+                iniciarGravacao();
+            } else {
+                pararGravacao();
+            }
+        });
+    }
+}
+
+// ==========================================
+// FUNÇÃO PARA GRAVAR ÁUDIO
+// ==========================================
+async function iniciarGravacao() {
+    try {
+        const recordBtn = document.getElementById('record-btn');
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(audioStream);
+        audioChunks = [];
+        
+        mediaRecorder.ondataavailable = event => { audioChunks.push(event.data); };
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            exibirAudioGravado(audioBlob);
+            audioStream.getTracks().forEach(track => track.stop());
+        };
+        
+        mediaRecorder.start();
+        isRecording = true;
+        recordBtn.classList.add('gravando');
+        recordBtn.innerHTML = '<span class="material-symbols-outlined">stop</span>';
+    } catch (error) {
+        console.error('Erro ao acessar microfone:', error);
+        alert('Não foi possível acessar o microfone. Verifique as permissões.');
+    }
+}
+
+function pararGravacao() {
+    if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false;
+        const recordBtn = document.getElementById('record-btn');
+        recordBtn.classList.remove('gravando');
+        recordBtn.innerHTML = '<span class="material-symbols-outlined">mic</span>';
+    }
+}
+
+function exibirAudioGravado(audioBlob) {
+    const chatMessages = document.getElementById('chat-mensagens');
+    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    
+    const audioDiv = document.createElement('div');
+    audioDiv.className = 'mensagem mensagem-enviada';
+    audioDiv.innerHTML = `
+        <div class="mensagem-conteudo">
+            <div class="mensagem-balao mensagem-balao-enviada">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">mic</span>
+                    <span>Áudio gravado</span>
+                    <span class="material-symbols-outlined audio-play" style="font-size: 16px; margin-left: auto; cursor: pointer;">play_arrow</span>
+                </div>
+            </div>
+            <div class="mensagem-status">
+                <span class="mensagem-hora">${horaAtual}</span>
+                <span class="material-symbols-outlined">done_all</span>
+            </div>
+        </div>
+    `;
+    
+    chatMessages.appendChild(audioDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    const audioElement = new Audio(URL.createObjectURL(audioBlob));
+    const playButton = audioDiv.querySelector('.audio-play');
+    
+    if (playButton) {
+        playButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (audioElement.paused) {
+                audioElement.play();
+                this.textContent = 'pause';
+            } else {
+                audioElement.pause();
+                this.textContent = 'play_arrow';
+            }
+        });
+    }
+    
+    audioElement.onended = function() {
+        if (playButton) playButton.textContent = 'play_arrow';
+    };
+}
+
+// ==========================================
 // FUNCIONALIDADES DO CADASTRO DE PRODUTO
 // ==========================================
-
-let currentImageData = null;
-let currentFile = null;
-
 function inicializarCadastroProduto() {
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('productPhotoInput');
@@ -58,10 +558,7 @@ function inicializarCadastroProduto() {
     const previewImg = document.getElementById('previewImg');
     const previewFileNameSpan = document.getElementById('previewFileName');
     const removePhotoBtn = document.getElementById('removePhotoBtn');
-    const productNameInput = document.getElementById('productName');
-    const categorySelect = document.getElementById('productCategory');
     const priceInput = document.getElementById('productPrice');
-    const descriptionTextarea = document.getElementById('productDescription');
     
     if (!uploadArea) return;
     
@@ -166,6 +663,9 @@ function inicializarCadastroProduto() {
     if (finalPriceInput) finalPriceInput.placeholder = "0,00";
 }
 
+// ==========================================
+// FUNÇÕES AUXILIARES
+// ==========================================
 function showToast(message, isError = false) {
     let toast = document.querySelector('.toast-message');
     if (!toast) {
@@ -190,202 +690,9 @@ function showToast(message, isError = false) {
     }, 2400);
 }
 
-// FUNCIONALIDADE DO CHAT
-let mediaRecorder;
-let audioChunks = [];
-let isRecording = false;
-let audioStream;
-
-function inicializarChat() {
-    const chatInput = document.getElementById('chat-input');
-    const recordBtn = document.getElementById('record-btn');
-    const sendBtn = document.getElementById('send-btn');
-    
-    if (!chatInput || !recordBtn || !sendBtn) return;
-    
-    const newSendBtn = sendBtn.cloneNode(true);
-    sendBtn.parentNode.replaceChild(newSendBtn, sendBtn);
-    
-    const newRecordBtn = recordBtn.cloneNode(true);
-    recordBtn.parentNode.replaceChild(newRecordBtn, recordBtn);
-    
-    const finalSendBtn = document.getElementById('send-btn');
-    const finalRecordBtn = document.getElementById('record-btn');
-    
-    finalSendBtn.addEventListener('click', function() {
-        const input = document.getElementById('chat-input');
-        if (input && input.value.trim()) {
-            enviarMensagem(input.value);
-            input.value = '';
-        }
-    });
-    
-    if (chatInput) {
-        chatInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && this.value.trim()) {
-                enviarMensagem(this.value);
-                this.value = '';
-            }
-        });
-    }
-    
-    finalRecordBtn.addEventListener('click', function() {
-        if (!isRecording) {
-            iniciarGravacao();
-        } else {
-            pararGravacao();
-        }
-    });
-}
-
-function enviarMensagem(texto) {
-    const chatMessages = document.getElementById('chat-mensagens');
-    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    
-    const mensagemDiv = document.createElement('div');
-    mensagemDiv.className = 'mensagem mensagem-enviada';
-    mensagemDiv.innerHTML = `
-        <div class="mensagem-conteudo">
-            <div class="mensagem-balao mensagem-balao-enviada">
-                <p>${texto}</p>
-            </div>
-            <div class="mensagem-status">
-                <span class="mensagem-hora">${horaAtual}</span>
-                <span class="material-symbols-outlined">done_all</span>
-            </div>
-        </div>
-    `;
-    
-    chatMessages.appendChild(mensagemDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    setTimeout(() => {
-        const respostas = [
-            "Entendido! O entregador já está a caminho.",
-            "Perfeito! Vamos atualizar o status do seu pedido.",
-            "Obrigado pela informação!",
-            "Seu pedido está sendo preparado.",
-            "O entregador está na sua região."
-        ];
-        
-        const respostaAleatoria = respostas[Math.floor(Math.random() * respostas.length)];
-        const horaResposta = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        
-        const respostaDiv = document.createElement('div');
-        respostaDiv.className = 'mensagem mensagem-recebida';
-        respostaDiv.innerHTML = `
-            <div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div>
-            <div class="mensagem-conteudo">
-                <div class="mensagem-balao">
-                    <p>${respostaAleatoria}</p>
-                </div>
-                <span class="mensagem-hora">${horaResposta}</span>
-            </div>
-        `;
-        
-        chatMessages.appendChild(respostaDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 2000);
-}
-
-async function iniciarGravacao() {
-    try {
-        const recordBtn = document.getElementById('record-btn');
-        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(audioStream);
-        audioChunks = [];
-        
-        mediaRecorder.ondataavailable = event => { audioChunks.push(event.data); };
-        mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            exibirAudioGravado(audioBlob);
-            audioStream.getTracks().forEach(track => track.stop());
-        };
-        
-        mediaRecorder.start();
-        isRecording = true;
-        recordBtn.classList.add('gravando');
-        recordBtn.innerHTML = '<span class="material-symbols-outlined">stop</span>';
-    } catch (error) {
-        console.error('Erro ao acessar microfone:', error);
-        alert('Não foi possível acessar o microfone. Por favor, verifique as permissões.');
-    }
-}
-
-function pararGravacao() {
-    if (mediaRecorder && isRecording) {
-        mediaRecorder.stop();
-        isRecording = false;
-        const recordBtn = document.getElementById('record-btn');
-        recordBtn.classList.remove('gravando');
-        recordBtn.innerHTML = '<span class="material-symbols-outlined">mic</span>';
-    }
-}
-
-function exibirAudioGravado(audioBlob) {
-    const chatMessages = document.getElementById('chat-mensagens');
-    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-minute' });
-    
-    const audioDiv = document.createElement('div');
-    audioDiv.className = 'mensagem mensagem-enviada';
-    audioDiv.innerHTML = `
-        <div class="mensagem-conteudo">
-            <div class="mensagem-balao mensagem-balao-enviada">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="material-symbols-outlined" style="font-size: 16px;">mic</span>
-                    <span>Áudio gravado</span>
-                    <span class="material-symbols-outlined audio-play" style="font-size: 16px; margin-left: auto; cursor: pointer;">play_arrow</span>
-                </div>
-            </div>
-            <div class="mensagem-status">
-                <span class="mensagem-hora">${horaAtual}</span>
-                <span class="material-symbols-outlined">done_all</span>
-            </div>
-        </div>
-    `;
-    
-    chatMessages.appendChild(audioDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    const audioElement = new Audio(URL.createObjectURL(audioBlob));
-    const playButton = audioDiv.querySelector('.audio-play');
-    
-    if (playButton) {
-        playButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            if (audioElement.paused) {
-                audioElement.play();
-                this.textContent = 'pause';
-            } else {
-                audioElement.pause();
-                this.textContent = 'play_arrow';
-            }
-        });
-    }
-    
-    audioElement.onended = function() {
-        if (playButton) playButton.textContent = 'play_arrow';
-    };
-    
-    setTimeout(() => {
-        const horaResposta = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        const respostaDiv = document.createElement('div');
-        respostaDiv.className = 'mensagem mensagem-recebida';
-        respostaDiv.innerHTML = `
-            <div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div>
-            <div class="mensagem-conteudo">
-                <div class="mensagem-balao">
-                    <p>Áudio recebido! Vou verificar isso.</p>
-                </div>
-                <span class="mensagem-hora">${horaResposta}</span>
-            </div>
-        `;
-        chatMessages.appendChild(respostaDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 3000);
-}
-
+// ==========================================
 // SWITCH DA LOJA
+// ==========================================
 let switchInicializado = false;
 
 function inicializarSwitchLoja() {
@@ -403,7 +710,9 @@ function inicializarSwitchLoja() {
     }
 }
 
+// ==========================================
 // ACEITAR PEDIDO
+// ==========================================
 function aceitarPedido(botao) {
     const pedidoDiv = botao.closest('.loja-pedido');
     if (pedidoDiv) {
@@ -425,7 +734,9 @@ function aceitarPedido(botao) {
     }
 }
 
+// ==========================================
 // BUSCA CARDÁPIO
+// ==========================================
 function inicializarBuscaCardapio() {
     const buscaInput = document.getElementById('cardapio-busca');
     if (!buscaInput || buscaInput.hasListener) return;
@@ -454,7 +765,9 @@ function inicializarBuscaCardapio() {
     buscaInput.hasListener = true;
 }
 
+// ==========================================
 // BUSCA MENSAGENS
+// ==========================================
 function inicializarBuscaMensagens() {
     const buscaInput = document.getElementById('mensagens-busca-input');
     if (!buscaInput || buscaInput.hasListener) return;
@@ -473,26 +786,16 @@ function inicializarBuscaMensagens() {
     buscaInput.hasListener = true;
 }
 
-function abrirChatCliente(nome, id) {
-    alert(`Abrindo conversa com ${nome} (Pedido #${id})`);
-}
-
-function inicializarCliquesMensagens() {
-    const mensagensItems = document.querySelectorAll('#mensagens-lista .mensagem-item');
-    mensagensItems.forEach(item => {
-        if (item.hasClickListener) return;
-        item.addEventListener('click', function() {
-            abrirChatCliente(this.getAttribute('data-nome'), this.getAttribute('data-id'));
-        });
-        item.hasClickListener = true;
-    });
-}
-
+// ==========================================
+// AJUSTES
+// ==========================================
 function inicializarAjustes() {
     console.log('Tela de Ajustes carregada');
 }
 
+// ==========================================
 // TOGGLE VISIBILIDADE DE SENHA
+// ==========================================
 document.addEventListener('click', function(e) {
     if (e.target.closest('.btn-visibilidade')) {
         const btn = e.target.closest('.btn-visibilidade');
@@ -510,7 +813,16 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// ==========================================
+// FUNÇÃO DE SERVER TIMESTAMP (FALLBACK)
+// ==========================================
+function serverTimestamp() {
+    return new Date();
+}
+
+// ==========================================
 // INICIALIZAÇÃO
+// ==========================================
 window.addEventListener('DOMContentLoaded', function() {
     mudarTela('tela-1');
     
