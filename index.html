@@ -233,19 +233,62 @@
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
 
-            <!-- TELA 7: PEDIDOS -->
+            <!-- TELA 7: PEDIDOS - MODIFICADO COM CHAT REAL -->
             <section id="tela-7" class="tela">
                 <div class="pedidos-cabecalho"><h1>Meus Pedidos</h1></div>
-                <div class="pedidos-conteudo"><div class="pedido-card"><div class="pedido-imagem" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9qmCO1wwCO4N0iVnQWSPyVBHgwgZEXoQCF_0SPnDK-u1tits_-bmrj5XJY6rJBISIp4V6VNhhqkgO0-FKRGGt9kHBayxaeJKs4chrxUo4PBM0kFbVU-VKldj_2uv0PFReISHO7Yc-Tikbzi2Oyt-BZRqI8h5r3cJlEJACPTXLJnI6eR-MExNYdgnCWuRGTQX3MFh_mkViSIxRd5PCW5jTmMRrjOQk7b-PLyDk2tNQT37tXo3wroQ2JmEOZiU1c_chvrkP9c6AQVo')"></div><div class="pedido-info"><div class="pedido-titulo"><h3>Burger King</h3><span class="pedido-status status-andamento">Saiu para entrega</span></div><p class="pedido-data">Hoje, 19:30 • Pedido #4821</p><p class="pedido-descricao">1x Whopper Combo, 1x Batata Grande</p></div></div><button onclick="mudarTela('tela-8')" class="btn-chat"><span class="material-symbols-outlined">chat</span><span>Chat com Entregador</span></button></div>
-                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
+                <div class="pedidos-conteudo">
+                    <div class="pedido-card" data-pedido-id="PED-001">
+                        <div class="pedido-imagem" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9qmCO1wwCO4N0iVnQWSPyVBHgwgZEXoQCF_0SPnDK-u1tits_-bmrj5XJY6rJBISIp4V6VNhhqkgO0-FKRGGt9kHBayxaeJKs4chrxUo4PBM0kFbVU-VKldj_2uv0PFReISHO7Yc-Tikbzi2Oyt-BZRqI8h5r3cJlEJACPTXLJnI6eR-MExNYdgnCWuRGTQX3MFh_mkViSIxRd5PCW5jTmMRrjOQk7b-PLyDk2tNQT37tXo3wroQ2JmEOZiU1c_chvrkP9c6AQVo')"></div>
+                        <div class="pedido-info">
+                            <div class="pedido-titulo">
+                                <h3>Burger King</h3>
+                                <span class="pedido-status status-andamento">Saiu para entrega</span>
+                            </div>
+                            <p class="pedido-data">Hoje, 19:30 • Pedido #PED-001</p>
+                            <p class="pedido-descricao">1x Whopper Combo, 1x Batata Grande</p>
+                        </div>
+                    </div>
+                    <button onclick="abrirChatPedido('PED-001')" class="btn-chat">
+                        <span class="material-symbols-outlined">chat</span>
+                        <span>Chat com Entregador</span>
+                    </button>
+                </div>
+                <nav class="navegacao-inferior">
+                    <button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                    <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
+                    <button class="nav-item ativo"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
+                    <button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button>
+                </nav>
             </section>
 
-            <!-- TELA 8: CHAT -->
+            <!-- TELA 8: CHAT - MODIFICADO PARA CHAT REAL -->
             <section id="tela-8" class="tela">
-                <div class="chat-cabecalho"><button onclick="mudarTela('tela-7')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><div class="chat-contato-info"><div class="chat-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBE-eDMfOeLf8FpoYNPZwXXyHZDUt1lCh1Ff4DxVOMuoJpR-UHz6qWJgp75iB0mDf5EtHMDXz3UDL8q5hkZxHSWR0Q2v3TA84De-6l6pN7bOuIXZ_SDimOi5QXz24pyHiqUctirxzVTiUPzlgR9Xp_muVyxw5lnGjVnJdr-YZDgnLF0yk8jQn8oIJy3CVleqYgR7pg2F3KZ5iyCbZ2_RSj1Ywcmdb34AmWEncBJUqGJ-VLqfuVdWL5pcfIcktalCAuKqj43UtBRCqA')"></div><h2>Perfil da Cliente</h2></div><button class="btn-info"><span class="material-symbols-outlined">info</span></button></div>
-                <div class="chat-mensagens" id="chat-mensagens"><div class="chat-data">Hoje</div><div class="mensagem mensagem-recebida"><div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB7rSYxal4bU_WFmmlB2AUIS2FIE2WwCv3rGvQIBMas0ZXlndCkt9BvLRrerDMiECkhT5X0a-NDisyDTOwxyWQJ0I0Cirv8JUM6qkyiUDiqtLosebTbRt3kvs0loFt6shpoKZ-u0_V_VFxELtmbsbIzKi__49NCzpFAvCf74fIB_12vB7kjhKSf93gY1W8QVMrU-x3HhYbZYvF96Xd8lDWL4pkjMfOVCz8gBK9UGqehKbifhGjfnbb6LAWhWHLlohmRmB_Y-kkjBts')"></div><div class="mensagem-conteudo"><span class="mensagem-nome">Mariana Souza</span><div class="mensagem-balao"><p>Olá! Acabei de ver que meu pedido saiu para entrega.</p></div><span class="mensagem-hora">14:32</span></div></div><div class="mensagem mensagem-recebida"><div class="mensagem-conteudo"><div class="mensagem-balao"><p>Vai demorar muito?</p></div><span class="mensagem-hora">14:32</span></div></div><div class="mensagem mensagem-enviada"><div class="mensagem-conteudo"><div class="mensagem-balao mensagem-balao-enviada"><p>Boa tarde, Mariana! O motoboy já está a caminho. Deve chegar em cerca de 10 minutos.</p></div><div class="mensagem-status"><span class="mensagem-hora">14:35</span><span class="material-symbols-outlined">done_all</span></div></div></div><div class="mensagem mensagem-recebida"><div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div><div class="mensagem-conteudo"><div class="mensagem-balao"><p>Ótimo, obrigada! Vou aguardar na portaria.</p></div><span class="mensagem-hora">14:36</span></div></div></div>
-                <div class="chat-input"><button id="record-btn" class="btn-audio"><span class="material-symbols-outlined">mic</span></button><div class="chat-input-container"><input type="text" id="chat-input" placeholder="Digite sua mensagem..."></div><button id="send-btn" class="btn-enviar"><span class="material-symbols-outlined">send</span></button></div>
-                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
+                <div class="chat-cabecalho">
+                    <button onclick="fecharChat()" class="btn-voltar">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <div class="chat-contato-info">
+                        <div class="chat-foto" id="chatContatoFoto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBE-eDMfOeLf8FpoYNPZwXXyHZDUt1lCh1Ff4DxVOMuoJpR-UHz6qWJgp75iB0mDf5EtHMDXz3UDL8q5hkZxHSWR0Q2v3TA84De-6l6pN7bOuIXZ_SDimOi5QXz24pyHiqUctirxzVTiUPzlgR9Xp_muVyxw5lnGjVnJdr-YZDgnLF0yk8jQn8oIJy3CVleqYgR7pg2F3KZ5iyCbZ2_RSj1Ywcmdb34AmWEncBJUqGJ-VLqfuVdWL5pcfIcktalCAuKqj43UtBRCqA')"></div>
+                        <h2 id="chatContatoNome">Carregando...</h2>
+                    </div>
+                    <button class="btn-info"><span class="material-symbols-outlined">info</span></button>
+                </div>
+                <div class="chat-mensagens" id="chat-mensagens">
+                    <div class="chat-data">Carregando mensagens...</div>
+                </div>
+                <div class="chat-input">
+                    <button id="record-btn" class="btn-audio"><span class="material-symbols-outlined">mic</span></button>
+                    <div class="chat-input-container">
+                        <input type="text" id="chat-input" placeholder="Digite sua mensagem...">
+                    </div>
+                    <button id="send-btn" class="btn-enviar"><span class="material-symbols-outlined">send</span></button>
+                </div>
+                <nav class="navegacao-inferior">
+                    <button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                    <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
+                    <button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
+                    <button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button>
+                </nav>
             </section>
 
             <!-- TELA 9: PERFIL CLIENTE -->
@@ -263,26 +306,45 @@
                 <div class="status-box"><span>Status da Loja: <strong id="status-text">Aberto</strong></span><div id="switch" class="switch"><div class="circle"></div></div></div>
                 <div class="loja-cards"><div class="loja-card"><span>Pedidos Pendentes</span><h2>5</h2></div><div class="loja-card"><span>Em Preparo</span><h2>3</h2></div></div>
                 <div class="loja-section-title">Pedidos Recentes</div>
-                <div class="loja-pedidos"><div class="loja-pedido"><div class="pedido-top"><strong>Maria Silva</strong><strong>R$ 67,90</strong></div><small>#2847</small><div class="pedido-list">2x Hambúrguer Artesanal<br>1x Batata Frita<br>1x Refrigerante</div><button class="btn-aceitar" onclick="aceitarPedido(this)">Aceitar</button></div><div class="loja-pedido"><div class="pedido-top"><strong>João Santos</strong><strong>R$ 42,50</strong></div><small>#2846</small><div class="pedido-list">1x Hambúrguer Bacon<br>1x Suco Natural</div><button class="btn-aceitar" onclick="aceitarPedido(this)">Aceitar</button></div></div>
+                <div class="loja-pedidos"><div class="loja-pedido"><div class="pedido-top"><strong>Maria Silva</strong><strong>R$ 67,90</strong></div><small>#PED-001</small><div class="pedido-list">2x Hambúrguer Artesanal<br>1x Batata Frita<br>1x Refrigerante</div><button class="btn-aceitar" onclick="aceitarPedido(this)">Aceitar</button></div><div class="loja-pedido"><div class="pedido-top"><strong>João Santos</strong><strong>R$ 42,50</strong></div><small>#PED-002</small><div class="pedido-list">1x Hambúrguer Bacon<br>1x Suco Natural</div><button class="btn-aceitar" onclick="aceitarPedido(this)">Aceitar</button></div></div>
                 <nav class="navegacao-inferior"><button class="nav-item ativo" onclick="mudarTela('tela-10')"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item" onclick="mudarTela('tela-11')"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button class="nav-item" onclick="mudarTela('tela-12')"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item" onclick="mudarTela('tela-13')"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
-            <!-- TELA 11: CARDÁPIO (com FAB para cadastrar produto) -->
+            <!-- TELA 11: CARDÁPIO -->
             <section id="tela-11" class="tela">
                 <div class="cardapio-header"><div class="cardapio-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Cardápio Digital</h1></div><div class="cardapio-search"><span class="material-symbols-outlined">search</span><input type="text" id="cardapio-busca" placeholder="Buscar produtos..."></div></div>
                 <div class="cardapio-content" id="cardapio-content"></div>
-                <!-- Botão FAB que ABRE a tela de cadastrar produto -->
                 <button class="cardapio-fab" onclick="abrirCadastroProduto()">
                     <span class="material-symbols-outlined">add</span>
                 </button>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
-            <!-- TELA 12: MENSAGENS -->
+            <!-- TELA 12: MENSAGENS - MODIFICADO PARA CONVERSAS REAIS -->
             <section id="tela-12" class="tela">
-                <div class="mensagens-cabecalho"><div class="mensagens-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Mensagens</h1></div><div class="mensagens-busca"><div class="busca-box"><span class="material-symbols-outlined">search</span><input type="text" id="mensagens-busca-input" placeholder="Buscar conversas..."></div></div></div>
-                <div class="mensagens-lista" id="mensagens-lista"><div class="mensagem-item" data-nome="Maria Silva" data-id="2847"><div class="avatar avatar1">MS</div><div class="mensagem-info"><div class="mensagem-topo"><h3>Maria Silva</h3><span class="badge">2</span></div><div class="mensagem-id">#2847</div><div class="mensagem-preview">Obrigado! Aguardo a entrega.</div></div></div><div class="mensagem-item" data-nome="João Santos" data-id="2846"><div class="avatar avatar2">JS</div><div class="mensagem-info"><div class="mensagem-topo"><h3>João Santos</h3><span class="badge">1</span></div><div class="mensagem-id">#2846</div><div class="mensagem-preview">Pode enviar sem cebola?</div></div></div></div>
-                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
+                <div class="mensagens-cabecalho">
+                    <div class="mensagens-top">
+                        <button onclick="mudarTela('tela-10')" class="btn-voltar">
+                            <span class="material-symbols-outlined">arrow_back</span>
+                        </button>
+                        <h1>Mensagens</h1>
+                    </div>
+                    <div class="mensagens-busca">
+                        <div class="busca-box">
+                            <span class="material-symbols-outlined">search</span>
+                            <input type="text" id="mensagens-busca-input" placeholder="Buscar conversas...">
+                        </div>
+                    </div>
+                </div>
+                <div class="mensagens-lista" id="mensagens-lista">
+                    <!-- Lista será preenchida dinamicamente pelo Firebase -->
+                </div>
+                <nav class="navegacao-inferior">
+                    <button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                    <button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button>
+                    <button class="nav-item ativo"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button>
+                    <button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button>
+                </nav>
             </section>
 
             <!-- TELA 13: AJUSTES -->
@@ -292,7 +354,7 @@
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
-            <!-- TELA 14: CADASTRAR PRODUTO (NOVA TELA) -->
+            <!-- TELA 14: CADASTRAR PRODUTO -->
             <section id="tela-14" class="tela">
                 <div class="tela-cabecalho">
                     <button onclick="fecharCadastroProduto()" class="btn-voltar">
@@ -388,14 +450,24 @@
     <script src="script.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { 
+            getAuth, 
+            GoogleAuthProvider, 
+            signInWithPopup,
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import {
             getFirestore,
             collection,
             addDoc,
             getDocs,
             query,
-            where
+            where,
+            orderBy,
+            limit,
+            onSnapshot,
+            doc,
+            serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -413,6 +485,21 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
         let tipoUsuario = null;
+
+        // EXPORTAR FUNÇÕES PARA O ESCOPO GLOBAL
+        window.auth = auth;
+        window.db = db;
+        window.serverTimestamp = serverTimestamp;
+        window.collection = collection;
+        window.addDoc = addDoc;
+        window.getDocs = getDocs;
+        window.query = query;
+        window.where = where;
+        window.orderBy = orderBy;
+        window.limit = limit;
+        window.onSnapshot = onSnapshot;
+        window.doc = doc;
+        window.signOut = signOut;
 
         window.irParaLogin = function(tipo) {
             tipoUsuario = tipo;
@@ -447,7 +534,7 @@
         };
 
         window.sairDaConta = function() {
-            auth.signOut().then(() => {
+            signOut(auth).then(() => {
                 tipoUsuario = null;
                 localStorage.removeItem('tipoUsuario');
                 localStorage.removeItem('nomeUsuario');
@@ -462,7 +549,6 @@
             setTimeout(inicializarCadastroProduto, 100);
         };
 
-        // Função para fechar e voltar ao cardápio
         window.fecharCadastroProduto = function() {
             mudarTela('tela-11');
         };
@@ -500,7 +586,6 @@
                 document.getElementById("productPrice").value = "";
                 document.getElementById("productDescription").value = "";
 
-                // Resetar foto
                 const uploadArea = document.getElementById('uploadArea');
                 const previewContainer = document.getElementById('photoPreviewContainer');
                 const fileInput = document.getElementById('productPhotoInput');
@@ -578,7 +663,7 @@
             }
         };
 
-        // CARREGAR PRODUTOS PARA CLIENTE (todos os produtos)
+        // CARREGAR PRODUTOS PARA CLIENTE
         window.carregarProdutosCliente = async function() {
             const lista = document.getElementById("listaProdutosCliente");
             if (!lista) return;
