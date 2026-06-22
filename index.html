@@ -236,7 +236,7 @@
             <!-- TELA 7: PEDIDOS -->
             <section id="tela-7" class="tela">
                 <div class="pedidos-cabecalho"><h1>Meus Pedidos</h1></div>
-                <div class="pedidos-conteudo"></div>
+                <div class="pedidos-conteudo"><div class="pedido-card"><div class="pedido-imagem" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9qmCO1wwCO4N0iVnQWSPyVBHgwgZEXoQCF_0SPnDK-u1tits_-bmrj5XJY6rJBISIp4V6VNhhqkgO0-FKRGGt9kHBayxaeJKs4chrxUo4PBM0kFbVU-VKldj_2uv0PFReISHO7Yc-Tikbzi2Oyt-BZRqI8h5r3cJlEJACPTXLJnI6eR-MExNYdgnCWuRGTQX3MFh_mkViSIxRd5PCW5jTmMRrjOQk7b-PLyDk2tNQT37tXo3wroQ2JmEOZiU1c_chvrkP9c6AQVo')"></div><div class="pedido-info"><div class="pedido-titulo"><h3>Burger King</h3><span class="pedido-status status-andamento">Saiu para entrega</span></div><p class="pedido-data">Hoje, 19:30 • Pedido #4821</p><p class="pedido-descricao">1x Whopper Combo, 1x Batata Grande</p></div></div><button onclick="mudarTela('tela-8')" class="btn-chat"><span class="material-symbols-outlined">chat</span><span>Chat com Entregador</span></button></div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
 
@@ -261,16 +261,17 @@
             <section id="tela-10" class="tela">
                 <div class="loja-header">Minha Loja</div>
                 <div class="status-box"><span>Status da Loja: <strong id="status-text">Aberto</strong></span><div id="switch" class="switch"><div class="circle"></div></div></div>
-                <div class="loja-cards"><div class="loja-card"><span>Pedidos Pendentes</span><h2>0</h2></div><div class="loja-card"><span>Em Preparo</span><h2>0</h2></div></div>
+                <div class="loja-cards"><div class="loja-card"><span>Pedidos Pendentes</span><h2>5</h2></div><div class="loja-card"><span>Em Preparo</span><h2>3</h2></div></div>
                 <div class="loja-section-title">Pedidos Recentes</div>
-                <div class="loja-pedidos"></div>
+                <div class="loja-pedidos"><div class="loja-pedido"><div class="pedido-top"><strong>Maria Silva</strong><strong>R$ 67,90</strong></div><small>#2847</small><div class="pedido-list">2x Hambúrguer Artesanal<br>1x Batata Frita<br>1x Refrigerante</div><button class="btn-aceitar" onclick="aceitarPedido(this)">Aceitar</button></div><div class="loja-pedido"><div class="pedido-top"><strong>João Santos</strong><strong>R$ 42,50</strong></div><small>#2846</small><div class="pedido-list">1x Hambúrguer Bacon<br>1x Suco Natural</div><button class="btn-aceitar" onclick="aceitarPedido(this)">Aceitar</button></div></div>
                 <nav class="navegacao-inferior"><button class="nav-item ativo" onclick="mudarTela('tela-10')"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item" onclick="mudarTela('tela-11')"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button class="nav-item" onclick="mudarTela('tela-12')"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item" onclick="mudarTela('tela-13')"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
-            <!-- TELA 11: CARDÁPIO -->
+            <!-- TELA 11: CARDÁPIO (com FAB para cadastrar produto) -->
             <section id="tela-11" class="tela">
                 <div class="cardapio-header"><div class="cardapio-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Cardápio Digital</h1></div><div class="cardapio-search"><span class="material-symbols-outlined">search</span><input type="text" id="cardapio-busca" placeholder="Buscar produtos..."></div></div>
                 <div class="cardapio-content" id="cardapio-content"></div>
+                <!-- Botão FAB que ABRE a tela de cadastrar produto -->
                 <button class="cardapio-fab" onclick="abrirCadastroProduto()">
                     <span class="material-symbols-outlined">add</span>
                 </button>
@@ -291,7 +292,7 @@
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
-            <!-- TELA 14: CADASTRAR PRODUTO -->
+            <!-- TELA 14: CADASTRAR PRODUTO (NOVA TELA) -->
             <section id="tela-14" class="tela">
                 <div class="tela-cabecalho">
                     <button onclick="fecharCadastroProduto()" class="btn-voltar">
@@ -385,6 +386,271 @@
     </div>
 
     <script src="script.js"></script>
-    <script type="module" src="firebase-config.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            getDocs,
+            query,
+            where
+        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6OlOdx2p71kv57KF5XlRYoATZa8bWYvw",
+            authDomain: "aplicativo-prontoja-80c02.firebaseapp.com",
+            projectId: "aplicativo-prontoja-80c02",
+            storageBucket: "aplicativo-prontoja-80c02.firebasestorage.app",
+            messagingSenderId: "625556388980",
+            appId: "1:625556388980:web:32b3bcf47cb3aa9ccda521",
+            measurementId: "G-4YMXEHLGDR"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+        let tipoUsuario = null;
+
+        window.irParaLogin = function(tipo) {
+            tipoUsuario = tipo;
+            mudarTela('tela-login');
+        };
+
+        window.loginComGoogle = async function() {
+            if (!tipoUsuario) {
+                alert("Erro: Tipo de usuário não definido.");
+                mudarTela('tela-2');
+                return;
+            }
+            try {
+                const result = await signInWithPopup(auth, provider);
+                const user = result.user;
+                const nome = user.displayName || "Usuário";
+                const email = user.email || "";
+                localStorage.setItem('tipoUsuario', tipoUsuario);
+                localStorage.setItem('nomeUsuario', nome);
+                localStorage.setItem('emailUsuario', email);
+                const nomePerfil = document.getElementById('nomePerfil');
+                const emailPerfil = document.getElementById('emailPerfil');
+                if (nomePerfil) nomePerfil.textContent = nome;
+                if (emailPerfil) emailPerfil.textContent = email;
+                if (tipoUsuario === 'cliente') mudarTela('tela-5');
+                else if (tipoUsuario === 'empresa') mudarTela('tela-10');
+                else mudarTela('tela-5');
+            } catch (error) {
+                console.error("Erro no login:", error);
+                alert("Erro ao fazer login: " + error.message);
+            }
+        };
+
+        window.sairDaConta = function() {
+            auth.signOut().then(() => {
+                tipoUsuario = null;
+                localStorage.removeItem('tipoUsuario');
+                localStorage.removeItem('nomeUsuario');
+                localStorage.removeItem('emailUsuario');
+                mudarTela('tela-2');
+            }).catch((error) => console.error("Erro ao sair:", error));
+        };
+
+        // Função para abrir o cadastro de produto
+        window.abrirCadastroProduto = function() {
+            mudarTela('tela-14');
+            setTimeout(inicializarCadastroProduto, 100);
+        };
+
+        // Função para fechar e voltar ao cardápio
+        window.fecharCadastroProduto = function() {
+            mudarTela('tela-11');
+        };
+
+        // SALVAR PRODUTO no Firestore
+        window.salvarProduto = async function() {
+            const nome = document.getElementById("productName").value;
+            const categoria = document.getElementById("productCategory").value;
+            const preco = document.getElementById("productPrice").value;
+            const descricao = document.getElementById("productDescription").value;
+
+            if (!nome || !categoria || !preco) {
+                alert("Preencha todos os campos.");
+                return;
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Você precisa estar logado para cadastrar um produto.");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "produtos"), {
+                    nome: nome,
+                    categoria: categoria,
+                    preco: preco,
+                    descricao: descricao,
+                    empresa: user.uid
+                });
+
+                alert("Produto cadastrado com sucesso!");
+
+                document.getElementById("productName").value = "";
+                document.getElementById("productPrice").value = "";
+                document.getElementById("productDescription").value = "";
+
+                // Resetar foto
+                const uploadArea = document.getElementById('uploadArea');
+                const previewContainer = document.getElementById('photoPreviewContainer');
+                const fileInput = document.getElementById('productPhotoInput');
+                const previewImg = document.getElementById('previewImg');
+                
+                if (fileInput) fileInput.value = '';
+                if (previewImg) previewImg.src = '#';
+                if (previewContainer) previewContainer.style.display = 'none';
+                if (uploadArea) uploadArea.style.display = 'flex';
+
+                carregarProdutos();
+
+                mudarTela("tela-11");
+
+            } catch (erro) {
+                console.error(erro);
+                alert("Erro ao salvar produto: " + erro.message);
+            }
+        };
+
+        // CARREGAR PRODUTOS do Firestore (para empresa)
+        window.carregarProdutos = async function() {
+            const lista = document.getElementById("cardapio-content");
+            if (!lista) return;
+            
+            lista.innerHTML = "";
+            
+            const user = auth.currentUser;
+            if (!user) {
+                lista.innerHTML = '<p style="text-align:center; padding:20px;">Faça login para ver seus produtos</p>';
+                return;
+            }
+
+            try {
+                const q = query(collection(db, "produtos"), where("empresa", "==", user.uid));
+                const produtos = await getDocs(q);
+                
+                if (produtos.empty) {
+                    lista.innerHTML = '<p style="text-align:center; padding:20px;">Nenhum produto cadastrado. Clique no + para adicionar.</p>';
+                    return;
+                }
+                
+                let categoriasMap = new Map();
+                
+                produtos.forEach((doc) => {
+                    const produto = doc.data();
+                    if (!categoriasMap.has(produto.categoria)) {
+                        categoriasMap.set(produto.categoria, []);
+                    }
+                    categoriasMap.get(produto.categoria).push(produto);
+                });
+                
+                for (let [categoria, produtosList] of categoriasMap) {
+                    lista.innerHTML += `<h3>${categoria}</h3>`;
+                    produtosList.forEach(produto => {
+                        let precoFormatado = `R$ ${parseFloat(produto.preco).toFixed(2).replace('.', ',')}`;
+                        lista.innerHTML += `
+                            <div class="cardapio-item">
+                                <div>
+                                    <h4>${produto.nome}</h4>
+                                    <p>${produto.descricao || ''}</p>
+                                    <span class="cardapio-price">${precoFormatado}</span>
+                                </div>
+                                <label class="cardapio-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (erro) {
+                console.error(erro);
+                lista.innerHTML = '<p style="text-align:center; padding:20px;">Erro ao carregar produtos</p>';
+            }
+        };
+
+        // CARREGAR PRODUTOS PARA CLIENTE (todos os produtos)
+        window.carregarProdutosCliente = async function() {
+            const lista = document.getElementById("listaProdutosCliente");
+            if (!lista) return;
+            
+            lista.innerHTML = '<p style="text-align:center; padding:20px;">Carregando produtos...</p>';
+            
+            try {
+                const produtos = await getDocs(collection(db, "produtos"));
+                
+                if (produtos.empty) {
+                    lista.innerHTML = '<p style="text-align:center; padding:20px;">Nenhum produto disponível no momento.</p>';
+                    return;
+                }
+                
+                lista.innerHTML = "";
+                
+                produtos.forEach((doc) => {
+                    const p = doc.data();
+                    let precoFormatado = `R$ ${parseFloat(p.preco).toFixed(2).replace('.', ',')}`;
+                    lista.innerHTML += `
+                        <div class="produto-cliente-card">
+                            <h3>${p.nome}</h3>
+                            <p>${p.descricao || ''}</p>
+                            <strong>${precoFormatado}</strong>
+                            <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('${p.nome}', '${precoFormatado}')">
+                                <span class="material-symbols-outlined">shopping_cart</span>
+                                Adicionar
+                            </button>
+                        </div>
+                    `;
+                });
+            } catch (erro) {
+                console.error(erro);
+                lista.innerHTML = '<p style="text-align:center; padding:20px;">Erro ao carregar produtos</p>';
+            }
+        };
+        
+        window.adicionarAoCarrinho = function(nome, preco) {
+            alert(`"${nome}" adicionado ao carrinho! Valor: ${preco}`);
+        };
+        
+        window.abrirProdutosCliente = function() {
+            mudarTela('tela-15');
+            setTimeout(carregarProdutosCliente, 100);
+        };
+
+        // Adicionar botão na home cliente para ver produtos
+        window.addEventListener('DOMContentLoaded', function() {
+            const categoriasGrid = document.querySelector('#tela-5 .categorias-grid');
+            if (categoriasGrid) {
+                const btnVerProdutos = document.createElement('button');
+                btnVerProdutos.className = 'categoria';
+                btnVerProdutos.onclick = () => abrirProdutosCliente();
+                btnVerProdutos.innerHTML = '<div class="categoria-icone"><span class="material-symbols-outlined">restaurant_menu</span></div><span>Ver Cardápio</span>';
+                categoriasGrid.appendChild(btnVerProdutos);
+            }
+            
+            carregarProdutos();
+            
+            const tipoSalvo = localStorage.getItem('tipoUsuario');
+            const nomeSalvo = localStorage.getItem('nomeUsuario');
+            const emailSalvo = localStorage.getItem('emailUsuario');
+            if (tipoSalvo && nomeSalvo) {
+                tipoUsuario = tipoSalvo;
+                const nomePerfil = document.getElementById('nomePerfil');
+                const emailPerfil = document.getElementById('emailPerfil');
+                if (nomePerfil) nomePerfil.textContent = nomeSalvo;
+                if (emailPerfil) emailPerfil.textContent = emailSalvo;
+                if (tipoSalvo === 'cliente') mudarTela('tela-5');
+                else if (tipoSalvo === 'empresa') mudarTela('tela-10');
+            }
+        });
+    </script>
 </body>
 </html>
