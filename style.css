@@ -2443,3 +2443,77 @@ body {
 .tela {
     overflow: hidden;
 }
+
+/* Status dos pedidos */
+.pedido-status {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-pendente {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-aceito {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-preparo {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-rota {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-entregue {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+/* Botão de chat nos pedidos */
+.btn-chat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-chat:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+/* Mensagem quando não há pedidos */
+.pedidos-vazios {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.pedidos-vazios .material-symbols-outlined {
+    font-size: 64px;
+    color: #ddd;
+}
+
+.pedidos-vazios h3 {
+    margin-top: 16px;
+    color: #666;
+}
