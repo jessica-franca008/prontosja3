@@ -221,7 +221,7 @@
                 <nav class="navegacao-inferior">
                     <button class="nav-item ativo"><span class="material-symbols-outlined">home</span><span>Início</span></button>
                     <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
-                    <button onclick="mudarTela('tela-7'); setTimeout(carregarPedidosCliente,200);" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
+                    <button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
                     <button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">account_circle</span><span>Perfil</span></button>
                 </nav>
             </section>
@@ -230,15 +230,13 @@
             <section id="tela-6" class="tela">
                 <div class="pesquisa-cabecalho"><h1>Pesquisar</h1><div class="pesquisa-busca"><span class="material-symbols-outlined">search</span><input type="text" placeholder="O que você procura hoje?"></div></div>
                 <div class="pesquisa-conteudo"><div class="pesquisa-sugestoes"><h3>Sugestões para você</h3><button class="link-vermais">Ver mais</button></div><div class="pesquisa-resultados"><div class="resultado-item"><div class="resultado-imagem" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD1ujBixUSbXXODnGm9IUFKnoC3Go4ZkUHxcZMTJAzBrUMyJF9QbXOOBpeVz82oSAkNbq5sSpTBvMGBKO3jhy1ll3vnp_yRKbz6PqYVne91LvfxdxzMeqnKVR_ZO5WL_0zoHXbwZHt0oO8j_uKoT3-ZYUgMsX3WdJJk64lUcPDfYYCAKc6jKjGTcaiDBbraJyEXVuILUvA603OYsdugtz4osVvExytIc72MbSRjXNexjetm5rrVNlGwlIPe5VOfhWp_UGUAxjO5Gbo')"></div><div class="resultado-info"><div class="resultado-titulo"><h4>Burger King</h4><span class="avaliacao">4.8</span></div><p>Fast Food • Lanches</p><div class="resultado-detalhes"><span><span class="material-symbols-outlined">schedule</span> 30-40 min</span><span class="entrega-gratis"><span class="material-symbols-outlined">attach_money</span> Entrega Grátis</span></div></div></div></div></div>
-                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7'); setTimeout(carregarPedidosCliente,200);" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
+                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
 
             <!-- TELA 7: PEDIDOS -->
             <section id="tela-7" class="tela">
                 <div class="pedidos-cabecalho"><h1>Meus Pedidos</h1></div>
-                <div class="pedidos-conteudo">
-                    <p style="text-align:center; padding:20px;">Carregando pedidos...</p>
-                </div>
+                <div class="pedidos-conteudo"><div class="pedido-card"><div class="pedido-imagem" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB9qmCO1wwCO4N0iVnQWSPyVBHgwgZEXoQCF_0SPnDK-u1tits_-bmrj5XJY6rJBISIp4V6VNhhqkgO0-FKRGGt9kHBayxaeJKs4chrxUo4PBM0kFbVU-VKldj_2uv0PFReISHO7Yc-Tikbzi2Oyt-BZRqI8h5r3cJlEJACPTXLJnI6eR-MExNYdgnCWuRGTQX3MFh_mkViSIxRd5PCW5jTmMRrjOQk7b-PLyDk2tNQT37tXo3wroQ2JmEOZiU1c_chvrkP9c6AQVo')"></div><div class="pedido-info"><div class="pedido-titulo"><h3>Burger King</h3><span class="pedido-status status-andamento">Saiu para entrega</span></div><p class="pedido-data">Hoje, 19:30 • Pedido #4821</p><p class="pedido-descricao">1x Whopper Combo, 1x Batata Grande</p></div></div><button onclick="mudarTela('tela-8')" class="btn-chat"><span class="material-symbols-outlined">chat</span><span>Chat com Entregador</span></button></div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
 
@@ -247,7 +245,7 @@
                 <div class="chat-cabecalho"><button onclick="mudarTela('tela-7')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><div class="chat-contato-info"><div class="chat-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBE-eDMfOeLf8FpoYNPZwXXyHZDUt1lCh1Ff4DxVOMuoJpR-UHz6qWJgp75iB0mDf5EtHMDXz3UDL8q5hkZxHSWR0Q2v3TA84De-6l6pN7bOuIXZ_SDimOi5QXz24pyHiqUctirxzVTiUPzlgR9Xp_muVyxw5lnGjVnJdr-YZDgnLF0yk8jQn8oIJy3CVleqYgR7pg2F3KZ5iyCbZ2_RSj1Ywcmdb34AmWEncBJUqGJ-VLqfuVdWL5pcfIcktalCAuKqj43UtBRCqA')"></div><h2>Perfil da Cliente</h2></div><button class="btn-info"><span class="material-symbols-outlined">info</span></button></div>
                 <div class="chat-mensagens" id="chat-mensagens"><div class="chat-data">Hoje</div><div class="mensagem mensagem-recebida"><div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB7rSYxal4bU_WFmmlB2AUIS2FIE2WwCv3rGvQIBMas0ZXlndCkt9BvLRrerDMiECkhT5X0a-NDisyDTOwxyWQJ0I0Cirv8JUM6qkyiUDiqtLosebTbRt3kvs0loFt6shpoKZ-u0_V_VFxELtmbsbIzKi__49NCzpFAvCf74fIB_12vB7kjhKSf93gY1W8QVMrU-x3HhYbZYvF96Xd8lDWL4pkjMfOVCz8gBK9UGqehKbifhGjfnbb6LAWhWHLlohmRmB_Y-kkjBts')"></div><div class="mensagem-conteudo"><span class="mensagem-nome">Mariana Souza</span><div class="mensagem-balao"><p>Olá! Acabei de ver que meu pedido saiu para entrega.</p></div><span class="mensagem-hora">14:32</span></div></div><div class="mensagem mensagem-recebida"><div class="mensagem-conteudo"><div class="mensagem-balao"><p>Vai demorar muito?</p></div><span class="mensagem-hora">14:32</span></div></div><div class="mensagem mensagem-enviada"><div class="mensagem-conteudo"><div class="mensagem-balao mensagem-balao-enviada"><p>Boa tarde, Mariana! O motoboy já está a caminho. Deve chegar em cerca de 10 minutos.</p></div><div class="mensagem-status"><span class="mensagem-hora">14:35</span><span class="material-symbols-outlined">done_all</span></div></div></div><div class="mensagem mensagem-recebida"><div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div><div class="mensagem-conteudo"><div class="mensagem-balao"><p>Ótimo, obrigada! Vou aguardar na portaria.</p></div><span class="mensagem-hora">14:36</span></div></div></div>
                 <div class="chat-input"><button id="record-btn" class="btn-audio"><span class="material-symbols-outlined">mic</span></button><div class="chat-input-container"><input type="text" id="chat-input" placeholder="Digite sua mensagem..."></div><button id="send-btn" class="btn-enviar"><span class="material-symbols-outlined">send</span></button></div>
-                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7'); setTimeout(carregarPedidosCliente,200);" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
+                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
 
             <!-- TELA 9: PERFIL CLIENTE -->
@@ -256,18 +254,16 @@
                 <div class="perfil-conteudo"><div class="perfil-foto-container"><div class="perfil-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdfNGj9M5PWs6ndJyrqKlftGJxQCay23IDeqSjrZr2uEE5rpgzA_W7x_sj50n3uEwXXuBP_1X1wnpueL20XuVppn2evqajkJWmkjHwpoohbJKGtGLNYILf_hal-eRCwK678boFLs2v2RXByyR1S1D_eXIhkOkDymsi52Roq2wJMGPB64Xur8Eswjq3TwZVxEVCXw87w5qW_joqA8ezHd-ljbU1BLcFkFrB9PZxwnQJ5iuBhnS_QkjhJaZIFk-q6RxpvVp9gMipJ_Y')"></div><button class="btn-camera"><span class="material-symbols-outlined">camera_alt</span></button></div><h2 id="nomePerfil">Maria Silva</h2><button class="btn-mudar-perfil">Mudar Perfil</button></div>
                 <div class="perfil-detalhes"><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">mail</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Email</span><span class="detalhe-valor" id="emailPerfil">maria.silva@email.com</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Número</span><span class="detalhe-valor">(11) 98765-4321</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">location_on</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Localidade</span><span class="detalhe-valor">Rua das Flores, 123 - São Paulo</span></div><button class="btn-editar"><span class="material-symbols-outlined">edit</span></button></div></div>
                 <button onclick="sairDaConta()" class="btn-sair"><span class="material-symbols-outlined">logout</span><span>Sair da Conta</span></button><p class="versao-app">Versão 2.4.0</p>
-                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7'); setTimeout(carregarPedidosCliente,200);" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
+                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
 
             <!-- TELA 10: MINHA LOJA -->
             <section id="tela-10" class="tela">
                 <div class="loja-header">Minha Loja</div>
                 <div class="status-box"><span>Status da Loja: <strong id="status-text">Aberto</strong></span><div id="switch" class="switch"><div class="circle"></div></div></div>
-                <div class="loja-cards"><div class="loja-card"><span>Pedidos Pendentes</span><h2>0</h2></div><div class="loja-card"><span>Em Preparo</span><h2>0</h2></div></div>
+                <div class="loja-cards"><div class="loja-card"><span>Pedidos Pendentes</span><h2>5</h2></div><div class="loja-card"><span>Em Preparo</span><h2>3</h2></div></div>
                 <div class="loja-section-title">Pedidos Recentes</div>
-                <div class="loja-pedidos">
-                    <p style="text-align:center; padding:20px; color: #666;">Aguardando pedidos...</p>
-                </div>
+                <div class="loja-pedidos"><div class="loja-pedido"><div class="pedido-top"><strong>Maria Silva</strong><strong>R$ 67,90</strong></div><small>#2847</small><div class="pedido-list">2x Hambúrguer Artesanal<br>1x Batata Frita<br>1x Refrigerante</div><button class="btn-aceitar" onclick="aceitarPedido(this)">Aceitar</button></div><div class="loja-pedido"><div class="pedido-top"><strong>João Santos</strong><strong>R$ 42,50</strong></div><small>#2846</small><div class="pedido-list">1x Hambúrguer Bacon<br>1x Suco Natural</div><button class="btn-aceitar" onclick="aceitarPedido(this)">Aceitar</button></div></div>
                 <nav class="navegacao-inferior"><button class="nav-item ativo" onclick="mudarTela('tela-10')"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item" onclick="mudarTela('tela-11')"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button class="nav-item" onclick="mudarTela('tela-12')"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item" onclick="mudarTela('tela-13')"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
@@ -382,7 +378,7 @@
                 <nav class="navegacao-inferior">
                     <button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
                     <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
-                    <button onclick="mudarTela('tela-7'); setTimeout(carregarPedidosCliente,200);" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
+                    <button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
                     <button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button>
                 </nav>
             </section>
@@ -399,8 +395,7 @@
             addDoc,
             getDocs,
             query,
-            where,
-            onSnapshot
+            where
         } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -442,15 +437,9 @@
                 const emailPerfil = document.getElementById('emailPerfil');
                 if (nomePerfil) nomePerfil.textContent = nome;
                 if (emailPerfil) emailPerfil.textContent = email;
-                if (tipoUsuario === 'cliente') {
-                    mudarTela('tela-5');
-                } else if (tipoUsuario === 'empresa') {
-                    mudarTela('tela-10');
-                    // PASSO 8: Inicia escuta de pedidos após login da empresa
-                    setTimeout(escutarPedidosEmpresa, 500);
-                } else {
-                    mudarTela('tela-5');
-                }
+                if (tipoUsuario === 'cliente') mudarTela('tela-5');
+                else if (tipoUsuario === 'empresa') mudarTela('tela-10');
+                else mudarTela('tela-5');
             } catch (error) {
                 console.error("Erro no login:", error);
                 alert("Erro ao fazer login: " + error.message);
@@ -614,7 +603,7 @@
                             <h3>${p.nome}</h3>
                             <p>${p.descricao || ''}</p>
                             <strong>${precoFormatado}</strong>
-                            <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('${p.nome}', '${precoFormatado}', '${p.empresa}')">
+                            <button class="btn-adicionar-carrinho" onclick="adicionarAoCarrinho('${p.nome}', '${precoFormatado}')">
                                 <span class="material-symbols-outlined">shopping_cart</span>
                                 Adicionar
                             </button>
@@ -627,7 +616,9 @@
             }
         };
         
-        // Função adicionar ao carrinho agora está no script.js
+        window.adicionarAoCarrinho = function(nome, preco) {
+            alert(`"${nome}" adicionado ao carrinho! Valor: ${preco}`);
+        };
         
         window.abrirProdutosCliente = function() {
             mudarTela('tela-15');
@@ -656,12 +647,8 @@
                 const emailPerfil = document.getElementById('emailPerfil');
                 if (nomePerfil) nomePerfil.textContent = nomeSalvo;
                 if (emailPerfil) emailPerfil.textContent = emailSalvo;
-                if (tipoSalvo === 'cliente') {
-                    mudarTela('tela-5');
-                } else if (tipoSalvo === 'empresa') {
-                    mudarTela('tela-10');
-                    setTimeout(escutarPedidosEmpresa, 500);
-                }
+                if (tipoSalvo === 'cliente') mudarTela('tela-5');
+                else if (tipoSalvo === 'empresa') mudarTela('tela-10');
             }
         });
     </script>
