@@ -9,6 +9,59 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* ── Perfil: inputs editáveis ── */
+        .detalhe-input {
+            border: none;
+            border-bottom: 1.5px solid #e0e0e0;
+            outline: none;
+            font-size: 14px;
+            color: var(--text-main, #111);
+            background: transparent;
+            width: 100%;
+            padding: 4px 0;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .detalhe-input:focus {
+            border-bottom-color: var(--primary, #e50615);
+        }
+        .perfil-foto {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            background-color: #f0f0f0;
+        }
+        .perfil-email-sub {
+            font-size: 13px;
+            color: #888;
+            margin-top: 2px;
+            display: block;
+        }
+        .btn-salvar-perfil {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: calc(100% - 32px);
+            margin: 16px 16px 0;
+            padding: 14px;
+            background: var(--primary, #e50615);
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .btn-salvar-perfil:active {
+            opacity: 0.85;
+        }
+    </style>
 </head>
 <body>
     <div class="phone-container">
@@ -198,7 +251,7 @@
                         <span class="material-symbols-outlined">location_on</span>
                         <div>
                             <span class="local-texto">Entregar em</span>
-                            <span class="local-endereco">Minha Localidade</span>
+                            <span class="local-endereco" id="home-local-endereco">Minha Localidade</span>
                         </div>
                         <span class="material-symbols-outlined">expand_more</span>
                     </div>
@@ -253,10 +306,57 @@
             <!-- TELA 9: PERFIL CLIENTE -->
             <section id="tela-9" class="tela">
                 <div class="perfil-cabecalho"><h1>Meu Perfil</h1></div>
-                <div class="perfil-conteudo"><div class="perfil-foto-container"><div class="perfil-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdfNGj9M5PWs6ndJyrqKlftGJxQCay23IDeqSjrZr2uEE5rpgzA_W7x_sj50n3uEwXXuBP_1X1wnpueL20XuVppn2evqajkJWmkjHwpoohbJKGtGLNYILf_hal-eRCwK678boFLs2v2RXByyR1S1D_eXIhkOkDymsi52Roq2wJMGPB64Xur8Eswjq3TwZVxEVCXw87w5qW_joqA8ezHd-ljbU1BLcFkFrB9PZxwnQJ5iuBhnS_QkjhJaZIFk-q6RxpvVp9gMipJ_Y')"></div><button class="btn-camera"><span class="material-symbols-outlined">camera_alt</span></button></div><h2 id="nomePerfil">Maria Silva</h2><button class="btn-mudar-perfil">Mudar Perfil</button></div>
-                <div class="perfil-detalhes"><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">mail</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Email</span><span class="detalhe-valor" id="emailPerfil">maria.silva@email.com</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Número</span><span class="detalhe-valor">(11) 98765-4321</span></div></div><div class="detalhe-item"><div class="detalhe-icone"><span class="material-symbols-outlined">location_on</span></div><div class="detalhe-conteudo"><span class="detalhe-rotulo">Localidade</span><span class="detalhe-valor">Rua das Flores, 123 - São Paulo</span></div><button class="btn-editar"><span class="material-symbols-outlined">edit</span></button></div></div>
-                <button onclick="sairDaConta()" class="btn-sair"><span class="material-symbols-outlined">logout</span><span>Sair da Conta</span></button><p class="versao-app">Versão 2.4.0</p>
-                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
+
+                <!-- Foto + nome + e-mail -->
+                <div class="perfil-conteudo">
+                    <div class="perfil-foto-container">
+                        <div class="perfil-foto" id="perfilFotoEl"></div>
+                        <button class="btn-camera" onclick="document.getElementById('inputFotoPerfil').click()">
+                            <span class="material-symbols-outlined">camera_alt</span>
+                        </button>
+                        <!-- Input oculto para selecionar imagem da galeria -->
+                        <input type="file" id="inputFotoPerfil" accept="image/*" style="display:none;">
+                    </div>
+                    <h2 id="nomePerfil">Carregando...</h2>
+                    <span class="perfil-email-sub" id="emailPerfil"></span>
+                </div>
+
+                <!-- Campos editáveis -->
+                <div class="perfil-detalhes">
+                    <div class="detalhe-item">
+                        <div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div>
+                        <div class="detalhe-conteudo">
+                            <span class="detalhe-rotulo">Número</span>
+                            <input id="perfilTelefone" class="detalhe-input" type="tel" placeholder="(XX) XXXXX-XXXX">
+                        </div>
+                    </div>
+                    <div class="detalhe-item">
+                        <div class="detalhe-icone"><span class="material-symbols-outlined">location_on</span></div>
+                        <div class="detalhe-conteudo">
+                            <span class="detalhe-rotulo">Localidade</span>
+                            <input id="perfilLocalidade" class="detalhe-input" type="text" placeholder="Sua cidade ou endereço">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão salvar -->
+                <button onclick="salvarPerfil()" class="btn-salvar-perfil">
+                    <span class="material-symbols-outlined">save</span>
+                    Salvar Alterações
+                </button>
+
+                <button onclick="sairDaConta()" class="btn-sair">
+                    <span class="material-symbols-outlined">logout</span>
+                    <span>Sair da Conta</span>
+                </button>
+                <p class="versao-app">Versão 2.4.0</p>
+
+                <nav class="navegacao-inferior">
+                    <button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                    <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
+                    <button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
+                    <button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button>
+                </nav>
             </section>
 
             <!-- TELA 10: MINHA LOJA (pedidos em tempo real) -->
@@ -471,7 +571,6 @@
                 if (nomePerfil) nomePerfil.textContent = nome;
                 if (emailPerfil) emailPerfil.textContent = email;
 
-                // Se empresa, salvar no Firestore
                 if (tipoUsuario === 'empresa') {
                     const empresaRef = doc(db, "empresas", user.uid);
                     const empresaSnap = await getDoc(empresaRef);
@@ -487,6 +586,15 @@
                     mudarTela('tela-10');
                 } else {
                     mudarTela('tela-5');
+                    // Carrega localidade salva logo após login
+                    setTimeout(async () => {
+                        try {
+                            const snap = await getDoc(doc(db, "clientes", user.uid));
+                            if (snap.exists() && snap.data().localidade) {
+                                atualizarLocalidadeHome(snap.data().localidade);
+                            }
+                        } catch(e) {}
+                    }, 600);
                 }
             } catch (error) {
                 console.error("Erro no login:", error);
@@ -495,17 +603,122 @@
         };
 
         window.sairDaConta = function() {
-            // Cancelar listeners ativos
             if (unsubscribePedidosCliente) { unsubscribePedidosCliente(); unsubscribePedidosCliente = null; }
             if (unsubscribePedidosEmpresa) { unsubscribePedidosEmpresa(); unsubscribePedidosEmpresa = null; }
 
             auth.signOut().then(() => {
                 tipoUsuario = null;
+                fotoPerfilBase64 = null;
                 localStorage.removeItem('tipoUsuario');
                 localStorage.removeItem('nomeUsuario');
                 localStorage.removeItem('emailUsuario');
                 mudarTela('tela-2');
             }).catch((error) => console.error("Erro ao sair:", error));
+        };
+
+        // ==========================================
+        // PERFIL DO CLIENTE
+        // ==========================================
+
+        let fotoPerfilBase64 = null;
+
+        // Atualiza o texto de localidade na tela inicial
+        function atualizarLocalidadeHome(localidade) {
+            const enderecoEl = document.getElementById('home-local-endereco');
+            if (enderecoEl) {
+                enderecoEl.textContent = localidade && localidade.trim() !== '' ? localidade : 'Minha Localidade';
+            }
+        }
+
+        // Carrega dados salvos do Firestore e preenche a tela de perfil
+        window.carregarPerfilCliente = async function() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const nomePerfil = document.getElementById('nomePerfil');
+            const emailPerfil = document.getElementById('emailPerfil');
+            if (nomePerfil) nomePerfil.textContent = user.displayName || 'Usuário';
+            if (emailPerfil) emailPerfil.textContent = user.email || '';
+
+            // Foto padrão do Google enquanto carrega
+            const fotoEl = document.getElementById('perfilFotoEl');
+            if (fotoEl && user.photoURL) {
+                fotoEl.style.backgroundImage = `url('${user.photoURL}')`;
+            }
+
+            try {
+                const snap = await getDoc(doc(db, "clientes", user.uid));
+                if (snap.exists()) {
+                    const dados = snap.data();
+
+                    // Foto personalizada (sobrescreve a do Google)
+                    if (fotoEl && dados.foto) {
+                        fotoEl.style.backgroundImage = `url('${dados.foto}')`;
+                        fotoPerfilBase64 = dados.foto;
+                    }
+
+                    const tel = document.getElementById('perfilTelefone');
+                    if (tel && dados.telefone) tel.value = dados.telefone;
+
+                    const loc = document.getElementById('perfilLocalidade');
+                    if (loc && dados.localidade) loc.value = dados.localidade;
+
+                    // Garante que a home já reflete a localidade salva
+                    atualizarLocalidadeHome(dados.localidade || '');
+                }
+            } catch(e) {
+                console.error("Erro ao carregar perfil:", e);
+            }
+
+            // Listener do input de foto (evita duplicar)
+            const inputFoto = document.getElementById('inputFotoPerfil');
+            if (inputFoto && !inputFoto._listenerAdded) {
+                inputFoto.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        fotoPerfilBase64 = ev.target.result;
+                        const fotoEl = document.getElementById('perfilFotoEl');
+                        if (fotoEl) fotoEl.style.backgroundImage = `url('${fotoPerfilBase64}')`;
+                    };
+                    reader.readAsDataURL(file);
+                });
+                inputFoto._listenerAdded = true;
+            }
+        };
+
+        // Salva as alterações no Firestore
+        window.salvarPerfil = async function() {
+            const user = auth.currentUser;
+            if (!user) { alert('Você precisa estar logado.'); return; }
+
+            const telefone = document.getElementById('perfilTelefone')?.value.trim() || '';
+            const localidade = document.getElementById('perfilLocalidade')?.value.trim() || '';
+
+            const dados = {
+                uid: user.uid,
+                nome: user.displayName || '',
+                email: user.email || '',
+                telefone,
+                localidade,
+                atualizadoEm: serverTimestamp()
+            };
+
+            // Salva foto em base64 somente se o usuário escolheu uma da galeria
+            // Obs: para produção com fotos grandes, use Firebase Storage no lugar de base64
+            if (fotoPerfilBase64 && fotoPerfilBase64.startsWith('data:')) {
+                dados.foto = fotoPerfilBase64;
+            }
+
+            try {
+                await setDoc(doc(db, "clientes", user.uid), dados, { merge: true });
+                atualizarLocalidadeHome(localidade);
+                alert('✅ Perfil salvo com sucesso!');
+            } catch(e) {
+                console.error(e);
+                alert('Erro ao salvar perfil: ' + e.message);
+            }
         };
 
         // ==========================================
@@ -538,7 +751,6 @@
                 return;
             }
 
-            // Buscar nome da empresa
             let nomeEmpresa = user.displayName || "Empresa";
             try {
                 const empresaSnap = await getDoc(doc(db, "empresas", user.uid));
@@ -782,7 +994,6 @@
                     return;
                 }
 
-                // Ordenar por data (mais recentes primeiro)
                 const pedidos = [];
                 snap.forEach(d => pedidos.push({ id: d.id, ...d.data() }));
                 pedidos.sort((a, b) => {
@@ -849,7 +1060,6 @@
             );
 
             unsubscribePedidosEmpresa = onSnapshot(q, (snap) => {
-                // Atualizar contador
                 const contador = document.getElementById('contador-pendentes');
                 if (contador) contador.textContent = snap.size;
 
@@ -895,7 +1105,6 @@
         window.responderPedido = async function(pedidoId, novoStatus) {
             try {
                 await updateDoc(doc(db, "pedidos", pedidoId), { status: novoStatus });
-                // Atualizar contador em preparo se aceito
                 if (novoStatus === 'Aceito') {
                     const contadorPreparo = document.getElementById('contador-preparo');
                     if (contadorPreparo) {
@@ -925,8 +1134,23 @@
                 const emailPerfil = document.getElementById('emailPerfil');
                 if (nomePerfil) nomePerfil.textContent = nomeSalvo;
                 if (emailPerfil) emailPerfil.textContent = emailSalvo;
-                if (tipoSalvo === 'cliente') mudarTela('tela-5');
-                else if (tipoSalvo === 'empresa') mudarTela('tela-10');
+
+                if (tipoSalvo === 'cliente') {
+                    mudarTela('tela-5');
+                    // Carrega localidade salva no reload
+                    setTimeout(async () => {
+                        const u = auth.currentUser;
+                        if (!u) return;
+                        try {
+                            const snap = await getDoc(doc(db, "clientes", u.uid));
+                            if (snap.exists() && snap.data().localidade) {
+                                atualizarLocalidadeHome(snap.data().localidade);
+                            }
+                        } catch(e) {}
+                    }, 1200);
+                } else if (tipoSalvo === 'empresa') {
+                    mudarTela('tela-10');
+                }
             }
         });
 
