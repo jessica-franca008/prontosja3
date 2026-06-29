@@ -51,6 +51,13 @@ function mudarTela(idTela) {
             if (typeof carregarProdutosCliente === 'function') carregarProdutosCliente();
         }, 100);
     }
+
+    // NOVO: carrega perfil do cliente ao abrir tela-9
+    if (idTela === 'tela-9') {
+        setTimeout(() => {
+            if (typeof carregarPerfilCliente === 'function') carregarPerfilCliente();
+        }, 100);
+    }
 }
 
 // ==========================================
