@@ -28,7 +28,7 @@ function mudarTela(idTela) {
     if (idTela === 'tela-12') {
         setTimeout(() => {
             inicializarBuscaMensagens();
-            inicializarCliquesMensagens();
+            if (typeof carregarConversasEmpresa === 'function') carregarConversasEmpresa();
         }, 100);
     }
     
@@ -52,7 +52,7 @@ function mudarTela(idTela) {
         }, 100);
     }
 
-    // NOVO: carrega perfil do cliente ao abrir tela-9
+    // Carrega perfil do cliente ao abrir tela-9
     if (idTela === 'tela-9') {
         setTimeout(() => {
             if (typeof carregarPerfilCliente === 'function') carregarPerfilCliente();
@@ -202,7 +202,15 @@ function showToast(message, isError = false) {
     }, 2400);
 }
 
-// FUNCIONALIDADE DO CHAT
+// ==========================================
+// CHAT (interface / UI)
+// ==========================================
+// A função window.enviarMensagem() que realmente grava a mensagem no
+// Firestore e o listener em tempo real (escutarMensagens) ficam
+// definidos no <script type="module"> do index.html, pois dependem
+// do Firebase. Aqui cuidamos só dos elementos de interface (input,
+// botão de enviar e gravação de áudio).
+
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
@@ -215,6 +223,7 @@ function inicializarChat() {
     
     if (!chatInput || !recordBtn || !sendBtn) return;
     
+    // Evita duplicar listeners toda vez que a tela de chat é reaberta
     const newSendBtn = sendBtn.cloneNode(true);
     sendBtn.parentNode.replaceChild(newSendBtn, sendBtn);
     
@@ -226,16 +235,16 @@ function inicializarChat() {
     
     finalSendBtn.addEventListener('click', function() {
         const input = document.getElementById('chat-input');
-        if (input && input.value.trim()) {
-            enviarMensagem(input.value);
+        if (input && input.value.trim() && typeof window.enviarMensagem === 'function') {
+            window.enviarMensagem(input.value);
             input.value = '';
         }
     });
     
     if (chatInput) {
         chatInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && this.value.trim()) {
-                enviarMensagem(this.value);
+            if (e.key === 'Enter' && this.value.trim() && typeof window.enviarMensagem === 'function') {
+                window.enviarMensagem(this.value);
                 this.value = '';
             }
         });
@@ -248,56 +257,6 @@ function inicializarChat() {
             pararGravacao();
         }
     });
-}
-
-function enviarMensagem(texto) {
-    const chatMessages = document.getElementById('chat-mensagens');
-    const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    
-    const mensagemDiv = document.createElement('div');
-    mensagemDiv.className = 'mensagem mensagem-enviada';
-    mensagemDiv.innerHTML = `
-        <div class="mensagem-conteudo">
-            <div class="mensagem-balao mensagem-balao-enviada">
-                <p>${texto}</p>
-            </div>
-            <div class="mensagem-status">
-                <span class="mensagem-hora">${horaAtual}</span>
-                <span class="material-symbols-outlined">done_all</span>
-            </div>
-        </div>
-    `;
-    
-    chatMessages.appendChild(mensagemDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-    
-    setTimeout(() => {
-        const respostas = [
-            "Entendido! O entregador já está a caminho.",
-            "Perfeito! Vamos atualizar o status do seu pedido.",
-            "Obrigado pela informação!",
-            "Seu pedido está sendo preparado.",
-            "O entregador está na sua região."
-        ];
-        
-        const respostaAleatoria = respostas[Math.floor(Math.random() * respostas.length)];
-        const horaResposta = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        
-        const respostaDiv = document.createElement('div');
-        respostaDiv.className = 'mensagem mensagem-recebida';
-        respostaDiv.innerHTML = `
-            <div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div>
-            <div class="mensagem-conteudo">
-                <div class="mensagem-balao">
-                    <p>${respostaAleatoria}</p>
-                </div>
-                <span class="mensagem-hora">${horaResposta}</span>
-            </div>
-        `;
-        
-        chatMessages.appendChild(respostaDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 2000);
 }
 
 async function iniciarGravacao() {
@@ -334,8 +293,13 @@ function pararGravacao() {
     }
 }
 
+// OBS: o envio de áudio ainda é local (não sincroniza pelo Firestore).
+// Ele aparece só na tela de quem gravou, como uma prévia do áudio.
+// Para sincronizar de verdade entre cliente e empresa seria necessário
+// subir o arquivo para o Firebase Storage e salvar a URL na mensagem.
 function exibirAudioGravado(audioBlob) {
     const chatMessages = document.getElementById('chat-mensagens');
+    if (!chatMessages) return;
     const horaAtual = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     
     const audioDiv = document.createElement('div');
@@ -345,13 +309,13 @@ function exibirAudioGravado(audioBlob) {
             <div class="mensagem-balao mensagem-balao-enviada">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span class="material-symbols-outlined" style="font-size: 16px;">mic</span>
-                    <span>Áudio gravado</span>
+                    <span>Áudio gravado (local)</span>
                     <span class="material-symbols-outlined audio-play" style="font-size: 16px; margin-left: auto; cursor: pointer;">play_arrow</span>
                 </div>
             </div>
             <div class="mensagem-status">
                 <span class="mensagem-hora">${horaAtual}</span>
-                <span class="material-symbols-outlined">done_all</span>
+                <span class="material-symbols-outlined">schedule</span>
             </div>
         </div>
     `;
@@ -378,23 +342,6 @@ function exibirAudioGravado(audioBlob) {
     audioElement.onended = function() {
         if (playButton) playButton.textContent = 'play_arrow';
     };
-    
-    setTimeout(() => {
-        const horaResposta = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-        const respostaDiv = document.createElement('div');
-        respostaDiv.className = 'mensagem mensagem-recebida';
-        respostaDiv.innerHTML = `
-            <div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div>
-            <div class="mensagem-conteudo">
-                <div class="mensagem-balao">
-                    <p>Áudio recebido! Vou verificar isso.</p>
-                </div>
-                <span class="mensagem-hora">${horaResposta}</span>
-            </div>
-        `;
-        chatMessages.appendChild(respostaDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }, 3000);
 }
 
 // SWITCH DA LOJA
@@ -412,28 +359,6 @@ function inicializarSwitchLoja() {
         };
         switchBtn.hasListener = true;
         switchInicializado = true;
-    }
-}
-
-// ACEITAR PEDIDO (função legada mantida por compatibilidade)
-function aceitarPedido(botao) {
-    const pedidoDiv = botao.closest('.loja-pedido');
-    if (pedidoDiv) {
-        botao.textContent = 'Aceito!';
-        botao.style.background = '#10b981';
-        botao.disabled = true;
-        
-        const pendentesCard = document.querySelector('.loja-card:first-child h2');
-        if (pendentesCard) {
-            let pendentes = parseInt(pendentesCard.textContent);
-            if (!isNaN(pendentes) && pendentes > 0) pendentesCard.textContent = pendentes - 1;
-        }
-        
-        const preparoCard = document.querySelector('.loja-card:last-child h2');
-        if (preparoCard) {
-            let preparo = parseInt(preparoCard.textContent);
-            if (!isNaN(preparo)) preparoCard.textContent = preparo + 1;
-        }
     }
 }
 
@@ -466,7 +391,7 @@ function inicializarBuscaCardapio() {
     buscaInput.hasListener = true;
 }
 
-// BUSCA MENSAGENS
+// BUSCA MENSAGENS (funciona tanto com a lista real quanto vazia)
 function inicializarBuscaMensagens() {
     const buscaInput = document.getElementById('mensagens-busca-input');
     if (!buscaInput || buscaInput.hasListener) return;
@@ -483,21 +408,6 @@ function inicializarBuscaMensagens() {
         });
     });
     buscaInput.hasListener = true;
-}
-
-function abrirChatCliente(nome, id) {
-    alert(`Abrindo conversa com ${nome} (Pedido #${id})`);
-}
-
-function inicializarCliquesMensagens() {
-    const mensagensItems = document.querySelectorAll('#mensagens-lista .mensagem-item');
-    mensagensItems.forEach(item => {
-        if (item.hasClickListener) return;
-        item.addEventListener('click', function() {
-            abrirChatCliente(this.getAttribute('data-nome'), this.getAttribute('data-id'));
-        });
-        item.hasClickListener = true;
-    });
 }
 
 function inicializarAjustes() {
