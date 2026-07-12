@@ -297,8 +297,8 @@
 
             <!-- TELA 8: CHAT -->
             <section id="tela-8" class="tela">
-                <div class="chat-cabecalho"><button onclick="mudarTela('tela-7')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><div class="chat-contato-info"><div class="chat-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBE-eDMfOeLf8FpoYNPZwXXyHZDUt1lCh1Ff4DxVOMuoJpR-UHz6qWJgp75iB0mDf5EtHMDXz3UDL8q5hkZxHSWR0Q2v3TA84De-6l6pN7bOuIXZ_SDimOi5QXz24pyHiqUctirxzVTiUPzlgR9Xp_muVyxw5lnGjVnJdr-YZDgnLF0yk8jQn8oIJy3CVleqYgR7pg2F3KZ5iyCbZ2_RSj1Ywcmdb34AmWEncBJUqGJ-VLqfuVdWL5pcfIcktalCAuKqj43UtBRCqA')"></div><h2>Perfil da Cliente</h2></div><button class="btn-info"><span class="material-symbols-outlined">info</span></button></div>
-                <div class="chat-mensagens" id="chat-mensagens"><div class="chat-data">Hoje</div><div class="mensagem mensagem-recebida"><div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB7rSYxal4bU_WFmmlB2AUIS2FIE2WwCv3rGvQIBMas0ZXlndCkt9BvLRrerDMiECkhT5X0a-NDisyDTOwxyWQJ0I0Cirv8JUM6qkyiUDiqtLosebTbRt3kvs0loFt6shpoKZ-u0_V_VFxELtmbsbIzKi__49NCzpFAvCf74fIB_12vB7kjhKSf93gY1W8QVMrU-x3HhYbZYvF96Xd8lDWL4pkjMfOVCz8gBK9UGqehKbifhGjfnbb6LAWhWHLlohmRmB_Y-kkjBts')"></div><div class="mensagem-conteudo"><span class="mensagem-nome">Mariana Souza</span><div class="mensagem-balao"><p>Olá! Acabei de ver que meu pedido saiu para entrega.</p></div><span class="mensagem-hora">14:32</span></div></div><div class="mensagem mensagem-recebida"><div class="mensagem-conteudo"><div class="mensagem-balao"><p>Vai demorar muito?</p></div><span class="mensagem-hora">14:32</span></div></div><div class="mensagem mensagem-enviada"><div class="mensagem-conteudo"><div class="mensagem-balao mensagem-balao-enviada"><p>Boa tarde, Mariana! O motoboy já está a caminho. Deve chegar em cerca de 10 minutos.</p></div><div class="mensagem-status"><span class="mensagem-hora">14:35</span><span class="material-symbols-outlined">done_all</span></div></div></div><div class="mensagem mensagem-recebida"><div class="mensagem-foto" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCo2WOsnviTirPXViHLuIQx6Fc7P9RB04Mt2QW0Ne2r2uObuBI99pgO9Rwy0EMxZSQ8A90BNE-k-TPjnd6so7pDr1NlkwLqUCCBP0u8h704f5m159sd2XuCmX3Od-M3z99hL3voS5JZNWz7kNUFU6W9gmirlsY_s-eciw9XgtG1opIMFE6hWXIHKonrviDD-aYh6TLvnPlwTgJHKUCHDen1hK_Eut_AKTjhjZGNVC13TpeVDgBM0lV_YLF_WUdfQKipbGdIrG9T52c')"></div><div class="mensagem-conteudo"><div class="mensagem-balao"><p>Ótimo, obrigada! Vou aguardar na portaria.</p></div><span class="mensagem-hora">14:36</span></div></div></div>
+                <div class="chat-cabecalho"><button onclick="mudarTela('tela-7')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><div class="chat-contato-info"><div class="chat-foto" id="chat-foto-contato" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBE-eDMfOeLf8FpoYNPZwXXyHZDUt1lCh1Ff4DxVOMuoJpR-UHz6qWJgp75iB0mDf5EtHMDXz3UDL8q5hkZxHSWR0Q2v3TA84De-6l6pN7bOuIXZ_SDimOi5QXz24pyHiqUctirxzVTiUPzlgR9Xp_muVyxw5lnGjVnJdr-YZDgnLF0yk8jQn8oIJy3CVleqYgR7pg2F3KZ5iyCbZ2_RSj1Ywcmdb34AmWEncBJUqGJ-VLqfuVdWL5pcfIcktalCAuKqj43UtBRCqA')"></div><h2 id="chat-nome-contato">Conversa</h2></div><button class="btn-info"><span class="material-symbols-outlined">info</span></button></div>
+                <div class="chat-mensagens" id="chat-mensagens"><p style="text-align:center; padding:20px; color:#888;">Selecione uma conversa.</p></div>
                 <div class="chat-input"><button id="record-btn" class="btn-audio"><span class="material-symbols-outlined">mic</span></button><div class="chat-input-container"><input type="text" id="chat-input" placeholder="Digite sua mensagem..."></div><button id="send-btn" class="btn-enviar"><span class="material-symbols-outlined">send</span></button></div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
@@ -384,7 +384,9 @@
             <!-- TELA 12: MENSAGENS -->
             <section id="tela-12" class="tela">
                 <div class="mensagens-cabecalho"><div class="mensagens-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Mensagens</h1></div><div class="mensagens-busca"><div class="busca-box"><span class="material-symbols-outlined">search</span><input type="text" id="mensagens-busca-input" placeholder="Buscar conversas..."></div></div></div>
-                <div class="mensagens-lista" id="mensagens-lista"><div class="mensagem-item" data-nome="Maria Silva" data-id="2847"><div class="avatar avatar1">MS</div><div class="mensagem-info"><div class="mensagem-topo"><h3>Maria Silva</h3><span class="badge">2</span></div><div class="mensagem-id">#2847</div><div class="mensagem-preview">Obrigado! Aguardo a entrega.</div></div></div><div class="mensagem-item" data-nome="João Santos" data-id="2846"><div class="avatar avatar2">JS</div><div class="mensagem-info"><div class="mensagem-topo"><h3>João Santos</h3><span class="badge">1</span></div><div class="mensagem-id">#2846</div><div class="mensagem-preview">Pode enviar sem cebola?</div></div></div></div>
+                <div class="mensagens-lista" id="mensagens-lista">
+                    <p style="text-align:center; padding:20px; color:#888;">Carregando conversas...</p>
+                </div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
@@ -469,6 +471,9 @@
                         <span class="material-symbols-outlined">arrow_back</span>
                     </button>
                     <h1 id="titulo-cardapio-empresa">Cardápio</h1>
+                    <button onclick="abrirChatEmpresaAtual()" class="btn-voltar" style="margin-left:auto;" title="Falar com a loja">
+                        <span class="material-symbols-outlined">chat</span>
+                    </button>
                 </div>
                 <div class="produto-conteudo">
                     <div id="listaProdutosCliente" class="produtos-cliente-grid"></div>
@@ -605,6 +610,8 @@
         window.sairDaConta = function() {
             if (unsubscribePedidosCliente) { unsubscribePedidosCliente(); unsubscribePedidosCliente = null; }
             if (unsubscribePedidosEmpresa) { unsubscribePedidosEmpresa(); unsubscribePedidosEmpresa = null; }
+            if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
+            if (unsubscribeConversasEmpresa) { unsubscribeConversasEmpresa(); unsubscribeConversasEmpresa = null; }
 
             auth.signOut().then(() => {
                 tipoUsuario = null;
@@ -1022,7 +1029,14 @@
                                 </span>
                             </div>
                             <p class="pedido-descricao">1x ${p.nomeProduto}</p>
-                            <p class="pedido-data" style="color:#e50615;font-weight:600;">${precoFormatado}</p>
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+                                <p class="pedido-data" style="color:#e50615;font-weight:600;margin:0;">${precoFormatado}</p>
+                                <button style="display:flex;align-items:center;gap:4px;background:#f0f0f0;color:#333;border:none;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;"
+                                    onclick="abrirChatComEmpresa('${p.empresaId}', '${(p.empresaNome || 'Empresa').replace(/'/g,"\\'")}')">
+                                    <span class="material-symbols-outlined" style="font-size:15px;">chat</span>
+                                    Falar com a loja
+                                </button>
+                            </div>
                         </div>
                     `;
                     lista.appendChild(div);
@@ -1091,6 +1105,10 @@
                                 onclick="responderPedido('${docPed.id}', 'Recusado')">
                                 ✗ Recusar
                             </button>
+                            <button style="padding:10px 12px;background:#f0f0f0;color:#333;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;"
+                                onclick="abrirChatComCliente('${p.clienteId}', '${(p.clienteNome || 'Cliente').replace(/'/g,"\\'")}')">
+                                <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
+                            </button>
                         </div>
                     `;
                     lista.appendChild(div);
@@ -1115,6 +1133,240 @@
                 console.error(err);
                 alert('Erro ao atualizar pedido: ' + err.message);
             }
+        };
+
+        // ==========================================
+        // CHAT REAL EM TEMPO REAL (Firestore)
+        // ==========================================
+        // Modelo:
+        //   conversas/{conversaId}                -> metadados (cliente, empresa, última mensagem)
+        //   conversas/{conversaId}/mensagens/{id}  -> mensagens individuais
+        // conversaId = uids do cliente e da empresa ordenados e unidos por "_"
+
+        let conversaAtualId = null;
+        let conversaAtualDados = null;
+        let unsubscribeChat = null;
+        let unsubscribeConversasEmpresa = null;
+
+        function gerarConversaId(uidCliente, uidEmpresa) {
+            return [uidCliente, uidEmpresa].sort().join('_');
+        }
+
+        async function abrirConversa(clienteId, empresaId, dadosIniciais) {
+            const user = auth.currentUser;
+            if (!user) { alert('Você precisa estar logado.'); return; }
+
+            const conversaId = gerarConversaId(clienteId, empresaId);
+            conversaAtualId = conversaId;
+
+            const conversaRef = doc(db, 'conversas', conversaId);
+            try {
+                const snap = await getDoc(conversaRef);
+                if (!snap.exists()) {
+                    await setDoc(conversaRef, {
+                        participantes: [clienteId, empresaId],
+                        clienteId: dadosIniciais.clienteId,
+                        clienteNome: dadosIniciais.clienteNome,
+                        empresaId: dadosIniciais.empresaId,
+                        empresaNome: dadosIniciais.empresaNome,
+                        ultimaMensagem: '',
+                        ultimaMensagemEm: serverTimestamp()
+                    });
+                    conversaAtualDados = dadosIniciais;
+                } else {
+                    conversaAtualDados = snap.data();
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao abrir conversa: ' + err.message);
+                return;
+            }
+
+            const souEmpresa = user.uid === conversaAtualDados.empresaId;
+            const nomeOutro = souEmpresa ? conversaAtualDados.clienteNome : conversaAtualDados.empresaNome;
+            const tituloEl = document.getElementById('chat-nome-contato');
+            if (tituloEl) tituloEl.textContent = nomeOutro || 'Conversa';
+
+            mudarTela('tela-8');
+            setTimeout(() => { if (typeof inicializarChat === 'function') inicializarChat(); }, 100);
+            escutarMensagens(conversaId);
+        }
+
+        // Cliente inicia/abre conversa com uma empresa
+        window.abrirChatComEmpresa = async function(empresaId, empresaNome) {
+            const user = auth.currentUser;
+            if (!user) { alert('Você precisa estar logado.'); return; }
+            await abrirConversa(user.uid, empresaId, {
+                clienteId: user.uid,
+                clienteNome: user.displayName || 'Cliente',
+                empresaId: empresaId,
+                empresaNome: empresaNome
+            });
+        };
+
+        // Empresa inicia/abre conversa com um cliente
+        window.abrirChatComCliente = async function(clienteId, clienteNome) {
+            const user = auth.currentUser;
+            if (!user) { alert('Você precisa estar logado.'); return; }
+            await abrirConversa(clienteId, user.uid, {
+                clienteId: clienteId,
+                clienteNome: clienteNome,
+                empresaId: user.uid,
+                empresaNome: user.displayName || 'Empresa'
+            });
+        };
+
+        // Botão de chat no cardápio da empresa (tela-15)
+        window.abrirChatEmpresaAtual = function() {
+            if (!empresaSelecionada) { alert('Abra o cardápio de uma loja primeiro.'); return; }
+            abrirChatComEmpresa(empresaSelecionada.id, empresaSelecionada.nome);
+        };
+
+        function escutarMensagens(conversaId) {
+            if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
+            const chatMessages = document.getElementById('chat-mensagens');
+            if (chatMessages) chatMessages.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando mensagens...</p>';
+
+            const q = query(collection(db, 'conversas', conversaId, 'mensagens'), orderBy('criadoEm', 'asc'));
+            unsubscribeChat = onSnapshot(q, (snap) => {
+                const user = auth.currentUser;
+                if (!chatMessages || !user) return;
+
+                if (snap.empty) {
+                    chatMessages.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Nenhuma mensagem ainda. Diga olá!</p>';
+                    return;
+                }
+
+                chatMessages.innerHTML = '';
+                let dataAnterior = '';
+                snap.forEach(docMsg => {
+                    const m = docMsg.data();
+                    const dataMsg = m.criadoEm?.toDate ? m.criadoEm.toDate() : new Date();
+                    const dataStr = dataMsg.toLocaleDateString('pt-BR');
+                    if (dataStr !== dataAnterior) {
+                        const divData = document.createElement('div');
+                        divData.className = 'chat-data';
+                        divData.textContent = dataStr === new Date().toLocaleDateString('pt-BR') ? 'Hoje' : dataStr;
+                        chatMessages.appendChild(divData);
+                        dataAnterior = dataStr;
+                    }
+
+                    const souEu = m.remetenteId === user.uid;
+                    const hora = m.criadoEm?.toDate ? dataMsg.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+
+                    const div = document.createElement('div');
+                    div.className = 'mensagem ' + (souEu ? 'mensagem-enviada' : 'mensagem-recebida');
+
+                    if (souEu) {
+                        div.innerHTML = `
+                            <div class="mensagem-conteudo">
+                                <div class="mensagem-balao mensagem-balao-enviada"><p></p></div>
+                                <div class="mensagem-status">
+                                    <span class="mensagem-hora">${hora}</span>
+                                    <span class="material-symbols-outlined">done_all</span>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        div.innerHTML = `
+                            <div class="mensagem-conteudo">
+                                <div class="mensagem-balao"><p></p></div>
+                                <span class="mensagem-hora">${hora}</span>
+                            </div>
+                        `;
+                    }
+                    div.querySelector('p').textContent = m.texto || '';
+                    chatMessages.appendChild(div);
+                });
+
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, (err) => {
+                console.error(err);
+                if (chatMessages) chatMessages.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar mensagens.</p>';
+            });
+        }
+
+        // Sobrescreve a função global (a versão local/fake definida em script.js) por uma real
+        window.enviarMensagem = async function(texto) {
+            texto = (texto || '').trim();
+            if (!texto) return;
+            const user = auth.currentUser;
+            if (!user) { alert('Você precisa estar logado.'); return; }
+            if (!conversaAtualId) { alert('Nenhuma conversa aberta.'); return; }
+
+            const souEmpresa = conversaAtualDados && user.uid === conversaAtualDados.empresaId;
+
+            try {
+                await addDoc(collection(db, 'conversas', conversaAtualId, 'mensagens'), {
+                    remetenteId: user.uid,
+                    remetenteTipo: souEmpresa ? 'empresa' : 'cliente',
+                    texto: texto,
+                    criadoEm: serverTimestamp()
+                });
+                await updateDoc(doc(db, 'conversas', conversaAtualId), {
+                    ultimaMensagem: texto,
+                    ultimaMensagemEm: serverTimestamp()
+                });
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao enviar mensagem: ' + err.message);
+            }
+        };
+
+        // Lista de conversas da empresa (tela-12), em tempo real
+        window.carregarConversasEmpresa = function() {
+            const user = auth.currentUser;
+            const lista = document.getElementById('mensagens-lista');
+            if (!lista) return;
+
+            if (!user) {
+                lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Faça login para ver suas mensagens.</p>';
+                return;
+            }
+
+            if (unsubscribeConversasEmpresa) unsubscribeConversasEmpresa();
+
+            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando conversas...</p>';
+
+            const q = query(collection(db, 'conversas'), where('empresaId', '==', user.uid));
+
+            unsubscribeConversasEmpresa = onSnapshot(q, (snap) => {
+                if (snap.empty) {
+                    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Nenhuma conversa ainda.</p>';
+                    return;
+                }
+
+                const conversas = [];
+                snap.forEach(d => conversas.push({ id: d.id, ...d.data() }));
+                conversas.sort((a, b) => {
+                    const ta = a.ultimaMensagemEm?.seconds || 0;
+                    const tb = b.ultimaMensagemEm?.seconds || 0;
+                    return tb - ta;
+                });
+
+                lista.innerHTML = '';
+                conversas.forEach(c => {
+                    const iniciais = (c.clienteNome || 'C').split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+                    const item = document.createElement('div');
+                    item.className = 'mensagem-item';
+                    item.setAttribute('data-nome', c.clienteNome || '');
+                    item.setAttribute('data-id', c.id);
+                    item.innerHTML = `
+                        <div class="avatar avatar1">${iniciais}</div>
+                        <div class="mensagem-info">
+                            <div class="mensagem-topo"><h3>${c.clienteNome || 'Cliente'}</h3></div>
+                            <div class="mensagem-preview">${c.ultimaMensagem ? c.ultimaMensagem : 'Nenhuma mensagem ainda'}</div>
+                        </div>
+                    `;
+                    item.addEventListener('click', () => {
+                        abrirChatComCliente(c.clienteId, c.clienteNome);
+                    });
+                    lista.appendChild(item);
+                });
+            }, (err) => {
+                console.error(err);
+                lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar conversas.</p>';
+            });
         };
 
         // ==========================================
