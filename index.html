@@ -363,8 +363,15 @@
             <section id="tela-10" class="tela">
                 <div class="loja-header">Minha Loja</div>
                 <div class="status-box"><span>Status da Loja: <strong id="status-text">Aberto</strong></span><div id="switch" class="switch"><div class="circle"></div></div></div>
-                <div class="loja-cards"><div class="loja-card"><span>Pedidos Pendentes</span><h2 id="contador-pendentes">0</h2></div><div class="loja-card"><span>Em Preparo</span><h2 id="contador-preparo">0</h2></div></div>
-                <div class="loja-section-title">Pedidos Recentes</div>
+                <div class="loja-cards">
+                    <div class="loja-card" id="card-pendentes" onclick="mostrarPedidosPorStatus('Pendente')" style="cursor:pointer;">
+                        <span>Pedidos Pendentes</span><h2 id="contador-pendentes">0</h2>
+                    </div>
+                    <div class="loja-card" id="card-preparo" onclick="mostrarPedidosPorStatus('Aceito')" style="cursor:pointer;">
+                        <span>Em Preparo</span><h2 id="contador-preparo">0</h2>
+                    </div>
+                </div>
+                <div class="loja-section-title" id="loja-section-title">Pedidos Pendentes</div>
                 <div class="loja-pedidos" id="loja-pedidos-lista">
                     <p style="text-align:center; padding:20px; color:#888;">Carregando pedidos...</p>
                 </div>
@@ -610,6 +617,7 @@
         window.sairDaConta = function() {
             if (unsubscribePedidosCliente) { unsubscribePedidosCliente(); unsubscribePedidosCliente = null; }
             if (unsubscribePedidosEmpresa) { unsubscribePedidosEmpresa(); unsubscribePedidosEmpresa = null; }
+            if (unsubscribePreparoEmpresa) { unsubscribePreparoEmpresa(); unsubscribePreparoEmpresa = null; }
             if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
             if (unsubscribeConversasEmpresa) { unsubscribeConversasEmpresa(); unsubscribeConversasEmpresa = null; }
             if (unsubscribeProdutosEmpresa) { unsubscribeProdutosEmpresa(); unsubscribeProdutosEmpresa = null; }
@@ -987,11 +995,25 @@
             }
             if (!confirm(`Confirmar pedido de "${nomeProduto}"?`)) return;
 
+            // Busca o endereço/telefone salvos no perfil do cliente para
+            // a empresa já ver "para onde entregar" direto no pedido.
+            let clienteLocalidade = '';
+            let clienteTelefone = '';
+            try {
+                const perfilSnap = await getDoc(doc(db, "clientes", user.uid));
+                if (perfilSnap.exists()) {
+                    clienteLocalidade = perfilSnap.data().localidade || '';
+                    clienteTelefone = perfilSnap.data().telefone || '';
+                }
+            } catch (e) { console.error('Erro ao buscar endereço do cliente:', e); }
+
             try {
                 await addDoc(collection(db, "pedidos"), {
                     clienteId: user.uid,
                     clienteNome: user.displayName || "Cliente",
                     clienteEmail: user.email || "",
+                    clienteLocalidade: clienteLocalidade,
+                    clienteTelefone: clienteTelefone,
                     empresaId: empresaId,
                     empresaNome: empresaNome,
                     produtoId: produtoId,
@@ -1088,8 +1110,101 @@
         // ==========================================
         // PEDIDOS DA EMPRESA EM TEMPO REAL (tela-10)
         // ==========================================
+        // Mantém dois listeners simultâneos (Pendente e Aceito) para que os
+        // contadores dos dois cards fiquem sempre corretos, e guarda os
+        // resultados em cache para trocar a lista exibida instantaneamente
+        // quando o usuário clica em "Pedidos Pendentes" ou "Em Preparo".
 
         let unsubscribePedidosEmpresa = null;
+        let unsubscribePreparoEmpresa = null;
+        let cachePedidosPendentes = [];
+        let cachePedidosPreparo = [];
+        let filtroPedidosEmpresa = 'Pendente';
+
+        window.mostrarPedidosPorStatus = function(status) {
+            filtroPedidosEmpresa = status;
+            const titulo = document.getElementById('loja-section-title');
+            if (titulo) titulo.textContent = status === 'Pendente' ? 'Pedidos Pendentes' : 'Pedidos em Preparo';
+
+            const cardPendentes = document.getElementById('card-pendentes');
+            const cardPreparo = document.getElementById('card-preparo');
+            if (cardPendentes) cardPendentes.style.outline = status === 'Pendente' ? '2px solid var(--primary, #e50615)' : 'none';
+            if (cardPreparo) cardPreparo.style.outline = status === 'Aceito' ? '2px solid var(--primary, #e50615)' : 'none';
+
+            renderizarPedidosEmpresa();
+        };
+
+        function renderizarPedidosEmpresa() {
+            const lista = document.getElementById('loja-pedidos-lista');
+            if (!lista) return;
+
+            const pedidos = filtroPedidosEmpresa === 'Pendente' ? cachePedidosPendentes : cachePedidosPreparo;
+
+            if (pedidos.length === 0) {
+                lista.innerHTML = filtroPedidosEmpresa === 'Pendente'
+                    ? '<p style="text-align:center; padding:20px; color:#888;">Nenhum pedido pendente no momento.</p>'
+                    : '<p style="text-align:center; padding:20px; color:#888;">Nenhum pedido em preparo no momento.</p>';
+                return;
+            }
+
+            lista.innerHTML = '';
+            pedidos.forEach(p => {
+                const precoFormatado = formatarPreco(p.preco);
+                const nomeSeguro = (p.clienteNome || 'Cliente').replace(/'/g, "\\'");
+                const div = document.createElement('div');
+                div.className = 'loja-pedido';
+
+                const botoesAcao = filtroPedidosEmpresa === 'Pendente' ? `
+                        <button style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;"
+                            onclick="responderPedido('${p.id}', 'Aceito')">
+                            ✓ Aceitar
+                        </button>
+                        <button style="flex:1;padding:10px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;"
+                            onclick="responderPedido('${p.id}', 'Recusado')">
+                            ✗ Recusar
+                        </button>
+                        <button style="padding:10px 12px;background:#f0f0f0;color:#333;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;"
+                            onclick="abrirChatComCliente('${p.clienteId}', '${nomeSeguro}')">
+                            <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
+                        </button>
+                ` : `
+                        <button style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;"
+                            onclick="responderPedido('${p.id}', 'Concluído')">
+                            ✓ Marcar como Entregue
+                        </button>
+                        <button style="padding:10px 12px;background:#f0f0f0;color:#333;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;"
+                            onclick="abrirChatComCliente('${p.clienteId}', '${nomeSeguro}')">
+                            <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
+                            Falar com o cliente
+                        </button>
+                `;
+
+                const enderecoHtml = filtroPedidosEmpresa === 'Aceito' ? `
+                        <div style="display:flex; align-items:center; gap:6px; margin:6px 0; color:#555; font-size:13px;">
+                            <span class="material-symbols-outlined" style="font-size:16px;">location_on</span>
+                            ${p.clienteLocalidade ? p.clienteLocalidade : 'Endereço não informado pelo cliente'}
+                        </div>
+                        ${p.clienteTelefone ? `
+                        <div style="display:flex; align-items:center; gap:6px; margin:2px 0 6px; color:#555; font-size:13px;">
+                            <span class="material-symbols-outlined" style="font-size:16px;">call</span>
+                            ${p.clienteTelefone}
+                        </div>` : ''}
+                ` : '';
+
+                div.innerHTML = `
+                    <div class="pedido-top">
+                        <strong>${p.clienteNome || 'Cliente'}</strong>
+                        <strong>${precoFormatado}</strong>
+                    </div>
+                    <div class="pedido-list" style="margin:6px 0;">1x ${p.nomeProduto}</div>
+                    ${enderecoHtml}
+                    <div style="display:flex;gap:8px;margin-top:10px;">
+                        ${botoesAcao}
+                    </div>
+                `;
+                lista.appendChild(div);
+            });
+        }
 
         window.carregarPedidosEmpresa = function() {
             const user = auth.currentUser;
@@ -1102,70 +1217,62 @@
             }
 
             if (unsubscribePedidosEmpresa) unsubscribePedidosEmpresa();
+            if (unsubscribePreparoEmpresa) unsubscribePreparoEmpresa();
 
             lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando...</p>';
+            filtroPedidosEmpresa = 'Pendente';
+            const titulo = document.getElementById('loja-section-title');
+            if (titulo) titulo.textContent = 'Pedidos Pendentes';
 
-            const q = query(
+            const qPendentes = query(
                 collection(db, "pedidos"),
                 where("empresaId", "==", user.uid),
                 where("status", "==", "Pendente")
             );
-
-            unsubscribePedidosEmpresa = onSnapshot(q, (snap) => {
+            unsubscribePedidosEmpresa = onSnapshot(qPendentes, (snap) => {
                 const contador = document.getElementById('contador-pendentes');
                 if (contador) contador.textContent = snap.size;
 
-                if (snap.empty) {
-                    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Nenhum pedido pendente no momento.</p>';
-                    return;
-                }
+                cachePedidosPendentes = [];
+                snap.forEach(d => cachePedidosPendentes.push({ id: d.id, ...d.data() }));
+                cachePedidosPendentes.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
 
-                lista.innerHTML = '';
-                snap.forEach(docPed => {
-                    const p = docPed.data();
-                    const precoFormatado = formatarPreco(p.preco);
-
-                    const div = document.createElement('div');
-                    div.className = 'loja-pedido';
-                    div.innerHTML = `
-                        <div class="pedido-top">
-                            <strong>${p.clienteNome || 'Cliente'}</strong>
-                            <strong>${precoFormatado}</strong>
-                        </div>
-                        <div class="pedido-list" style="margin:6px 0;">1x ${p.nomeProduto}</div>
-                        <div style="display:flex;gap:8px;margin-top:10px;">
-                            <button style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;" 
-                                onclick="responderPedido('${docPed.id}', 'Aceito')">
-                                ✓ Aceitar
-                            </button>
-                            <button style="flex:1;padding:10px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;" 
-                                onclick="responderPedido('${docPed.id}', 'Recusado')">
-                                ✗ Recusar
-                            </button>
-                            <button style="padding:10px 12px;background:#f0f0f0;color:#333;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;"
-                                onclick="abrirChatComCliente('${p.clienteId}', '${(p.clienteNome || 'Cliente').replace(/'/g,"\\'")}')">
-                                <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
-                            </button>
-                        </div>
-                    `;
-                    lista.appendChild(div);
-                });
+                if (filtroPedidosEmpresa === 'Pendente') renderizarPedidosEmpresa();
             }, (err) => {
                 console.error(err);
-                lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar pedidos.</p>';
+                if (filtroPedidosEmpresa === 'Pendente') {
+                    lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
+                }
+            });
+
+            const qPreparo = query(
+                collection(db, "pedidos"),
+                where("empresaId", "==", user.uid),
+                where("status", "==", "Aceito")
+            );
+            unsubscribePreparoEmpresa = onSnapshot(qPreparo, (snap) => {
+                const contador = document.getElementById('contador-preparo');
+                if (contador) contador.textContent = snap.size;
+
+                cachePedidosPreparo = [];
+                snap.forEach(d => cachePedidosPreparo.push({ id: d.id, ...d.data() }));
+                cachePedidosPreparo.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+
+                if (filtroPedidosEmpresa === 'Aceito') renderizarPedidosEmpresa();
+            }, (err) => {
+                console.error(err);
+                if (filtroPedidosEmpresa === 'Aceito') {
+                    lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
+                }
             });
         };
 
-        // ACEITAR OU RECUSAR PEDIDO
+        // ACEITAR, RECUSAR OU CONCLUIR PEDIDO
         window.responderPedido = async function(pedidoId, novoStatus) {
             try {
                 await updateDoc(doc(db, "pedidos", pedidoId), { status: novoStatus });
-                if (novoStatus === 'Aceito') {
-                    const contadorPreparo = document.getElementById('contador-preparo');
-                    if (contadorPreparo) {
-                        contadorPreparo.textContent = (parseInt(contadorPreparo.textContent) || 0) + 1;
-                    }
-                }
+                // Os contadores e as listas já se atualizam sozinhos pelos
+                // listeners em tempo real acima — não precisa mexer no DOM aqui.
             } catch (err) {
                 console.error(err);
                 alert('Erro ao atualizar pedido: ' + err.message);
