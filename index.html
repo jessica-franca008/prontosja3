@@ -612,6 +612,9 @@
             if (unsubscribePedidosEmpresa) { unsubscribePedidosEmpresa(); unsubscribePedidosEmpresa = null; }
             if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
             if (unsubscribeConversasEmpresa) { unsubscribeConversasEmpresa(); unsubscribeConversasEmpresa = null; }
+            if (unsubscribeProdutosEmpresa) { unsubscribeProdutosEmpresa(); unsubscribeProdutosEmpresa = null; }
+            if (unsubscribeProdutosCliente) { unsubscribeProdutosCliente(); unsubscribeProdutosCliente = null; }
+            if (unsubscribeEmpresas) { unsubscribeEmpresas(); unsubscribeEmpresas = null; }
 
             auth.signOut().then(() => {
                 tipoUsuario = null;
@@ -801,21 +804,44 @@
         };
 
         // ==========================================
-        // CARDÁPIO DA EMPRESA (tela-11)
+        // HELPERS
         // ==========================================
 
-        window.carregarProdutos = async function() {
+        // Nunca deixa um produto com preço inválido derrubar a lista inteira
+        function formatarPreco(preco) {
+            const num = parseFloat(String(preco ?? '0').replace(',', '.'));
+            const seguro = isNaN(num) ? 0 : num;
+            return `R$ ${seguro.toFixed(2).replace('.', ',')}`;
+        }
+
+        function mensagemErro(err) {
+            if (err && err.code === 'permission-denied') {
+                return 'Sem permissão para ler esses dados. Verifique as regras de segurança do Firestore.';
+            }
+            return 'Erro ao carregar: ' + (err && err.message ? err.message : 'tente novamente.');
+        }
+
+        // ==========================================
+        // CARDÁPIO DA EMPRESA (tela-11) — tempo real
+        // ==========================================
+
+        let unsubscribeProdutosEmpresa = null;
+
+        window.carregarProdutos = function() {
             const lista = document.getElementById("cardapio-content");
             if (!lista) return;
-            lista.innerHTML = "";
             const user = auth.currentUser;
             if (!user) {
                 lista.innerHTML = '<p style="text-align:center; padding:20px;">Faça login para ver seus produtos</p>';
                 return;
             }
-            try {
-                const q = query(collection(db, "produtos"), where("empresa", "==", user.uid));
-                const produtos = await getDocs(q);
+
+            if (unsubscribeProdutosEmpresa) unsubscribeProdutosEmpresa();
+
+            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando...</p>';
+
+            const q = query(collection(db, "produtos"), where("empresa", "==", user.uid));
+            unsubscribeProdutosEmpresa = onSnapshot(q, (produtos) => {
                 if (produtos.empty) {
                     lista.innerHTML = '<p style="text-align:center; padding:20px;">Nenhum produto cadastrado. Clique no + para adicionar.</p>';
                     return;
@@ -823,19 +849,20 @@
                 let categoriasMap = new Map();
                 produtos.forEach((doc) => {
                     const produto = doc.data();
-                    if (!categoriasMap.has(produto.categoria)) categoriasMap.set(produto.categoria, []);
-                    categoriasMap.get(produto.categoria).push(produto);
+                    const categoria = produto.categoria || 'Outros';
+                    if (!categoriasMap.has(categoria)) categoriasMap.set(categoria, []);
+                    categoriasMap.get(categoria).push(produto);
                 });
+                let html = '';
                 for (let [categoria, produtosList] of categoriasMap) {
-                    lista.innerHTML += `<h3>${categoria}</h3>`;
+                    html += `<h3>${categoria}</h3>`;
                     produtosList.forEach(produto => {
-                        let precoFormatado = `R$ ${parseFloat(produto.preco.replace(',','.')).toFixed(2).replace('.', ',')}`;
-                        lista.innerHTML += `
+                        html += `
                             <div class="cardapio-item">
                                 <div>
-                                    <h4>${produto.nome}</h4>
+                                    <h4>${produto.nome || 'Sem nome'}</h4>
                                     <p>${produto.descricao || ''}</p>
-                                    <span class="cardapio-price">${precoFormatado}</span>
+                                    <span class="cardapio-price">${formatarPreco(produto.preco)}</span>
                                 </div>
                                 <label class="cardapio-switch">
                                     <input type="checkbox" checked>
@@ -845,22 +872,29 @@
                         `;
                     });
                 }
-            } catch (erro) {
+                lista.innerHTML = html;
+            }, (erro) => {
                 console.error(erro);
-                lista.innerHTML = '<p style="text-align:center; padding:20px;">Erro ao carregar produtos</p>';
-            }
+                lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(erro)}</p>`;
+            });
         };
 
         // ==========================================
-        // LISTA DE EMPRESAS (tela-16)
+        // LISTA DE EMPRESAS (tela-16) — tempo real
         // ==========================================
 
-        window.abrirListaEmpresas = async function() {
+        let unsubscribeEmpresas = null;
+
+        window.abrirListaEmpresas = function() {
             mudarTela('tela-16');
             const lista = document.getElementById('listaEmpresas');
+            if (!lista) return;
+
+            if (unsubscribeEmpresas) unsubscribeEmpresas();
+
             lista.innerHTML = '<p style="text-align:center; color:#888;">Carregando empresas...</p>';
-            try {
-                const snap = await getDocs(collection(db, "empresas"));
+
+            unsubscribeEmpresas = onSnapshot(collection(db, "empresas"), (snap) => {
                 if (snap.empty) {
                     lista.innerHTML = '<p style="text-align:center; color:#888;">Nenhuma empresa disponível no momento.</p>';
                     return;
@@ -875,27 +909,28 @@
                             <span class="material-symbols-outlined" style="color:var(--primary);font-size:26px;">storefront</span>
                         </div>
                         <div>
-                            <h3 style="margin:0;font-size:15px;font-weight:600;">${e.nome}</h3>
+                            <h3 style="margin:0;font-size:15px;font-weight:600;">${e.nome || 'Loja'}</h3>
                             <p style="margin:4px 0 0;font-size:12px;color:#888;">${e.categoria || 'Restaurante'}</p>
                         </div>
                         <span class="material-symbols-outlined" style="margin-left:auto;color:#ccc;">chevron_right</span>
                     `;
-                    card.onclick = () => abrirCardapioEmpresa(docEmp.id, e.nome);
+                    card.onclick = () => abrirCardapioEmpresa(docEmp.id, e.nome || 'Loja');
                     lista.appendChild(card);
                 });
-            } catch (err) {
+            }, (err) => {
                 console.error(err);
-                lista.innerHTML = '<p style="text-align:center; color:#888;">Erro ao carregar empresas.</p>';
-            }
+                lista.innerHTML = `<p style="text-align:center; color:#888;">${mensagemErro(err)}</p>`;
+            });
         };
 
         // ==========================================
-        // CARDÁPIO DE UMA EMPRESA (tela-15)
+        // CARDÁPIO DE UMA EMPRESA (tela-15) — tempo real
         // ==========================================
 
         let empresaSelecionada = null;
+        let unsubscribeProdutosCliente = null;
 
-        window.abrirCardapioEmpresa = async function(empresaId, empresaNome) {
+        window.abrirCardapioEmpresa = function(empresaId, empresaNome) {
             empresaSelecionada = { id: empresaId, nome: empresaNome };
             mudarTela('tela-15');
 
@@ -903,11 +938,14 @@
             if (titulo) titulo.textContent = empresaNome;
 
             const lista = document.getElementById('listaProdutosCliente');
+            if (!lista) return;
+
+            if (unsubscribeProdutosCliente) unsubscribeProdutosCliente();
+
             lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando cardápio...</p>';
 
-            try {
-                const q = query(collection(db, "produtos"), where("empresa", "==", empresaId));
-                const snap = await getDocs(q);
+            const q = query(collection(db, "produtos"), where("empresa", "==", empresaId));
+            unsubscribeProdutosCliente = onSnapshot(q, (snap) => {
                 if (snap.empty) {
                     lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Esta empresa ainda não tem produtos cadastrados.</p>';
                     return;
@@ -915,25 +953,26 @@
                 lista.innerHTML = '';
                 snap.forEach(docProd => {
                     const p = docProd.data();
-                    const precoNum = parseFloat(p.preco.replace(',', '.'));
-                    const precoFormatado = `R$ ${precoNum.toFixed(2).replace('.', ',')}`;
+                    const nomeSeguro = (p.nome || 'Produto').replace(/'/g, "\\'");
+                    const empresaNomeSeguro = (empresaNome || 'Loja').replace(/'/g, "\\'");
+                    const precoOriginal = String(p.preco ?? '0');
                     const card = document.createElement('div');
                     card.className = 'produto-cliente-card';
                     card.innerHTML = `
-                        <h3>${p.nome}</h3>
+                        <h3>${p.nome || 'Produto'}</h3>
                         <p>${p.descricao || ''}</p>
-                        <strong>${precoFormatado}</strong>
-                        <button class="btn-adicionar-carrinho" onclick="fazerPedido('${docProd.id}', '${p.nome.replace(/'/g,"\\'")}', '${p.preco}', '${empresaId}', '${empresaNome.replace(/'/g,"\\'")}')">
+                        <strong>${formatarPreco(p.preco)}</strong>
+                        <button class="btn-adicionar-carrinho" onclick="fazerPedido('${docProd.id}', '${nomeSeguro}', '${precoOriginal}', '${empresaId}', '${empresaNomeSeguro}')">
                             <span class="material-symbols-outlined">shopping_cart</span>
                             Pedir
                         </button>
                     `;
                     lista.appendChild(card);
                 });
-            } catch (err) {
+            }, (err) => {
                 console.error(err);
-                lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar cardápio.</p>';
-            }
+                lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
+            });
         };
 
         // ==========================================
@@ -1013,8 +1052,7 @@
                 pedidos.forEach(p => {
                     const corStatus = p.status === 'Aceito' ? '#10b981' : p.status === 'Recusado' ? '#ef4444' : '#f59e0b';
                     const iconeStatus = p.status === 'Aceito' ? 'check_circle' : p.status === 'Recusado' ? 'cancel' : 'schedule';
-                    const precoNum = parseFloat((p.preco || '0').replace(',', '.'));
-                    const precoFormatado = `R$ ${precoNum.toFixed(2).replace('.', ',')}`;
+                    const precoFormatado = formatarPreco(p.preco);
 
                     const div = document.createElement('div');
                     div.className = 'pedido-card';
@@ -1085,8 +1123,7 @@
                 lista.innerHTML = '';
                 snap.forEach(docPed => {
                     const p = docPed.data();
-                    const precoNum = parseFloat((p.preco || '0').replace(',', '.'));
-                    const precoFormatado = `R$ ${precoNum.toFixed(2).replace('.', ',')}`;
+                    const precoFormatado = formatarPreco(p.preco);
 
                     const div = document.createElement('div');
                     div.className = 'loja-pedido';
