@@ -255,9 +255,9 @@
                         </div>
                         <span class="material-symbols-outlined">expand_more</span>
                     </div>
-                    <button class="btn-notificacao">
+                    <button class="btn-notificacao" id="btn-notificacao-cliente" onclick="abrirNotificacoes()">
                         <span class="material-symbols-outlined">notifications</span>
-                        <span class="notificacao-ponto"></span>
+                        <span class="notificacao-ponto" id="ponto-notificacao-cliente" style="display:none;"></span>
                     </button>
                 </div>
                 <div class="home-conteudo">
@@ -361,7 +361,13 @@
 
             <!-- TELA 10: MINHA LOJA (pedidos em tempo real) -->
             <section id="tela-10" class="tela">
-                <div class="loja-header">Minha Loja</div>
+                <div class="loja-header" style="display:flex; align-items:center; justify-content:space-between;">
+                    <span>Minha Loja</span>
+                    <button class="btn-notificacao" id="btn-notificacao-empresa" onclick="abrirNotificacoes()" style="position:relative;">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span class="notificacao-ponto" id="ponto-notificacao-empresa" style="display:none;"></span>
+                    </button>
+                </div>
                 <div class="status-box"><span>Status da Loja: <strong id="status-text">Aberto</strong></span><div id="switch" class="switch"><div class="circle"></div></div></div>
                 <div class="loja-cards">
                     <div class="loja-card" id="card-pendentes" onclick="mostrarPedidosPorStatus('Pendente')" style="cursor:pointer;">
@@ -514,13 +520,26 @@
                 </nav>
             </section>
 
+            <!-- TELA 17: NOTIFICAÇÕES (nova, comum a cliente e empresa) -->
+            <section id="tela-17" class="tela">
+                <div class="tela-cabecalho">
+                    <button onclick="voltarDeNotificacoes()" class="btn-voltar">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <h1>Notificações</h1>
+                </div>
+                <div id="notificacoes-lista" style="padding:12px 16px; display:flex; flex-direction:column; gap:10px;">
+                    <p style="text-align:center; padding:20px; color:#888;">Carregando notificações...</p>
+                </div>
+            </section>
+
         </div>
     </div>
 
     <script src="script.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
         import {
             getFirestore,
             collection,
@@ -623,6 +642,7 @@
             if (unsubscribeProdutosEmpresa) { unsubscribeProdutosEmpresa(); unsubscribeProdutosEmpresa = null; }
             if (unsubscribeProdutosCliente) { unsubscribeProdutosCliente(); unsubscribeProdutosCliente = null; }
             if (unsubscribeEmpresas) { unsubscribeEmpresas(); unsubscribeEmpresas = null; }
+            if (unsubscribeNotificacoes) { unsubscribeNotificacoes(); unsubscribeNotificacoes = null; }
 
             auth.signOut().then(() => {
                 tipoUsuario = null;
@@ -1008,7 +1028,7 @@
             } catch (e) { console.error('Erro ao buscar endereço do cliente:', e); }
 
             try {
-                await addDoc(collection(db, "pedidos"), {
+                const pedidoRef = await addDoc(collection(db, "pedidos"), {
                     clienteId: user.uid,
                     clienteNome: user.displayName || "Cliente",
                     clienteEmail: user.email || "",
@@ -1023,6 +1043,15 @@
                     status: "Pendente",
                     criadoEm: serverTimestamp()
                 });
+
+                // Notifica a empresa de que chegou um pedido novo
+                criarNotificacao(empresaId, {
+                    tipo: 'pedido_novo',
+                    titulo: 'Novo pedido recebido',
+                    corpo: `${user.displayName || 'Um cliente'} pediu "${nomeProduto}"`,
+                    pedidoId: pedidoRef.id
+                });
+
                 alert(`✅ Pedido de "${nomeProduto}" enviado!\nAguarde a confirmação da empresa.`);
                 mudarTela('tela-7');
             } catch (err) {
@@ -1270,7 +1299,28 @@
         // ACEITAR, RECUSAR OU CONCLUIR PEDIDO
         window.responderPedido = async function(pedidoId, novoStatus) {
             try {
+                const pedidoSnap = await getDoc(doc(db, "pedidos", pedidoId));
                 await updateDoc(doc(db, "pedidos", pedidoId), { status: novoStatus });
+
+                // Notifica o cliente sobre a mudança de status
+                if (pedidoSnap.exists()) {
+                    const p = pedidoSnap.data();
+                    let titulo = 'Atualização do seu pedido';
+                    let corpo = `Seu pedido de "${p.nomeProduto}" agora está: ${novoStatus}`;
+                    if (novoStatus === 'Recusado') {
+                        titulo = 'Pedido recusado';
+                        corpo = `A loja ${p.empresaNome || ''} recusou seu pedido de "${p.nomeProduto}".`;
+                    } else if (novoStatus === 'Concluído') {
+                        titulo = 'Pedido entregue';
+                        corpo = `Seu pedido de "${p.nomeProduto}" foi marcado como entregue.`;
+                    }
+                    criarNotificacao(p.clienteId, {
+                        tipo: 'pedido_status',
+                        titulo,
+                        corpo,
+                        pedidoId
+                    });
+                }
                 // Os contadores e as listas já se atualizam sozinhos pelos
                 // listeners em tempo real acima — não precisa mexer no DOM aqui.
             } catch (err) {
@@ -1279,11 +1329,23 @@
             }
         };
 
-        // Aceita o pedido (muda status para "Aceito") e já leva a empresa
-        // direto pra conversa com o cliente que fez o pedido.
+        // Aceita o pedido (muda status para "Aceito"), notifica o cliente
+        // e já leva a empresa direto pra conversa com quem pediu.
         window.aceitarPedido = async function(pedidoId, clienteId, clienteNome) {
             try {
+                const pedidoSnap = await getDoc(doc(db, "pedidos", pedidoId));
                 await updateDoc(doc(db, "pedidos", pedidoId), { status: 'Aceito' });
+
+                if (pedidoSnap.exists()) {
+                    const p = pedidoSnap.data();
+                    criarNotificacao(clienteId, {
+                        tipo: 'pedido_status',
+                        titulo: 'Pedido aceito!',
+                        corpo: `${p.empresaNome || 'A loja'} aceitou seu pedido de "${p.nomeProduto}".`,
+                        pedidoId
+                    });
+                }
+
                 // Cria (se não existir) e abre a conversa com esse cliente
                 await abrirChatComCliente(clienteId, clienteNome);
             } catch (err) {
@@ -1315,6 +1377,11 @@
 
             const conversaId = gerarConversaId(clienteId, empresaId);
             conversaAtualId = conversaId;
+            // Usa sempre os dados de quem está abrindo a conversa AGORA,
+            // em vez de confiar cegamente no que foi salvo da última vez —
+            // assim, se o nome mudou (ou tinha sido salvo errado antes), a
+            // tela de chat sempre mostra o nome certo da outra pessoa.
+            conversaAtualDados = dadosIniciais;
 
             const conversaRef = doc(db, 'conversas', conversaId);
             try {
@@ -1329,9 +1396,13 @@
                         ultimaMensagem: '',
                         ultimaMensagemEm: serverTimestamp()
                     });
-                    conversaAtualDados = dadosIniciais;
                 } else {
-                    conversaAtualDados = snap.data();
+                    // Conversa já existe: preserva a última mensagem, só
+                    // atualiza os nomes para não ficarem desatualizados.
+                    await setDoc(conversaRef, {
+                        clienteNome: dadosIniciais.clienteNome,
+                        empresaNome: dadosIniciais.empresaNome
+                    }, { merge: true });
                 }
             } catch (err) {
                 console.error(err);
@@ -1339,8 +1410,8 @@
                 return;
             }
 
-            const souEmpresa = user.uid === conversaAtualDados.empresaId;
-            const nomeOutro = souEmpresa ? conversaAtualDados.clienteNome : conversaAtualDados.empresaNome;
+            const souEmpresa = user.uid === empresaId;
+            const nomeOutro = souEmpresa ? dadosIniciais.clienteNome : dadosIniciais.empresaNome;
             const tituloEl = document.getElementById('chat-nome-contato');
             if (tituloEl) tituloEl.textContent = nomeOutro || 'Conversa';
 
@@ -1452,6 +1523,8 @@
             if (!conversaAtualId) { alert('Nenhuma conversa aberta.'); return; }
 
             const souEmpresa = conversaAtualDados && user.uid === conversaAtualDados.empresaId;
+            const destinatarioId = souEmpresa ? conversaAtualDados.clienteId : conversaAtualDados.empresaId;
+            const meuNome = souEmpresa ? (conversaAtualDados.empresaNome || 'Empresa') : (conversaAtualDados.clienteNome || 'Cliente');
 
             try {
                 await addDoc(collection(db, 'conversas', conversaAtualId, 'mensagens'), {
@@ -1464,6 +1537,16 @@
                     ultimaMensagem: texto,
                     ultimaMensagemEm: serverTimestamp()
                 });
+
+                // Notifica quem está do outro lado da conversa
+                if (destinatarioId) {
+                    criarNotificacao(destinatarioId, {
+                        tipo: 'mensagem',
+                        titulo: `Nova mensagem de ${meuNome}`,
+                        corpo: texto,
+                        conversaId: conversaAtualId
+                    });
+                }
             } catch (err) {
                 console.error(err);
                 alert('Erro ao enviar mensagem: ' + err.message);
@@ -1527,39 +1610,182 @@
         };
 
         // ==========================================
+        // NOTIFICAÇÕES (tempo real, cliente e empresa)
+        // ==========================================
+        // notificacoes/{id}: { paraUsuario, tipo, titulo, corpo, lida,
+        //                       criadoEm, pedidoId?, conversaId? }
+
+        let unsubscribeNotificacoes = null;
+        let telaAnteriorNotificacoes = 'tela-5';
+
+        async function criarNotificacao(paraUsuario, dados) {
+            if (!paraUsuario) return;
+            try {
+                await addDoc(collection(db, 'notificacoes'), {
+                    paraUsuario,
+                    lida: false,
+                    criadoEm: serverTimestamp(),
+                    ...dados
+                });
+            } catch (err) {
+                console.error('Erro ao criar notificação:', err);
+            }
+        }
+
+        // Liga o "sininho" (bolinha vermelha) de cliente e empresa em
+        // tempo real, contando quantas notificações não lidas existem.
+        function observarNotificacoes() {
+            const user = auth.currentUser;
+            if (!user) return;
+            if (unsubscribeNotificacoes) unsubscribeNotificacoes();
+
+            const q = query(
+                collection(db, 'notificacoes'),
+                where('paraUsuario', '==', user.uid),
+                where('lida', '==', false)
+            );
+            unsubscribeNotificacoes = onSnapshot(q, (snap) => {
+                const temNaoLidas = !snap.empty;
+                const pontoCliente = document.getElementById('ponto-notificacao-cliente');
+                const pontoEmpresa = document.getElementById('ponto-notificacao-empresa');
+                if (pontoCliente) pontoCliente.style.display = temNaoLidas ? 'block' : 'none';
+                if (pontoEmpresa) pontoEmpresa.style.display = temNaoLidas ? 'block' : 'none';
+            }, (err) => console.error('Erro ao observar notificações:', err));
+        }
+
+        // Abre a tela de notificações (comum a cliente e empresa) e marca
+        // todas como lidas ao visualizar.
+        window.abrirNotificacoes = function() {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            // Lembra de qual tela veio, pra voltar certo
+            const telaAtiva = document.querySelector('.tela.ativa');
+            telaAnteriorNotificacoes = telaAtiva ? telaAtiva.id : (tipoUsuario === 'empresa' ? 'tela-10' : 'tela-5');
+
+            mudarTela('tela-17');
+
+            const lista = document.getElementById('notificacoes-lista');
+            if (lista) lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando notificações...</p>';
+
+            const q = query(collection(db, 'notificacoes'), where('paraUsuario', '==', user.uid));
+            getDocs(q).then(async (snap) => {
+                if (!lista) return;
+                if (snap.empty) {
+                    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Você não tem notificações.</p>';
+                    return;
+                }
+
+                const notifs = [];
+                snap.forEach(d => notifs.push({ id: d.id, ...d.data() }));
+                notifs.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+
+                const iconePorTipo = {
+                    mensagem: 'chat',
+                    pedido_novo: 'receipt_long',
+                    pedido_status: 'local_shipping'
+                };
+
+                lista.innerHTML = '';
+                notifs.forEach(n => {
+                    const item = document.createElement('div');
+                    item.style.cssText = `background:#fff; border-radius:12px; padding:14px; display:flex; gap:12px; align-items:flex-start; box-shadow:0 1px 6px rgba(0,0,0,0.06); ${n.lida ? 'opacity:0.6;' : ''} cursor:pointer;`;
+                    item.innerHTML = `
+                        <div style="width:38px;height:38px;border-radius:50%;background:rgba(229,6,21,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <span class="material-symbols-outlined" style="color:var(--primary,#e50615);font-size:20px;">${iconePorTipo[n.tipo] || 'notifications'}</span>
+                        </div>
+                        <div style="flex:1;">
+                            <strong style="font-size:14px;">${n.titulo || 'Notificação'}</strong>
+                            <p style="margin:4px 0 0; font-size:13px; color:#555;">${n.corpo || ''}</p>
+                        </div>
+                    `;
+                    item.onclick = () => abrirDestinoNotificacao(n);
+                    lista.appendChild(item);
+                });
+
+                // Marca todas como lidas depois de mostrar a lista
+                const naoLidas = notifs.filter(n => !n.lida);
+                for (const n of naoLidas) {
+                    try { await updateDoc(doc(db, 'notificacoes', n.id), { lida: true }); } catch (e) { console.error(e); }
+                }
+            }).catch(err => {
+                console.error(err);
+                if (lista) lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
+            });
+        };
+
+        // Ao clicar numa notificação, leva direto pro lugar certo
+        function abrirDestinoNotificacao(n) {
+            if (n.tipo === 'mensagem' && n.conversaId) {
+                // Reabre a conversa a partir dos dados salvos nela
+                getDoc(doc(db, 'conversas', n.conversaId)).then(snap => {
+                    if (!snap.exists()) { mudarTela(tipoUsuario === 'empresa' ? 'tela-12' : 'tela-7'); return; }
+                    const c = snap.data();
+                    if (tipoUsuario === 'empresa') {
+                        abrirChatComCliente(c.clienteId, c.clienteNome);
+                    } else {
+                        abrirChatComEmpresa(c.empresaId, c.empresaNome);
+                    }
+                }).catch(() => mudarTela(tipoUsuario === 'empresa' ? 'tela-12' : 'tela-7'));
+            } else if (n.pedidoId) {
+                mudarTela(tipoUsuario === 'empresa' ? 'tela-10' : 'tela-7');
+            } else {
+                voltarDeNotificacoes();
+            }
+        }
+
+        window.voltarDeNotificacoes = function() {
+            mudarTela(telaAnteriorNotificacoes || (tipoUsuario === 'empresa' ? 'tela-10' : 'tela-5'));
+        };
+
+        // ==========================================
         // INICIALIZAÇÃO
         // ==========================================
+        // IMPORTANTE: a tela é decidida a partir de onAuthStateChanged (o
+        // evento real do Firebase avisando se a sessão foi restaurada),
+        // não a partir do localStorage sozinho — assim a tela de
+        // pedidos/loja nunca tenta carregar dados com auth.currentUser
+        // ainda nulo (o que antes dava a impressão de que os pedidos
+        // tinham sumido ao recarregar a página).
 
-        window.addEventListener('DOMContentLoaded', function() {
-            carregarProdutos();
+        let inicializacaoTratada = false;
 
+        onAuthStateChanged(auth, (user) => {
             const tipoSalvo = localStorage.getItem('tipoUsuario');
-            const nomeSalvo = localStorage.getItem('nomeUsuario');
-            const emailSalvo = localStorage.getItem('emailUsuario');
 
-            if (tipoSalvo && nomeSalvo) {
+            if (user && tipoSalvo) {
                 tipoUsuario = tipoSalvo;
                 const nomePerfil = document.getElementById('nomePerfil');
                 const emailPerfil = document.getElementById('emailPerfil');
-                if (nomePerfil) nomePerfil.textContent = nomeSalvo;
-                if (emailPerfil) emailPerfil.textContent = emailSalvo;
+                if (nomePerfil) nomePerfil.textContent = user.displayName || 'Usuário';
+                if (emailPerfil) emailPerfil.textContent = user.email || '';
 
-                if (tipoSalvo === 'cliente') {
-                    mudarTela('tela-5');
-                    // Carrega localidade salva no reload
-                    setTimeout(async () => {
-                        const u = auth.currentUser;
-                        if (!u) return;
-                        try {
-                            const snap = await getDoc(doc(db, "clientes", u.uid));
-                            if (snap.exists() && snap.data().localidade) {
-                                atualizarLocalidadeHome(snap.data().localidade);
-                            }
-                        } catch(e) {}
-                    }, 1200);
-                } else if (tipoSalvo === 'empresa') {
-                    mudarTela('tela-10');
+                observarNotificacoes();
+
+                if (!inicializacaoTratada) {
+                    inicializacaoTratada = true;
+                    if (tipoSalvo === 'cliente') {
+                        mudarTela('tela-5');
+                        (async () => {
+                            try {
+                                const snap = await getDoc(doc(db, "clientes", user.uid));
+                                if (snap.exists() && snap.data().localidade) {
+                                    atualizarLocalidadeHome(snap.data().localidade);
+                                }
+                            } catch (e) { console.error(e); }
+                        })();
+                    } else if (tipoSalvo === 'empresa') {
+                        mudarTela('tela-10');
+                    }
                 }
+            } else if (!user && tipoSalvo && inicializacaoTratada === false) {
+                // Tínhamos um tipo salvo, mas a sessão não pôde ser
+                // restaurada (expirou, foi revogada, etc). Limpa o estado
+                // velho e manda para a seleção de acesso.
+                inicializacaoTratada = true;
+                localStorage.removeItem('tipoUsuario');
+                localStorage.removeItem('nomeUsuario');
+                localStorage.removeItem('emailUsuario');
             }
         });
 
