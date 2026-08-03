@@ -311,12 +311,12 @@
                 <div class="home-conteudo">
                     <h2>O que você precisa?</h2>
                     <div class="categorias-grid">
-                        <button class="categoria" onclick="abrirListaEmpresas()"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant</span></div><span>Restaurantes</span></button>
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">storefront</span></div><span>Mercado</span></button>
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">medication</span></div><span>Farmácia</span></button>
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">liquor</span></div><span>Bebidas</span></button>
-                        <button class="categoria"><div class="categoria-icone"><span class="material-symbols-outlined">pets</span></div><span>Pet Shop</span></button>
-                        <button class="categoria" onclick="abrirListaEmpresas()"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant_menu</span></div><span>Ver Cardápio</span></button>
+                        <button class="categoria" onclick="abrirListaEmpresas('Restaurante')"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant</span></div><span>Restaurantes</span></button>
+                        <button class="categoria" onclick="abrirListaEmpresas('Mercado')"><div class="categoria-icone"><span class="material-symbols-outlined">storefront</span></div><span>Mercado</span></button>
+                        <button class="categoria" onclick="abrirListaEmpresas('Farmácia')"><div class="categoria-icone"><span class="material-symbols-outlined">medication</span></div><span>Farmácia</span></button>
+                        <button class="categoria" onclick="abrirListaEmpresas('Bebidas')"><div class="categoria-icone"><span class="material-symbols-outlined">liquor</span></div><span>Bebidas</span></button>
+                        <button class="categoria" onclick="abrirListaEmpresas('Pet Shop')"><div class="categoria-icone"><span class="material-symbols-outlined">pets</span></div><span>Pet Shop</span></button>
+                        <button class="categoria" onclick="abrirListaEmpresas()"><div class="categoria-icone"><span class="material-symbols-outlined">restaurant_menu</span></div><span>Ver Todas</span></button>
                     </div>
                 </div>
                 <nav class="navegacao-inferior">
@@ -627,7 +627,7 @@
                     <button onclick="mudarTela('tela-5')" class="btn-voltar">
                         <span class="material-symbols-outlined">arrow_back</span>
                     </button>
-                    <h1>Restaurantes</h1>
+                    <h1 id="titulo-lista-empresas">Lojas</h1>
                 </div>
                 <div class="produto-conteudo">
                     <div id="listaEmpresas" style="display:flex; flex-direction:column; gap:12px; padding:16px;">
@@ -1437,18 +1437,35 @@ window.carregarProdutos = function() {
 let unsubscribeEmpresas = null;
 let cacheEmpresas = [];
 
-window.abrirListaEmpresas = function() {
+window.abrirListaEmpresas = function(categoriaFiltro) {
     mudarTela('tela-16');
     const lista = document.getElementById('listaEmpresas');
+    const titulo = document.getElementById('titulo-lista-empresas');
+    if (titulo) {
+        const titulosPorCategoria = {
+            'Restaurante': 'Restaurantes',
+            'Mercado': 'Mercados',
+            'Farmácia': 'Farmácias',
+            'Bebidas': 'Bebidas',
+            'Pet Shop': 'Pet Shops'
+        };
+        titulo.textContent = categoriaFiltro ? (titulosPorCategoria[categoriaFiltro] || categoriaFiltro) : 'Todas as Lojas';
+    }
     if (!lista) return;
 
     if (unsubscribeEmpresas) unsubscribeEmpresas();
 
     lista.innerHTML = '<p style="text-align:center; color:#888;">Carregando empresas...</p>';
 
-    unsubscribeEmpresas = onSnapshot(collection(db, "empresas"), (snap) => {
+    const ref = categoriaFiltro
+        ? query(collection(db, "empresas"), where("categoria", "==", categoriaFiltro))
+        : collection(db, "empresas");
+
+    unsubscribeEmpresas = onSnapshot(ref, (snap) => {
         if (snap.empty) {
-            lista.innerHTML = '<p style="text-align:center; color:#888;">Nenhuma empresa disponível no momento.</p>';
+            lista.innerHTML = categoriaFiltro
+                ? `<p style="text-align:center; color:#888;">Nenhuma loja de "${categoriaFiltro}" disponível no momento.</p>`
+                : '<p style="text-align:center; color:#888;">Nenhuma empresa disponível no momento.</p>';
             return;
         }
         cacheEmpresas = [];
