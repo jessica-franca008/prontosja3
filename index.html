@@ -349,10 +349,15 @@
 
             <!-- TELA 8: CHAT -->
             <section id="tela-8" class="tela">
-                <div class="chat-cabecalho"><button onclick="mudarTela('tela-7')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><div class="chat-contato-info"><div class="chat-foto" id="chat-foto-contato" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBE-eDMfOeLf8FpoYNPZwXXyHZDUt1lCh1Ff4DxVOMuoJpR-UHz6qWJgp75iB0mDf5EtHMDXz3UDL8q5hkZxHSWR0Q2v3TA84De-6l6pN7bOuIXZ_SDimOi5QXz24pyHiqUctirxzVTiUPzlgR9Xp_muVyxw5lnGjVnJdr-YZDgnLF0yk8jQn8oIJy3CVleqYgR7pg2F3KZ5iyCbZ2_RSj1Ywcmdb34AmWEncBJUqGJ-VLqfuVdWL5pcfIcktalCAuKqj43UtBRCqA')"></div><h2 id="chat-nome-contato">Conversa</h2></div><button class="btn-info"><span class="material-symbols-outlined">info</span></button></div>
+                <div class="chat-cabecalho"><button id="chat-btn-voltar" onclick="mudarTela('tela-7')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><div class="chat-contato-info"><div class="chat-foto" id="chat-foto-contato" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBE-eDMfOeLf8FpoYNPZwXXyHZDUt1lCh1Ff4DxVOMuoJpR-UHz6qWJgp75iB0mDf5EtHMDXz3UDL8q5hkZxHSWR0Q2v3TA84De-6l6pN7bOuIXZ_SDimOi5QXz24pyHiqUctirxzVTiUPzlgR9Xp_muVyxw5lnGjVnJdr-YZDgnLF0yk8jQn8oIJy3CVleqYgR7pg2F3KZ5iyCbZ2_RSj1Ywcmdb34AmWEncBJUqGJ-VLqfuVdWL5pcfIcktalCAuKqj43UtBRCqA')"></div><h2 id="chat-nome-contato">Conversa</h2></div><button class="btn-info"><span class="material-symbols-outlined">info</span></button></div>
                 <div class="chat-mensagens" id="chat-mensagens"><p style="text-align:center; padding:20px; color:#888;">Selecione uma conversa.</p></div>
                 <div class="chat-input"><button id="record-btn" class="btn-audio"><span class="material-symbols-outlined">mic</span></button><div class="chat-input-container"><input type="text" id="chat-input" placeholder="Digite sua mensagem..."></div><button id="send-btn" class="btn-enviar"><span class="material-symbols-outlined">send</span></button></div>
-                <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
+                <nav class="navegacao-inferior" id="chat-nav">
+                    <button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                    <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
+                    <button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
+                    <button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button>
+                </nav>
             </section>
 
             <!-- TELA 9: PERFIL CLIENTE -->
@@ -2017,6 +2022,39 @@ function gerarConversaId(uidCliente, uidEmpresa) {
     return [uidCliente, uidEmpresa].sort().join('_');
 }
 
+// A tela de chat (tela-8) é compartilhada entre cliente e empresa.
+// Antes disso, o menu inferior ficava travado nas telas do cliente —
+// então quando a empresa abria uma conversa e clicava em "Perfil" no
+// menu, ela caía na tela de perfil do CLIENTE (achando que tinha
+// "entrado na conta dele"). Aqui a gente monta o menu certo (e o botão
+// de voltar certo) de acordo com quem está usando o chat no momento.
+function aplicarNavegacaoChat(souEmpresa) {
+    const nav = document.getElementById('chat-nav');
+    const btnVoltar = document.getElementById('chat-btn-voltar');
+
+    if (souEmpresa) {
+        if (nav) {
+            nav.innerHTML = `
+                <button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                <button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button>
+                <button onclick="mudarTela('tela-12')" class="nav-item ativo"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button>
+                <button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button>
+            `;
+        }
+        if (btnVoltar) btnVoltar.setAttribute('onclick', "mudarTela('tela-12')");
+    } else {
+        if (nav) {
+            nav.innerHTML = `
+                <button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
+                <button onclick="mudarTela('tela-7')" class="nav-item ativo"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button>
+                <button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button>
+            `;
+        }
+        if (btnVoltar) btnVoltar.setAttribute('onclick', "mudarTela('tela-7')");
+    }
+}
+
 async function abrirConversa(clienteId, empresaId, dadosIniciais) {
     const user = auth.currentUser;
     if (!user) { toast('Você precisa estar logado.', true); return; }
@@ -2054,6 +2092,8 @@ async function abrirConversa(clienteId, empresaId, dadosIniciais) {
     const nomeOutro = souEmpresa ? dadosIniciais.clienteNome : dadosIniciais.empresaNome;
     const tituloEl = document.getElementById('chat-nome-contato');
     if (tituloEl) tituloEl.textContent = nomeOutro || 'Conversa';
+
+    aplicarNavegacaoChat(souEmpresa);
 
     mudarTela('tela-8');
     setTimeout(() => { if (typeof inicializarChat === 'function') inicializarChat(); }, 100);
