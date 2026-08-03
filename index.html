@@ -108,13 +108,40 @@
                     </button>
                     <h1>Entrar</h1>
                 </div>
-                <div class="tela-conteudo" style="justify-content: center; gap: 20px;">
-                    <div class="empresa-logo" style="width: 80px; height: 80px; background: rgba(229,6,21,0.1); border-radius: 50%;">
-                        <span class="material-symbols-outlined" style="font-size: 40px; color: var(--primary);">google</span>
+                <div class="tela-conteudo" style="justify-content: center; gap: 16px;">
+                    <div class="empresa-logo" style="width: 70px; height: 70px; background: rgba(229,6,21,0.1); border-radius: 50%;">
+                        <span class="material-symbols-outlined" style="font-size: 34px; color: var(--primary);">person</span>
                     </div>
-                    <h2>Bem-vindo ao ProntosJá</h2>
-                    <p style="text-align: center; max-width: 250px;">Continue com sua conta Google para acessar o aplicativo</p>
-                    <div class="selecao-botoes">
+                    <h2 style="margin:0;">Bem-vindo ao ProntosJá</h2>
+                    <p style="text-align: center; max-width: 260px; margin:0;">Entre com e-mail e senha ou continue com o Google</p>
+
+                    <div class="tela-formulario" style="width:100%;">
+                        <div class="campo-input">
+                            <label>E-mail</label>
+                            <div class="input-wrapper">
+                                <span class="material-symbols-outlined">mail</span>
+                                <input type="email" id="loginEmail" placeholder="exemplo@email.com">
+                            </div>
+                        </div>
+                        <div class="campo-input">
+                            <label>Senha</label>
+                            <div class="input-wrapper">
+                                <span class="material-symbols-outlined">lock</span>
+                                <input type="password" id="loginSenha" placeholder="••••••••">
+                                <button type="button" class="btn-visibilidade"><span class="material-symbols-outlined">visibility</span></button>
+                            </div>
+                        </div>
+                        <p id="loginErro" style="color:#dc2626; font-size:13px; text-align:center; display:none; margin:0 0 8px;"></p>
+                        <button onclick="loginComEmailSenha()" class="btn-principal">Entrar</button>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:10px; width:100%; margin:4px 0;">
+                        <div style="flex:1; height:1px; background:#e5e5e5;"></div>
+                        <span style="font-size:12px; color:#999;">ou</span>
+                        <div style="flex:1; height:1px; background:#e5e5e5;"></div>
+                    </div>
+
+                    <div class="selecao-botoes" style="width:100%;">
                         <button class="btn-google" onclick="loginComGoogle()">
                             <svg class="google-icon" viewBox="0 0 24 24">
                                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path>
@@ -125,69 +152,80 @@
                             <span>Continuar com Google</span>
                         </button>
                     </div>
+
+                    <p style="text-align:center; font-size:13px; margin-top:4px;">
+                        Não tem conta?
+                        <a href="javascript:void(0)" onclick="irParaCadastro()" style="color:var(--primary,#e50615); font-weight:600; text-decoration:none;">Cadastre-se</a>
+                    </p>
                 </div>
             </section>
 
             <!-- TELA 3: CADASTRO CLIENTE -->
             <section id="tela-3" class="tela">
                 <div class="tela-cabecalho">
-                    <button onclick="mudarTela('tela-2')" class="btn-voltar">
+                    <button onclick="mudarTela('tela-login')" class="btn-voltar">
                         <span class="material-symbols-outlined">arrow_back</span>
                     </button>
                     <h1>Crie sua conta</h1>
                 </div>
                 <div class="tela-abas">
-                    <button class="aba ativa">Sou Cliente</button>
-                    <button onclick="mudarTela('tela-4')" class="aba">Sou Empresa</button>
+                    <button onclick="irParaCadastroTipo('cliente')" class="aba ativa" id="aba-cliente">Sou Cliente</button>
+                    <button onclick="irParaCadastroTipo('empresa')" class="aba" id="aba-empresa-link">Sou Empresa</button>
                 </div>
                 <div class="tela-formulario">
                     <div class="campo-input">
                         <label>Nome Completo</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">person</span>
-                            <input type="text" placeholder="Digite seu nome">
+                            <input type="text" id="cadNome" placeholder="Digite seu nome">
                         </div>
                     </div>
                     <div class="campo-input">
                         <label>E-mail</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">mail</span>
-                            <input type="email" placeholder="exemplo@email.com">
+                            <input type="email" id="cadEmail" placeholder="exemplo@email.com">
                         </div>
                     </div>
                     <div class="campo-input">
                         <label>Telefone</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">call</span>
-                            <input type="tel" placeholder="(XX) XXXXX-XXXX">
+                            <input type="tel" id="cadTelefone" placeholder="(XX) XXXXX-XXXX">
                         </div>
                     </div>
                     <div class="campo-input">
                         <label>Localidade</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">location_on</span>
-                            <input type="text" placeholder="Cidade ou CEP">
+                            <input type="text" id="cadLocalidade" placeholder="Cidade ou CEP">
                         </div>
                     </div>
                     <div class="campo-input">
                         <label>Senha</label>
                         <div class="input-wrapper">
                             <span class="material-symbols-outlined">lock</span>
-                            <input type="password" placeholder="••••••••">
-                            <button class="btn-visibilidade"><span class="material-symbols-outlined">visibility</span></button>
+                            <input type="password" id="cadSenha" placeholder="••••••••">
+                            <button type="button" class="btn-visibilidade"><span class="material-symbols-outlined">visibility</span></button>
                         </div>
+                        <p class="info-senha">Mínimo de 8 caracteres.</p>
                     </div>
-                    <button onclick="mudarTela('tela-5')" class="btn-principal">Cadastrar</button>
+                    <p id="cadClienteErro" style="color:#dc2626; font-size:13px; text-align:center; display:none;"></p>
+                    <button id="btnCadastrarCliente" onclick="cadastrarCliente()" class="btn-principal">Cadastrar</button>
                 </div>
             </section>
 
             <!-- TELA 4: CADASTRO EMPRESA -->
             <section id="tela-4" class="tela">
                 <div class="tela-cabecalho">
-                    <button onclick="mudarTela('tela-2')" class="btn-voltar">
+                    <button onclick="mudarTela('tela-login')" class="btn-voltar">
                         <span class="material-symbols-outlined">arrow_back</span>
                     </button>
                     <h1>Cadastro Empresa</h1>
+                </div>
+                <div class="tela-abas">
+                    <button onclick="irParaCadastroTipo('cliente')" class="aba">Sou Cliente</button>
+                    <button onclick="irParaCadastroTipo('empresa')" class="aba ativa" id="aba-empresa">Sou Empresa</button>
                 </div>
                 <div class="tela-conteudo empresa-conteudo">
                     <div class="empresa-logo"><span class="material-symbols-outlined">storefront</span></div>
@@ -197,25 +235,34 @@
                             <label>Nome da Loja</label>
                             <div class="input-wrapper">
                                 <span class="material-symbols-outlined">store</span>
-                                <input type="text" placeholder="Ex: Pizzaria do João">
+                                <input type="text" id="empNome" placeholder="Ex: Pizzaria do João">
+                            </div>
+                        </div>
+                        <div class="campo-input">
+                            <label>E-mail</label>
+                            <div class="input-wrapper">
+                                <span class="material-symbols-outlined">mail</span>
+                                <input type="email" id="empEmail" placeholder="contato@sualoja.com">
                             </div>
                         </div>
                         <div class="campo-input">
                             <label>CNPJ</label>
                             <div class="input-wrapper">
                                 <span class="material-symbols-outlined">badge</span>
-                                <input type="text" placeholder="00.000.000/0000-00">
+                                <input type="text" id="empCnpj" placeholder="00.000.000/0000-00">
                             </div>
                         </div>
                         <div class="campo-input">
                             <label>Categoria</label>
                             <div class="input-wrapper">
                                 <span class="material-symbols-outlined">restaurant_menu</span>
-                                <select>
+                                <select id="empCategoria">
                                     <option value="">Selecione o tipo de loja</option>
-                                    <option value="restaurante">Restaurante</option>
-                                    <option value="mercado">Mercado</option>
-                                    <option value="farmacia">Farmácia</option>
+                                    <option value="Restaurante">Restaurante</option>
+                                    <option value="Mercado">Mercado</option>
+                                    <option value="Farmácia">Farmácia</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Pet Shop">Pet Shop</option>
                                 </select>
                                 <span class="material-symbols-outlined seta-baixo">keyboard_arrow_down</span>
                             </div>
@@ -223,7 +270,7 @@
                         <div class="campo-input">
                             <label>Endereço</label>
                             <div class="input-wrapper">
-                                <input type="text" placeholder="Buscar endereço...">
+                                <input type="text" id="empEndereco" placeholder="Endereço completo da loja">
                                 <span class="material-symbols-outlined icone-local">location_on</span>
                             </div>
                         </div>
@@ -231,13 +278,14 @@
                             <label>Senha</label>
                             <div class="input-wrapper">
                                 <span class="material-symbols-outlined">lock</span>
-                                <input type="password" placeholder="Crie uma senha forte">
-                                <button class="btn-visibilidade"><span class="material-symbols-outlined">visibility_off</span></button>
+                                <input type="password" id="empSenha" placeholder="Crie uma senha forte">
+                                <button type="button" class="btn-visibilidade"><span class="material-symbols-outlined">visibility_off</span></button>
                             </div>
                             <p class="info-senha">Mínimo de 8 caracteres.</p>
                         </div>
+                        <p id="cadEmpresaErro" style="color:#dc2626; font-size:13px; text-align:center; display:none;"></p>
                     </div>
-                    <button onclick="mudarTela('tela-10')" class="btn-principal btn-salvar">
+                    <button id="btnCadastrarEmpresa" onclick="cadastrarEmpresa()" class="btn-principal btn-salvar">
                         <span>Salvar</span>
                         <span class="material-symbols-outlined">arrow_forward</span>
                     </button>
@@ -281,8 +329,12 @@
 
             <!-- TELA 6: PESQUISAR -->
             <section id="tela-6" class="tela">
-                <div class="pesquisa-cabecalho"><h1>Pesquisar</h1><div class="pesquisa-busca"><span class="material-symbols-outlined">search</span><input type="text" placeholder="O que você procura hoje?"></div></div>
-                <div class="pesquisa-conteudo"><div class="pesquisa-sugestoes"><h3>Sugestões para você</h3><button class="link-vermais">Ver mais</button></div><div class="pesquisa-resultados"><div class="resultado-item"><div class="resultado-imagem" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD1ujBixUSbXXODnGm9IUFKnoC3Go4ZkUHxcZMTJAzBrUMyJF9QbXOOBpeVz82oSAkNbq5sSpTBvMGBKO3jhy1ll3vnp_yRKbz6PqYVne91LvfxdxzMeqnKVR_ZO5WL_0zoHXbwZHt0oO8j_uKoT3-ZYUgMsX3WdJJk64lUcPDfYYCAKc6jKjGTcaiDBbraJyEXVuILUvA603OYsdugtz4osVvExytIc72MbSRjXNexjetm5rrVNlGwlIPe5VOfhWp_UGUAxjO5Gbo')"></div><div class="resultado-info"><div class="resultado-titulo"><h4>Burger King</h4><span class="avaliacao">4.8</span></div><p>Fast Food • Lanches</p><div class="resultado-detalhes"><span><span class="material-symbols-outlined">schedule</span> 30-40 min</span><span class="entrega-gratis"><span class="material-symbols-outlined">attach_money</span> Entrega Grátis</span></div></div></div></div></div>
+                <div class="pesquisa-cabecalho"><h1>Pesquisar</h1><div class="pesquisa-busca"><span class="material-symbols-outlined">search</span><input type="text" id="pesquisa-busca-input" placeholder="O que você procura hoje?"></div></div>
+                <div class="pesquisa-conteudo">
+                    <div class="pesquisa-resultados" id="pesquisa-resultados">
+                        <p style="text-align:center; padding:20px; color:#888;">Digite para buscar lojas e produtos.</p>
+                    </div>
+                </div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">search</span><span>Buscar</span></button><button onclick="mudarTela('tela-7')" class="nav-item"><span class="material-symbols-outlined">receipt_long</span><span>Pedidos</span></button><button onclick="mudarTela('tela-9')" class="nav-item"><span class="material-symbols-outlined">person</span><span>Perfil</span></button></nav>
             </section>
 
@@ -377,6 +429,14 @@
                         <span>Em Preparo</span><h2 id="contador-preparo">0</h2>
                     </div>
                 </div>
+                <div class="loja-cards" style="margin-top:8px;">
+                    <div class="loja-card" id="card-concluidos" onclick="mostrarPedidosPorStatus('Concluído')" style="cursor:pointer;">
+                        <span>Entregues</span><h2 id="contador-concluidos">0</h2>
+                    </div>
+                    <div class="loja-card" id="card-recusados" onclick="mostrarPedidosPorStatus('Recusado')" style="cursor:pointer;">
+                        <span>Recusados</span><h2 id="contador-recusados">0</h2>
+                    </div>
+                </div>
                 <div class="loja-section-title" id="loja-section-title">Pedidos Pendentes</div>
                 <div class="loja-pedidos" id="loja-pedidos-lista">
                     <p style="text-align:center; padding:20px; color:#888;">Carregando pedidos...</p>
@@ -406,7 +466,54 @@
             <!-- TELA 13: AJUSTES -->
             <section id="tela-13" class="tela">
                 <div class="ajustes-cabecalho"><div class="ajustes-top"><button onclick="mudarTela('tela-10')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button><h1>Ajustes</h1></div></div>
-                <div class="ajustes-conteudo"><div class="card-loja"><div class="icone-loja"><span class="material-symbols-outlined">store</span></div><div class="info-loja"><h3>Hamburgueria do João</h3><span>CNPJ: 12.345.678/0001-90</span></div></div><div class="ajustes-lista"><div class="ajustes-item" onclick="alert('Dados da Loja - Em desenvolvimento')"><div class="item-esquerda"><span class="material-symbols-outlined">store</span><p>Dados da Loja</p></div><span class="material-symbols-outlined seta">chevron_right</span></div></div><div class="btn-sair-ajustes"><button onclick="sairDaConta()"><span class="material-symbols-outlined">logout</span>Sair da Conta</button></div></div>
+                <div class="ajustes-conteudo">
+                    <div class="card-loja"><div class="icone-loja"><span class="material-symbols-outlined">store</span></div><div class="info-loja"><h3 id="ajustes-nome-loja">Minha Loja</h3><span id="ajustes-cnpj-loja">CNPJ: —</span></div></div>
+                    <div class="ajustes-lista"><div class="ajustes-item" onclick="abrirDadosDaLoja()"><div class="item-esquerda"><span class="material-symbols-outlined">store</span><p>Dados da Loja</p></div><span class="material-symbols-outlined seta">chevron_right</span></div></div>
+
+                    <!-- Formulário de dados da loja (oculto até o usuário clicar) -->
+                    <div id="form-dados-loja" style="display:none; padding:16px;">
+                        <div class="campo-input-produto">
+                            <label>Nome da Loja</label>
+                            <div class="input-wrapper-produto">
+                                <span class="material-symbols-outlined">store</span>
+                                <input type="text" id="lojaNome" placeholder="Nome da loja">
+                            </div>
+                        </div>
+                        <div class="campo-input-produto">
+                            <label>CNPJ</label>
+                            <div class="input-wrapper-produto">
+                                <span class="material-symbols-outlined">badge</span>
+                                <input type="text" id="lojaCnpj" placeholder="00.000.000/0000-00">
+                            </div>
+                        </div>
+                        <div class="campo-input-produto">
+                            <label>Categoria</label>
+                            <div class="input-wrapper-produto">
+                                <span class="material-symbols-outlined">restaurant_menu</span>
+                                <select id="lojaCategoria">
+                                    <option value="Restaurante">Restaurante</option>
+                                    <option value="Mercado">Mercado</option>
+                                    <option value="Farmácia">Farmácia</option>
+                                    <option value="Bebidas">Bebidas</option>
+                                    <option value="Pet Shop">Pet Shop</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="campo-input-produto">
+                            <label>Endereço</label>
+                            <div class="input-wrapper-produto">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <input type="text" id="lojaEndereco" placeholder="Endereço completo da loja">
+                            </div>
+                        </div>
+                        <button onclick="salvarDadosDaLoja()" class="btn-salvar-produto">
+                            <span class="material-symbols-outlined">save</span>
+                            Salvar Dados da Loja
+                        </button>
+                    </div>
+
+                    <div class="btn-sair-ajustes"><button onclick="sairDaConta()"><span class="material-symbols-outlined">logout</span>Sair da Conta</button></div>
+                </div>
                 <nav class="navegacao-inferior"><button onclick="mudarTela('tela-10')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button><button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button><button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button><button class="nav-item ativo"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button></nav>
             </section>
 
@@ -468,7 +575,7 @@
                                 <textarea id="productDescription" rows="3" placeholder="Insira os ingredientes, composição ou detalhes do item..."></textarea>
                             </div>
                         </div>
-                        <button onclick="salvarProduto()" class="btn-salvar-produto">
+                        <button id="btnSalvarProduto" onclick="salvarProduto()" class="btn-salvar-produto">
                             <span class="material-symbols-outlined">save</span>
                             Salvar Produto
                         </button>
@@ -488,9 +595,19 @@
                         <span class="material-symbols-outlined">chat</span>
                     </button>
                 </div>
+                <div id="loja-fechada-aviso" style="display:none; margin:10px 16px 0; padding:10px 14px; background:#fff3cd; color:#8a6d3b; border-radius:10px; font-size:13px; text-align:center;">
+                    Esta loja está fechada no momento. Você pode ver o cardápio, mas não é possível fazer pedidos agora.
+                </div>
                 <div class="produto-conteudo">
                     <div id="listaProdutosCliente" class="produtos-cliente-grid"></div>
                 </div>
+
+                <!-- Barra do carrinho (some quando vazio) -->
+                <div id="barra-carrinho" style="display:none; position:sticky; bottom:64px; margin:0 16px 10px; background:var(--primary,#e50615); color:#fff; border-radius:14px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 14px rgba(0,0,0,0.18); cursor:pointer;" onclick="abrirResumoCarrinho()">
+                    <span id="carrinho-resumo-texto">0 itens</span>
+                    <span style="display:flex; align-items:center; gap:6px; font-weight:700;">Ver sacola <span class="material-symbols-outlined">shopping_bag</span></span>
+                </div>
+
                 <nav class="navegacao-inferior">
                     <button onclick="mudarTela('tela-5')" class="nav-item"><span class="material-symbols-outlined">home</span><span>Início</span></button>
                     <button onclick="mudarTela('tela-6')" class="nav-item"><span class="material-symbols-outlined">search</span><span>Buscar</span></button>
@@ -533,1261 +650,1845 @@
                 </div>
             </section>
 
+            <!-- TELA 18: RESUMO DA SACOLA / CHECKOUT -->
+            <section id="tela-18" class="tela">
+                <div class="tela-cabecalho">
+                    <button onclick="mudarTela('tela-15')" class="btn-voltar">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                    </button>
+                    <h1>Sua Sacola</h1>
+                </div>
+                <div class="produto-conteudo">
+                    <div id="resumoCarrinhoLista" style="padding:16px; display:flex; flex-direction:column; gap:10px;"></div>
+                    <div style="padding:0 16px; display:flex; justify-content:space-between; font-weight:700; font-size:16px; border-top:1px solid #eee; margin-top:8px; padding-top:14px;">
+                        <span>Total</span>
+                        <span id="resumoCarrinhoTotal">R$ 0,00</span>
+                    </div>
+                    <button onclick="confirmarPedidoCarrinho()" class="btn-salvar-produto" style="margin:20px 16px 0; width:calc(100% - 32px);">
+                        <span class="material-symbols-outlined">check_circle</span>
+                        Confirmar Pedido
+                    </button>
+                </div>
+            </section>
+
         </div>
     </div>
 
     <script src="script.js"></script>
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import {
-            getFirestore,
-            collection,
-            addDoc,
-            getDocs,
-            getDoc,
-            doc,
-            setDoc,
-            updateDoc,
-            onSnapshot,
-            query,
-            where,
-            orderBy,
-            serverTimestamp
-        } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    getDocs,
+    getDoc,
+    doc,
+    setDoc,
+    updateDoc,
+    deleteDoc,
+    onSnapshot,
+    query,
+    where,
+    orderBy,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyB6OlOdx2p71kv57KF5XlRYoATZa8bWYvw",
-            authDomain: "aplicativo-prontoja-80c02.firebaseapp.com",
-            projectId: "aplicativo-prontoja-80c02",
-            storageBucket: "aplicativo-prontoja-80c02.firebasestorage.app",
-            messagingSenderId: "625556388980",
-            appId: "1:625556388980:web:32b3bcf47cb3aa9ccda521",
-            measurementId: "G-4YMXEHLGDR"
-        };
+const firebaseConfig = {
+    apiKey: "AIzaSyB6OlOdx2p71kv57KF5XlRYoATZa8bWYvw",
+    authDomain: "aplicativo-prontoja-80c02.firebaseapp.com",
+    projectId: "aplicativo-prontoja-80c02",
+    storageBucket: "aplicativo-prontoja-80c02.firebasestorage.app",
+    messagingSenderId: "625556388980",
+    appId: "1:625556388980:web:32b3bcf47cb3aa9ccda521",
+    measurementId: "G-4YMXEHLGDR"
+};
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const provider = new GoogleAuthProvider();
-        let tipoUsuario = null;
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+let tipoUsuario = null;
 
-        // ==========================================
-        // AUTH
-        // ==========================================
+// ==========================================
+// HELPERS
+// ==========================================
 
-        window.irParaLogin = function(tipo) {
-            tipoUsuario = tipo;
-            mudarTela('tela-login');
-        };
+function formatarPreco(preco) {
+    const num = parseFloat(String(preco ?? '0').replace(',', '.'));
+    const seguro = isNaN(num) ? 0 : num;
+    return `R$ ${seguro.toFixed(2).replace('.', ',')}`;
+}
 
-        window.loginComGoogle = async function() {
-            if (!tipoUsuario) {
-                alert("Erro: Tipo de usuário não definido.");
-                mudarTela('tela-2');
-                return;
-            }
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                const nome = user.displayName || "Usuário";
-                const email = user.email || "";
+function precoParaNumero(preco) {
+    const num = parseFloat(String(preco ?? '0').replace(',', '.'));
+    return isNaN(num) ? 0 : num;
+}
 
-                localStorage.setItem('tipoUsuario', tipoUsuario);
-                localStorage.setItem('nomeUsuario', nome);
-                localStorage.setItem('emailUsuario', email);
+function mensagemErro(err) {
+    if (err && err.code === 'permission-denied') {
+        return 'Sem permissão para ler esses dados. Verifique as regras de segurança do Firestore.';
+    }
+    return 'Erro ao carregar: ' + (err && err.message ? err.message : 'tente novamente.');
+}
 
-                const nomePerfil = document.getElementById('nomePerfil');
-                const emailPerfil = document.getElementById('emailPerfil');
-                if (nomePerfil) nomePerfil.textContent = nome;
-                if (emailPerfil) emailPerfil.textContent = email;
+function toast(msg, isError) {
+    if (typeof window.showToast === 'function') window.showToast(msg, isError);
+    else if (isError) alert(msg);
+}
 
-                if (tipoUsuario === 'empresa') {
-                    const empresaRef = doc(db, "empresas", user.uid);
-                    const empresaSnap = await getDoc(empresaRef);
-                    if (!empresaSnap.exists()) {
-                        await setDoc(empresaRef, {
-                            uid: user.uid,
-                            nome: nome,
-                            email: email,
-                            categoria: 'Restaurante',
-                            criadoEm: serverTimestamp()
-                        });
-                    }
-                    mudarTela('tela-10');
-                } else {
-                    mudarTela('tela-5');
-                    // Carrega localidade salva logo após login
-                    setTimeout(async () => {
-                        try {
-                            const snap = await getDoc(doc(db, "clientes", user.uid));
-                            if (snap.exists() && snap.data().localidade) {
-                                atualizarLocalidadeHome(snap.data().localidade);
-                            }
-                        } catch(e) {}
-                    }, 600);
-                }
-            } catch (error) {
-                console.error("Erro no login:", error);
-                alert("Erro ao fazer login: " + error.message);
-            }
-        };
+// ==========================================
+// AUTH
+// ==========================================
 
-        window.sairDaConta = function() {
-            if (unsubscribePedidosCliente) { unsubscribePedidosCliente(); unsubscribePedidosCliente = null; }
-            if (unsubscribePedidosEmpresa) { unsubscribePedidosEmpresa(); unsubscribePedidosEmpresa = null; }
-            if (unsubscribePreparoEmpresa) { unsubscribePreparoEmpresa(); unsubscribePreparoEmpresa = null; }
-            if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
-            if (unsubscribeConversasEmpresa) { unsubscribeConversasEmpresa(); unsubscribeConversasEmpresa = null; }
-            if (unsubscribeProdutosEmpresa) { unsubscribeProdutosEmpresa(); unsubscribeProdutosEmpresa = null; }
-            if (unsubscribeProdutosCliente) { unsubscribeProdutosCliente(); unsubscribeProdutosCliente = null; }
-            if (unsubscribeEmpresas) { unsubscribeEmpresas(); unsubscribeEmpresas = null; }
-            if (unsubscribeNotificacoes) { unsubscribeNotificacoes(); unsubscribeNotificacoes = null; }
+window.irParaLogin = function(tipo) {
+    tipoUsuario = tipo;
+    mudarTela('tela-login');
+};
 
-            auth.signOut().then(() => {
-                tipoUsuario = null;
-                fotoPerfilBase64 = null;
-                localStorage.removeItem('tipoUsuario');
-                localStorage.removeItem('nomeUsuario');
-                localStorage.removeItem('emailUsuario');
-                mudarTela('tela-2');
-            }).catch((error) => console.error("Erro ao sair:", error));
-        };
+window.loginComGoogle = async function() {
+    if (!tipoUsuario) {
+        alert("Erro: Tipo de usuário não definido.");
+        mudarTela('tela-2');
+        return;
+    }
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        const nome = user.displayName || "Usuário";
+        const email = user.email || "";
 
-        // ==========================================
-        // PERFIL DO CLIENTE
-        // ==========================================
+        localStorage.setItem('tipoUsuario', tipoUsuario);
+        localStorage.setItem('nomeUsuario', nome);
+        localStorage.setItem('emailUsuario', email);
 
-        let fotoPerfilBase64 = null;
+        const nomePerfil = document.getElementById('nomePerfil');
+        const emailPerfil = document.getElementById('emailPerfil');
+        if (nomePerfil) nomePerfil.textContent = nome;
+        if (emailPerfil) emailPerfil.textContent = email;
 
-        // Atualiza o texto de localidade na tela inicial
-        function atualizarLocalidadeHome(localidade) {
-            const enderecoEl = document.getElementById('home-local-endereco');
-            if (enderecoEl) {
-                enderecoEl.textContent = localidade && localidade.trim() !== '' ? localidade : 'Minha Localidade';
-            }
-        }
-
-        // Carrega dados salvos do Firestore e preenche a tela de perfil
-        window.carregarPerfilCliente = async function() {
-            const user = auth.currentUser;
-            if (!user) return;
-
-            const nomePerfil = document.getElementById('nomePerfil');
-            const emailPerfil = document.getElementById('emailPerfil');
-            if (nomePerfil) nomePerfil.textContent = user.displayName || 'Usuário';
-            if (emailPerfil) emailPerfil.textContent = user.email || '';
-
-            // Foto padrão do Google enquanto carrega
-            const fotoEl = document.getElementById('perfilFotoEl');
-            if (fotoEl && user.photoURL) {
-                fotoEl.style.backgroundImage = `url('${user.photoURL}')`;
-            }
-
-            try {
-                const snap = await getDoc(doc(db, "clientes", user.uid));
-                if (snap.exists()) {
-                    const dados = snap.data();
-
-                    // Foto personalizada (sobrescreve a do Google)
-                    if (fotoEl && dados.foto) {
-                        fotoEl.style.backgroundImage = `url('${dados.foto}')`;
-                        fotoPerfilBase64 = dados.foto;
-                    }
-
-                    const tel = document.getElementById('perfilTelefone');
-                    if (tel && dados.telefone) tel.value = dados.telefone;
-
-                    const loc = document.getElementById('perfilLocalidade');
-                    if (loc && dados.localidade) loc.value = dados.localidade;
-
-                    // Garante que a home já reflete a localidade salva
-                    atualizarLocalidadeHome(dados.localidade || '');
-                }
-            } catch(e) {
-                console.error("Erro ao carregar perfil:", e);
-            }
-
-            // Listener do input de foto (evita duplicar)
-            const inputFoto = document.getElementById('inputFotoPerfil');
-            if (inputFoto && !inputFoto._listenerAdded) {
-                inputFoto.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = function(ev) {
-                        fotoPerfilBase64 = ev.target.result;
-                        const fotoEl = document.getElementById('perfilFotoEl');
-                        if (fotoEl) fotoEl.style.backgroundImage = `url('${fotoPerfilBase64}')`;
-                    };
-                    reader.readAsDataURL(file);
+        if (tipoUsuario === 'empresa') {
+            const empresaRef = doc(db, "empresas", user.uid);
+            const empresaSnap = await getDoc(empresaRef);
+            if (!empresaSnap.exists()) {
+                await setDoc(empresaRef, {
+                    uid: user.uid,
+                    nome: nome,
+                    email: email,
+                    categoria: 'Restaurante',
+                    cnpj: '',
+                    endereco: '',
+                    aberto: true,
+                    criadoEm: serverTimestamp()
                 });
-                inputFoto._listenerAdded = true;
             }
-        };
+            mudarTela('tela-10');
+        } else {
+            mudarTela('tela-5');
+            setTimeout(async () => {
+                try {
+                    const snap = await getDoc(doc(db, "clientes", user.uid));
+                    if (snap.exists() && snap.data().localidade) {
+                        atualizarLocalidadeHome(snap.data().localidade);
+                    }
+                } catch(e) {}
+            }, 600);
+        }
+    } catch (error) {
+        console.error("Erro no login:", error);
+        alert("Erro ao fazer login: " + error.message);
+    }
+};
 
-        // Salva as alterações no Firestore
-        window.salvarPerfil = async function() {
-            const user = auth.currentUser;
-            if (!user) { alert('Você precisa estar logado.'); return; }
+// ==========================================
+// CADASTRO / LOGIN POR E-MAIL E SENHA
+// ==========================================
 
-            const telefone = document.getElementById('perfilTelefone')?.value.trim() || '';
-            const localidade = document.getElementById('perfilLocalidade')?.value.trim() || '';
+function mostrarErroForm(elId, mensagem) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    el.textContent = mensagem;
+    el.style.display = mensagem ? 'block' : 'none';
+}
 
-            const dados = {
-                uid: user.uid,
-                nome: user.displayName || '',
-                email: user.email || '',
-                telefone,
-                localidade,
-                atualizadoEm: serverTimestamp()
+function traduzirErroAuth(err) {
+    const codigo = err && err.code ? err.code : '';
+    switch (codigo) {
+        case 'auth/email-already-in-use':
+            return 'Este e-mail já está cadastrado. Tente entrar em vez de cadastrar.';
+        case 'auth/invalid-email':
+            return 'E-mail inválido.';
+        case 'auth/weak-password':
+            return 'Senha muito fraca. Use pelo menos 8 caracteres.';
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-credential':
+            return 'E-mail ou senha incorretos.';
+        case 'auth/too-many-requests':
+            return 'Muitas tentativas. Aguarde um pouco e tente novamente.';
+        default:
+            return 'Erro: ' + (err && err.message ? err.message : 'tente novamente.');
+    }
+}
+
+// Leva da tela de login para o cadastro certo (cliente ou empresa),
+// respeitando o tipo escolhido na tela de seleção de acesso.
+window.irParaCadastro = function() {
+    irParaCadastroTipo(tipoUsuario === 'empresa' ? 'empresa' : 'cliente');
+};
+
+// Alterna entre "Sou Cliente" / "Sou Empresa" dentro do próprio cadastro
+window.irParaCadastroTipo = function(tipo) {
+    tipoUsuario = tipo;
+    const destino = tipo === 'empresa' ? 'tela-4' : 'tela-3';
+    mudarTela(destino);
+
+    document.querySelectorAll('#tela-3 .aba, #tela-4 .aba').forEach(btn => btn.classList.remove('ativa'));
+    const abaCliente = document.getElementById('aba-cliente');
+    const abaEmpresaLink = document.getElementById('aba-empresa-link');
+    const abaEmpresa = document.getElementById('aba-empresa');
+    if (tipo === 'cliente' && abaCliente) abaCliente.classList.add('ativa');
+    if (tipo === 'empresa' && abaEmpresaLink) abaEmpresaLink.classList.add('ativa');
+    if (tipo === 'empresa' && abaEmpresa) abaEmpresa.classList.add('ativa');
+};
+
+window.cadastrarCliente = async function() {
+    mostrarErroForm('cadClienteErro', '');
+    const nome = document.getElementById('cadNome')?.value.trim() || '';
+    const email = document.getElementById('cadEmail')?.value.trim() || '';
+    const telefone = document.getElementById('cadTelefone')?.value.trim() || '';
+    const localidade = document.getElementById('cadLocalidade')?.value.trim() || '';
+    const senha = document.getElementById('cadSenha')?.value || '';
+
+    if (!nome || !email || !senha) {
+        mostrarErroForm('cadClienteErro', 'Preencha nome, e-mail e senha.');
+        return;
+    }
+    if (senha.length < 8) {
+        mostrarErroForm('cadClienteErro', 'A senha precisa ter no mínimo 8 caracteres.');
+        return;
+    }
+
+    const btn = document.getElementById('btnCadastrarCliente');
+    if (btn) { btn.disabled = true; btn.textContent = 'Criando conta...'; }
+
+    try {
+        const cred = await createUserWithEmailAndPassword(auth, email, senha);
+        await updateProfile(cred.user, { displayName: nome });
+
+        await setDoc(doc(db, "clientes", cred.user.uid), {
+            uid: cred.user.uid,
+            nome,
+            email,
+            telefone,
+            localidade,
+            criadoEm: serverTimestamp()
+        }, { merge: true });
+
+        localStorage.setItem('tipoUsuario', 'cliente');
+        localStorage.setItem('nomeUsuario', nome);
+        localStorage.setItem('emailUsuario', email);
+        tipoUsuario = 'cliente';
+
+        toast('✅ Conta criada com sucesso!');
+        mudarTela('tela-5');
+        atualizarLocalidadeHome(localidade);
+    } catch (err) {
+        console.error(err);
+        mostrarErroForm('cadClienteErro', traduzirErroAuth(err));
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Cadastrar'; }
+    }
+};
+
+window.cadastrarEmpresa = async function() {
+    mostrarErroForm('cadEmpresaErro', '');
+    const nome = document.getElementById('empNome')?.value.trim() || '';
+    const email = document.getElementById('empEmail')?.value.trim() || '';
+    const cnpj = document.getElementById('empCnpj')?.value.trim() || '';
+    const categoria = document.getElementById('empCategoria')?.value || '';
+    const endereco = document.getElementById('empEndereco')?.value.trim() || '';
+    const senha = document.getElementById('empSenha')?.value || '';
+
+    if (!nome || !email || !categoria || !senha) {
+        mostrarErroForm('cadEmpresaErro', 'Preencha nome da loja, e-mail, categoria e senha.');
+        return;
+    }
+    if (senha.length < 8) {
+        mostrarErroForm('cadEmpresaErro', 'A senha precisa ter no mínimo 8 caracteres.');
+        return;
+    }
+
+    const btn = document.getElementById('btnCadastrarEmpresa');
+    if (btn) { btn.disabled = true; }
+
+    try {
+        const cred = await createUserWithEmailAndPassword(auth, email, senha);
+        await updateProfile(cred.user, { displayName: nome });
+
+        await setDoc(doc(db, "empresas", cred.user.uid), {
+            uid: cred.user.uid,
+            nome,
+            email,
+            cnpj,
+            categoria,
+            endereco,
+            aberto: true,
+            criadoEm: serverTimestamp()
+        }, { merge: true });
+
+        localStorage.setItem('tipoUsuario', 'empresa');
+        localStorage.setItem('nomeUsuario', nome);
+        localStorage.setItem('emailUsuario', email);
+        tipoUsuario = 'empresa';
+
+        toast('✅ Loja cadastrada com sucesso!');
+        mudarTela('tela-10');
+    } catch (err) {
+        console.error(err);
+        mostrarErroForm('cadEmpresaErro', traduzirErroAuth(err));
+    } finally {
+        if (btn) { btn.disabled = false; }
+    }
+};
+
+window.loginComEmailSenha = async function() {
+    mostrarErroForm('loginErro', '');
+    const email = document.getElementById('loginEmail')?.value.trim() || '';
+    const senha = document.getElementById('loginSenha')?.value || '';
+
+    if (!tipoUsuario) {
+        mostrarErroForm('loginErro', 'Volte e escolha "Entrar como Cliente" ou "Entrar como Empresa".');
+        return;
+    }
+    if (!email || !senha) {
+        mostrarErroForm('loginErro', 'Informe e-mail e senha.');
+        return;
+    }
+
+    try {
+        const cred = await signInWithEmailAndPassword(auth, email, senha);
+        const user = cred.user;
+
+        localStorage.setItem('tipoUsuario', tipoUsuario);
+        localStorage.setItem('nomeUsuario', user.displayName || '');
+        localStorage.setItem('emailUsuario', user.email || '');
+
+        const nomePerfil = document.getElementById('nomePerfil');
+        const emailPerfil = document.getElementById('emailPerfil');
+        if (nomePerfil) nomePerfil.textContent = user.displayName || 'Usuário';
+        if (emailPerfil) emailPerfil.textContent = user.email || '';
+
+        if (tipoUsuario === 'empresa') {
+            mudarTela('tela-10');
+        } else {
+            mudarTela('tela-5');
+            setTimeout(async () => {
+                try {
+                    const snap = await getDoc(doc(db, "clientes", user.uid));
+                    if (snap.exists() && snap.data().localidade) {
+                        atualizarLocalidadeHome(snap.data().localidade);
+                    }
+                } catch(e) {}
+            }, 600);
+        }
+    } catch (err) {
+        console.error(err);
+        mostrarErroForm('loginErro', traduzirErroAuth(err));
+    }
+};
+
+window.sairDaConta = function() {
+    [unsubscribePedidosCliente, unsubscribePedidosEmpresa, unsubscribePreparoEmpresa,
+     unsubscribeConcluidosEmpresa, unsubscribeRecusadosEmpresa, unsubscribeChat,
+     unsubscribeConversasEmpresa, unsubscribeProdutosEmpresa, unsubscribeProdutosCliente,
+     unsubscribeEmpresas, unsubscribeNotificacoes, unsubscribeStatusLoja].forEach(fn => {
+        if (typeof fn === 'function') fn();
+    });
+    unsubscribePedidosCliente = unsubscribePedidosEmpresa = unsubscribePreparoEmpresa =
+        unsubscribeConcluidosEmpresa = unsubscribeRecusadosEmpresa = unsubscribeChat =
+        unsubscribeConversasEmpresa = unsubscribeProdutosEmpresa = unsubscribeProdutosCliente =
+        unsubscribeEmpresas = unsubscribeNotificacoes = unsubscribeStatusLoja = null;
+
+    auth.signOut().then(() => {
+        tipoUsuario = null;
+        fotoPerfilBase64 = null;
+        limparCarrinho();
+        localStorage.removeItem('tipoUsuario');
+        localStorage.removeItem('nomeUsuario');
+        localStorage.removeItem('emailUsuario');
+        mudarTela('tela-2');
+    }).catch((error) => console.error("Erro ao sair:", error));
+};
+
+// ==========================================
+// PERFIL DO CLIENTE
+// ==========================================
+
+let fotoPerfilBase64 = null;
+
+function atualizarLocalidadeHome(localidade) {
+    const enderecoEl = document.getElementById('home-local-endereco');
+    if (enderecoEl) {
+        enderecoEl.textContent = localidade && localidade.trim() !== '' ? localidade : 'Minha Localidade';
+    }
+}
+
+window.carregarPerfilCliente = async function() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const nomePerfil = document.getElementById('nomePerfil');
+    const emailPerfil = document.getElementById('emailPerfil');
+    if (nomePerfil) nomePerfil.textContent = user.displayName || 'Usuário';
+    if (emailPerfil) emailPerfil.textContent = user.email || '';
+
+    const fotoEl = document.getElementById('perfilFotoEl');
+    if (fotoEl && user.photoURL) {
+        fotoEl.style.backgroundImage = `url('${user.photoURL}')`;
+    }
+
+    try {
+        const snap = await getDoc(doc(db, "clientes", user.uid));
+        if (snap.exists()) {
+            const dados = snap.data();
+            if (fotoEl && dados.foto) {
+                fotoEl.style.backgroundImage = `url('${dados.foto}')`;
+                fotoPerfilBase64 = dados.foto;
+            }
+            const tel = document.getElementById('perfilTelefone');
+            if (tel && dados.telefone) tel.value = dados.telefone;
+            const loc = document.getElementById('perfilLocalidade');
+            if (loc && dados.localidade) loc.value = dados.localidade;
+            atualizarLocalidadeHome(dados.localidade || '');
+        }
+    } catch(e) {
+        console.error("Erro ao carregar perfil:", e);
+    }
+
+    const inputFoto = document.getElementById('inputFotoPerfil');
+    if (inputFoto && !inputFoto._listenerAdded) {
+        inputFoto.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                fotoPerfilBase64 = ev.target.result;
+                const fotoEl = document.getElementById('perfilFotoEl');
+                if (fotoEl) fotoEl.style.backgroundImage = `url('${fotoPerfilBase64}')`;
             };
+            reader.readAsDataURL(file);
+        });
+        inputFoto._listenerAdded = true;
+    }
+};
 
-            // Salva foto em base64 somente se o usuário escolheu uma da galeria
-            // Obs: para produção com fotos grandes, use Firebase Storage no lugar de base64
-            if (fotoPerfilBase64 && fotoPerfilBase64.startsWith('data:')) {
-                dados.foto = fotoPerfilBase64;
+window.salvarPerfil = async function() {
+    const user = auth.currentUser;
+    if (!user) { toast('Você precisa estar logado.', true); return; }
+
+    const telefone = document.getElementById('perfilTelefone')?.value.trim() || '';
+    const localidade = document.getElementById('perfilLocalidade')?.value.trim() || '';
+
+    const dados = {
+        uid: user.uid,
+        nome: user.displayName || '',
+        email: user.email || '',
+        telefone,
+        localidade,
+        atualizadoEm: serverTimestamp()
+    };
+
+    if (fotoPerfilBase64 && fotoPerfilBase64.startsWith('data:')) {
+        dados.foto = fotoPerfilBase64;
+    }
+
+    try {
+        await setDoc(doc(db, "clientes", user.uid), dados, { merge: true });
+        atualizarLocalidadeHome(localidade);
+        toast('✅ Perfil salvo com sucesso!');
+    } catch(e) {
+        console.error(e);
+        toast('Erro ao salvar perfil: ' + e.message, true);
+    }
+};
+
+// ==========================================
+// STATUS DA LOJA (Aberto/Fechado) — em tempo real
+// ==========================================
+
+let unsubscribeStatusLoja = null;
+let lojaAbertaAtual = true;
+
+window.observarStatusLoja = function() {
+    const user = auth.currentUser;
+    if (!user) return;
+    if (unsubscribeStatusLoja) unsubscribeStatusLoja();
+
+    unsubscribeStatusLoja = onSnapshot(doc(db, "empresas", user.uid), (snap) => {
+        if (snap.exists()) {
+            lojaAbertaAtual = snap.data().aberto !== false;
+            if (typeof window.aplicarEstadoLoja === 'function') window.aplicarEstadoLoja(lojaAbertaAtual);
+        }
+    }, (err) => console.error('Erro ao observar status da loja:', err));
+};
+
+window.toggleStatusLoja = async function() {
+    const user = auth.currentUser;
+    if (!user) return;
+    const novoEstado = !lojaAbertaAtual;
+    try {
+        await updateDoc(doc(db, "empresas", user.uid), { aberto: novoEstado });
+        // A UI é atualizada pelo listener onSnapshot acima assim que a
+        // escrita é confirmada — mantém tudo consistente entre abas/dispositivos.
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao atualizar status da loja: ' + err.message, true);
+    }
+};
+
+// ==========================================
+// AJUSTES / DADOS DA LOJA
+// ==========================================
+
+window.carregarAjustesEmpresa = async function() {
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+        const snap = await getDoc(doc(db, "empresas", user.uid));
+        if (snap.exists()) {
+            const e = snap.data();
+            const nomeEl = document.getElementById('ajustes-nome-loja');
+            const cnpjEl = document.getElementById('ajustes-cnpj-loja');
+            if (nomeEl) nomeEl.textContent = e.nome || 'Minha Loja';
+            if (cnpjEl) cnpjEl.textContent = 'CNPJ: ' + (e.cnpj && e.cnpj.trim() !== '' ? e.cnpj : 'não informado');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+window.abrirDadosDaLoja = async function() {
+    const form = document.getElementById('form-dados-loja');
+    if (!form) return;
+    const abrindo = form.style.display === 'none';
+    form.style.display = abrindo ? 'block' : 'none';
+    if (!abrindo) return;
+
+    const user = auth.currentUser;
+    if (!user) return;
+    try {
+        const snap = await getDoc(doc(db, "empresas", user.uid));
+        if (snap.exists()) {
+            const e = snap.data();
+            const nomeI = document.getElementById('lojaNome');
+            const cnpjI = document.getElementById('lojaCnpj');
+            const catI = document.getElementById('lojaCategoria');
+            const endI = document.getElementById('lojaEndereco');
+            if (nomeI) nomeI.value = e.nome || '';
+            if (cnpjI) cnpjI.value = e.cnpj || '';
+            if (catI && e.categoria) catI.value = e.categoria;
+            if (endI) endI.value = e.endereco || '';
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+window.salvarDadosDaLoja = async function() {
+    const user = auth.currentUser;
+    if (!user) { toast('Você precisa estar logado.', true); return; }
+
+    const nome = document.getElementById('lojaNome')?.value.trim() || '';
+    const cnpj = document.getElementById('lojaCnpj')?.value.trim() || '';
+    const categoria = document.getElementById('lojaCategoria')?.value || 'Restaurante';
+    const endereco = document.getElementById('lojaEndereco')?.value.trim() || '';
+
+    if (!nome) { toast('Informe o nome da loja.', true); return; }
+
+    try {
+        await updateDoc(doc(db, "empresas", user.uid), { nome, cnpj, categoria, endereco });
+        toast('✅ Dados da loja salvos!');
+        window.carregarAjustesEmpresa();
+        const form = document.getElementById('form-dados-loja');
+        if (form) form.style.display = 'none';
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao salvar dados da loja: ' + err.message, true);
+    }
+};
+
+// ==========================================
+// CADASTRO / EDIÇÃO / EXCLUSÃO DE PRODUTO
+// ==========================================
+
+window.abrirCadastroProduto = function() {
+    window._modoEdicaoProduto = null;
+    mudarTela('tela-14');
+    setTimeout(() => {
+        const titulo = document.querySelector('#tela-14 h1');
+        const btn = document.getElementById('btnSalvarProduto');
+        if (titulo) titulo.textContent = 'Cadastrar Produto';
+        if (btn) btn.innerHTML = '<span class="material-symbols-outlined">save</span> Salvar Produto';
+        inicializarCadastroProduto();
+    }, 100);
+};
+
+window.editarProduto = async function(produtoId) {
+    try {
+        const snap = await getDoc(doc(db, "produtos", produtoId));
+        if (!snap.exists()) { toast('Produto não encontrado.', true); return; }
+        const p = snap.data();
+
+        window._modoEdicaoProduto = produtoId;
+        mudarTela('tela-14');
+        setTimeout(() => {
+            inicializarCadastroProduto();
+            document.getElementById('productName').value = p.nome || '';
+            document.getElementById('productCategory').value = p.categoria || '';
+            document.getElementById('productPrice').value = String(p.preco ?? '').replace('.', ',');
+            document.getElementById('productDescription').value = p.descricao || '';
+            if (p.foto && typeof window._setImagemProdutoAtual === 'function') {
+                window._setImagemProdutoAtual(p.foto);
             }
+            const titulo = document.querySelector('#tela-14 h1');
+            const btn = document.getElementById('btnSalvarProduto');
+            if (titulo) titulo.textContent = 'Editar Produto';
+            if (btn) btn.innerHTML = '<span class="material-symbols-outlined">save</span> Salvar Alterações';
+        }, 100);
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao carregar produto: ' + err.message, true);
+    }
+};
 
-            try {
-                await setDoc(doc(db, "clientes", user.uid), dados, { merge: true });
-                atualizarLocalidadeHome(localidade);
-                alert('✅ Perfil salvo com sucesso!');
-            } catch(e) {
-                console.error(e);
-                alert('Erro ao salvar perfil: ' + e.message);
-            }
-        };
+window.excluirProduto = async function(produtoId, nomeProduto) {
+    if (!confirm(`Remover "${nomeProduto}" do cardápio?`)) return;
+    try {
+        await deleteDoc(doc(db, "produtos", produtoId));
+        toast('Produto removido.');
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao remover produto: ' + err.message, true);
+    }
+};
 
-        // ==========================================
-        // CADASTRO DE PRODUTO
-        // ==========================================
+window.alternarDisponibilidade = async function(produtoId, disponivel) {
+    try {
+        await updateDoc(doc(db, "produtos", produtoId), { disponivel });
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao atualizar disponibilidade: ' + err.message, true);
+    }
+};
 
-        window.abrirCadastroProduto = function() {
-            mudarTela('tela-14');
-            setTimeout(inicializarCadastroProduto, 100);
-        };
+window.fecharCadastroProduto = function() {
+    window._modoEdicaoProduto = null;
+    mudarTela('tela-11');
+};
 
-        window.fecharCadastroProduto = function() {
-            mudarTela('tela-11');
-        };
+window.salvarProduto = async function() {
+    const nome = document.getElementById("productName").value.trim();
+    const categoria = document.getElementById("productCategory").value;
+    const precoTexto = document.getElementById("productPrice").value.trim();
+    const descricao = document.getElementById("productDescription").value.trim();
 
-        window.salvarProduto = async function() {
-            const nome = document.getElementById("productName").value.trim();
-            const categoria = document.getElementById("productCategory").value;
-            const preco = document.getElementById("productPrice").value.trim();
-            const descricao = document.getElementById("productDescription").value.trim();
+    if (!nome || !categoria || !precoTexto) {
+        toast("Preencha todos os campos obrigatórios.", true);
+        return;
+    }
 
-            if (!nome || !categoria || !preco) {
-                alert("Preencha todos os campos obrigatórios.");
-                return;
-            }
+    const preco = precoParaNumero(precoTexto);
+    if (preco <= 0) {
+        toast("Informe um preço válido.", true);
+        return;
+    }
 
-            const user = auth.currentUser;
-            if (!user) {
-                alert("Você precisa estar logado para cadastrar um produto.");
-                return;
-            }
+    const user = auth.currentUser;
+    if (!user) {
+        toast("Você precisa estar logado para cadastrar um produto.", true);
+        return;
+    }
 
-            let nomeEmpresa = user.displayName || "Empresa";
-            try {
-                const empresaSnap = await getDoc(doc(db, "empresas", user.uid));
-                if (empresaSnap.exists()) nomeEmpresa = empresaSnap.data().nome || nomeEmpresa;
-            } catch(e) {}
+    let nomeEmpresa = user.displayName || "Empresa";
+    try {
+        const empresaSnap = await getDoc(doc(db, "empresas", user.uid));
+        if (empresaSnap.exists()) nomeEmpresa = empresaSnap.data().nome || nomeEmpresa;
+    } catch(e) {}
 
-            try {
-                await addDoc(collection(db, "produtos"), {
-                    nome,
-                    categoria,
-                    preco,
-                    descricao,
-                    empresa: user.uid,
-                    nomeEmpresa,
-                    criadoEm: serverTimestamp()
-                });
+    const dadosProduto = {
+        nome,
+        categoria,
+        preco,
+        descricao,
+        foto: (typeof currentImageData !== 'undefined' ? currentImageData : null),
+        empresa: user.uid,
+        nomeEmpresa
+    };
 
-                alert("Produto cadastrado com sucesso!");
-
-                document.getElementById("productName").value = "";
-                document.getElementById("productPrice").value = "";
-                document.getElementById("productDescription").value = "";
-                document.getElementById("productCategory").selectedIndex = 0;
-
-                const uploadArea = document.getElementById('uploadArea');
-                const previewContainer = document.getElementById('photoPreviewContainer');
-                const fileInput = document.getElementById('productPhotoInput');
-                const previewImg = document.getElementById('previewImg');
-                if (fileInput) fileInput.value = '';
-                if (previewImg) previewImg.src = '#';
-                if (previewContainer) previewContainer.style.display = 'none';
-                if (uploadArea) uploadArea.style.display = 'flex';
-
-                carregarProdutos();
-                mudarTela("tela-11");
-
-            } catch (erro) {
-                console.error(erro);
-                alert("Erro ao salvar produto: " + erro.message);
-            }
-        };
-
-        // ==========================================
-        // HELPERS
-        // ==========================================
-
-        // Nunca deixa um produto com preço inválido derrubar a lista inteira
-        function formatarPreco(preco) {
-            const num = parseFloat(String(preco ?? '0').replace(',', '.'));
-            const seguro = isNaN(num) ? 0 : num;
-            return `R$ ${seguro.toFixed(2).replace('.', ',')}`;
+    try {
+        if (window._modoEdicaoProduto) {
+            await updateDoc(doc(db, "produtos", window._modoEdicaoProduto), dadosProduto);
+            toast("Produto atualizado com sucesso!");
+        } else {
+            dadosProduto.disponivel = true;
+            dadosProduto.criadoEm = serverTimestamp();
+            await addDoc(collection(db, "produtos"), dadosProduto);
+            toast("Produto cadastrado com sucesso!");
         }
 
-        function mensagemErro(err) {
-            if (err && err.code === 'permission-denied') {
-                return 'Sem permissão para ler esses dados. Verifique as regras de segurança do Firestore.';
-            }
-            return 'Erro ao carregar: ' + (err && err.message ? err.message : 'tente novamente.');
+        window._modoEdicaoProduto = null;
+        document.getElementById("productName").value = "";
+        document.getElementById("productPrice").value = "";
+        document.getElementById("productDescription").value = "";
+        document.getElementById("productCategory").selectedIndex = 0;
+        if (typeof window._resetFotoProduto === 'function') window._resetFotoProduto();
+
+        mudarTela("tela-11");
+    } catch (erro) {
+        console.error(erro);
+        toast("Erro ao salvar produto: " + erro.message, true);
+    }
+};
+
+// ==========================================
+// CARDÁPIO DA EMPRESA (tela-11) — tempo real
+// ==========================================
+
+let unsubscribeProdutosEmpresa = null;
+
+window.carregarProdutos = function() {
+    const lista = document.getElementById("cardapio-content");
+    if (!lista) return;
+    const user = auth.currentUser;
+    if (!user) {
+        lista.innerHTML = '<p style="text-align:center; padding:20px;">Faça login para ver seus produtos</p>';
+        return;
+    }
+
+    if (unsubscribeProdutosEmpresa) unsubscribeProdutosEmpresa();
+
+    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando...</p>';
+
+    const q = query(collection(db, "produtos"), where("empresa", "==", user.uid));
+    unsubscribeProdutosEmpresa = onSnapshot(q, (produtos) => {
+        if (produtos.empty) {
+            lista.innerHTML = '<p style="text-align:center; padding:20px;">Nenhum produto cadastrado. Clique no + para adicionar.</p>';
+            return;
         }
-
-        // ==========================================
-        // CARDÁPIO DA EMPRESA (tela-11) — tempo real
-        // ==========================================
-
-        let unsubscribeProdutosEmpresa = null;
-
-        window.carregarProdutos = function() {
-            const lista = document.getElementById("cardapio-content");
-            if (!lista) return;
-            const user = auth.currentUser;
-            if (!user) {
-                lista.innerHTML = '<p style="text-align:center; padding:20px;">Faça login para ver seus produtos</p>';
-                return;
-            }
-
-            if (unsubscribeProdutosEmpresa) unsubscribeProdutosEmpresa();
-
-            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando...</p>';
-
-            const q = query(collection(db, "produtos"), where("empresa", "==", user.uid));
-            unsubscribeProdutosEmpresa = onSnapshot(q, (produtos) => {
-                if (produtos.empty) {
-                    lista.innerHTML = '<p style="text-align:center; padding:20px;">Nenhum produto cadastrado. Clique no + para adicionar.</p>';
-                    return;
-                }
-                let categoriasMap = new Map();
-                produtos.forEach((doc) => {
-                    const produto = doc.data();
-                    const categoria = produto.categoria || 'Outros';
-                    if (!categoriasMap.has(categoria)) categoriasMap.set(categoria, []);
-                    categoriasMap.get(categoria).push(produto);
-                });
-                let html = '';
-                for (let [categoria, produtosList] of categoriasMap) {
-                    html += `<h3>${categoria}</h3>`;
-                    produtosList.forEach(produto => {
-                        html += `
-                            <div class="cardapio-item">
-                                <div>
-                                    <h4>${produto.nome || 'Sem nome'}</h4>
-                                    <p>${produto.descricao || ''}</p>
-                                    <span class="cardapio-price">${formatarPreco(produto.preco)}</span>
-                                </div>
-                                <label class="cardapio-switch">
-                                    <input type="checkbox" checked>
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                        `;
-                    });
-                }
-                lista.innerHTML = html;
-            }, (erro) => {
-                console.error(erro);
-                lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(erro)}</p>`;
-            });
-        };
-
-        // ==========================================
-        // LISTA DE EMPRESAS (tela-16) — tempo real
-        // ==========================================
-
-        let unsubscribeEmpresas = null;
-
-        window.abrirListaEmpresas = function() {
-            mudarTela('tela-16');
-            const lista = document.getElementById('listaEmpresas');
-            if (!lista) return;
-
-            if (unsubscribeEmpresas) unsubscribeEmpresas();
-
-            lista.innerHTML = '<p style="text-align:center; color:#888;">Carregando empresas...</p>';
-
-            unsubscribeEmpresas = onSnapshot(collection(db, "empresas"), (snap) => {
-                if (snap.empty) {
-                    lista.innerHTML = '<p style="text-align:center; color:#888;">Nenhuma empresa disponível no momento.</p>';
-                    return;
-                }
-                lista.innerHTML = '';
-                snap.forEach(docEmp => {
-                    const e = docEmp.data();
-                    const card = document.createElement('div');
-                    card.style.cssText = 'background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,0.08);cursor:pointer;display:flex;align-items:center;gap:14px;transition:transform 0.15s;';
-                    card.innerHTML = `
-                        <div style="width:52px;height:52px;background:rgba(229,6,21,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <span class="material-symbols-outlined" style="color:var(--primary);font-size:26px;">storefront</span>
-                        </div>
-                        <div>
-                            <h3 style="margin:0;font-size:15px;font-weight:600;">${e.nome || 'Loja'}</h3>
-                            <p style="margin:4px 0 0;font-size:12px;color:#888;">${e.categoria || 'Restaurante'}</p>
-                        </div>
-                        <span class="material-symbols-outlined" style="margin-left:auto;color:#ccc;">chevron_right</span>
-                    `;
-                    card.onclick = () => abrirCardapioEmpresa(docEmp.id, e.nome || 'Loja');
-                    lista.appendChild(card);
-                });
-            }, (err) => {
-                console.error(err);
-                lista.innerHTML = `<p style="text-align:center; color:#888;">${mensagemErro(err)}</p>`;
-            });
-        };
-
-        // ==========================================
-        // CARDÁPIO DE UMA EMPRESA (tela-15) — tempo real
-        // ==========================================
-
-        let empresaSelecionada = null;
-        let unsubscribeProdutosCliente = null;
-
-        window.abrirCardapioEmpresa = function(empresaId, empresaNome) {
-            empresaSelecionada = { id: empresaId, nome: empresaNome };
-            mudarTela('tela-15');
-
-            const titulo = document.getElementById('titulo-cardapio-empresa');
-            if (titulo) titulo.textContent = empresaNome;
-
-            const lista = document.getElementById('listaProdutosCliente');
-            if (!lista) return;
-
-            if (unsubscribeProdutosCliente) unsubscribeProdutosCliente();
-
-            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando cardápio...</p>';
-
-            const q = query(collection(db, "produtos"), where("empresa", "==", empresaId));
-            unsubscribeProdutosCliente = onSnapshot(q, (snap) => {
-                if (snap.empty) {
-                    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Esta empresa ainda não tem produtos cadastrados.</p>';
-                    return;
-                }
-                lista.innerHTML = '';
-                snap.forEach(docProd => {
-                    const p = docProd.data();
-                    const nomeSeguro = (p.nome || 'Produto').replace(/'/g, "\\'");
-                    const empresaNomeSeguro = (empresaNome || 'Loja').replace(/'/g, "\\'");
-                    const precoOriginal = String(p.preco ?? '0');
-                    const card = document.createElement('div');
-                    card.className = 'produto-cliente-card';
-                    card.innerHTML = `
-                        <h3>${p.nome || 'Produto'}</h3>
-                        <p>${p.descricao || ''}</p>
-                        <strong>${formatarPreco(p.preco)}</strong>
-                        <button class="btn-adicionar-carrinho" onclick="fazerPedido('${docProd.id}', '${nomeSeguro}', '${precoOriginal}', '${empresaId}', '${empresaNomeSeguro}')">
-                            <span class="material-symbols-outlined">shopping_cart</span>
-                            Pedir
-                        </button>
-                    `;
-                    lista.appendChild(card);
-                });
-            }, (err) => {
-                console.error(err);
-                lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
-            });
-        };
-
-        // ==========================================
-        // FAZER PEDIDO REAL
-        // ==========================================
-
-        window.fazerPedido = async function(produtoId, nomeProduto, preco, empresaId, empresaNome) {
-            const user = auth.currentUser;
-            if (!user) {
-                alert('Você precisa estar logado para fazer um pedido.');
-                return;
-            }
-            if (!confirm(`Confirmar pedido de "${nomeProduto}"?`)) return;
-
-            // Busca o endereço/telefone salvos no perfil do cliente para
-            // a empresa já ver "para onde entregar" direto no pedido.
-            let clienteLocalidade = '';
-            let clienteTelefone = '';
-            try {
-                const perfilSnap = await getDoc(doc(db, "clientes", user.uid));
-                if (perfilSnap.exists()) {
-                    clienteLocalidade = perfilSnap.data().localidade || '';
-                    clienteTelefone = perfilSnap.data().telefone || '';
-                }
-            } catch (e) { console.error('Erro ao buscar endereço do cliente:', e); }
-
-            try {
-                const pedidoRef = await addDoc(collection(db, "pedidos"), {
-                    clienteId: user.uid,
-                    clienteNome: user.displayName || "Cliente",
-                    clienteEmail: user.email || "",
-                    clienteLocalidade: clienteLocalidade,
-                    clienteTelefone: clienteTelefone,
-                    empresaId: empresaId,
-                    empresaNome: empresaNome,
-                    produtoId: produtoId,
-                    nomeProduto: nomeProduto,
-                    preco: preco,
-                    quantidade: 1,
-                    status: "Pendente",
-                    criadoEm: serverTimestamp()
-                });
-
-                // Notifica a empresa de que chegou um pedido novo
-                criarNotificacao(empresaId, {
-                    tipo: 'pedido_novo',
-                    titulo: 'Novo pedido recebido',
-                    corpo: `${user.displayName || 'Um cliente'} pediu "${nomeProduto}"`,
-                    pedidoId: pedidoRef.id
-                });
-
-                alert(`✅ Pedido de "${nomeProduto}" enviado!\nAguarde a confirmação da empresa.`);
-                mudarTela('tela-7');
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao fazer pedido: ' + err.message);
-            }
-        };
-
-        // ==========================================
-        // PEDIDOS DO CLIENTE EM TEMPO REAL (tela-7)
-        // ==========================================
-
-        let unsubscribePedidosCliente = null;
-
-        window.carregarPedidosCliente = function() {
-            const user = auth.currentUser;
-            const lista = document.getElementById('pedidos-cliente-lista');
-            if (!lista) return;
-
-            if (!user) {
-                lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Faça login para ver seus pedidos.</p>';
-                return;
-            }
-
-            if (unsubscribePedidosCliente) unsubscribePedidosCliente();
-
-            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando...</p>';
-
-            const q = query(
-                collection(db, "pedidos"),
-                where("clienteId", "==", user.uid)
-            );
-
-            unsubscribePedidosCliente = onSnapshot(q, (snap) => {
-                if (snap.empty) {
-                    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Você ainda não fez nenhum pedido.</p>';
-                    return;
-                }
-
-                const pedidos = [];
-                snap.forEach(d => pedidos.push({ id: d.id, ...d.data() }));
-                pedidos.sort((a, b) => {
-                    const ta = a.criadoEm?.seconds || 0;
-                    const tb = b.criadoEm?.seconds || 0;
-                    return tb - ta;
-                });
-
-                lista.innerHTML = '';
-                pedidos.forEach(p => {
-                    const corStatus = p.status === 'Aceito' ? '#10b981' : p.status === 'Recusado' ? '#ef4444' : '#f59e0b';
-                    const iconeStatus = p.status === 'Aceito' ? 'check_circle' : p.status === 'Recusado' ? 'cancel' : 'schedule';
-                    const precoFormatado = formatarPreco(p.preco);
-
-                    const div = document.createElement('div');
-                    div.className = 'pedido-card';
-                    div.style.cssText = 'margin-bottom:12px;';
-                    div.innerHTML = `
-                        <div class="pedido-info">
-                            <div class="pedido-titulo">
-                                <h3>${p.empresaNome || 'Empresa'}</h3>
-                                <span style="display:flex;align-items:center;gap:4px;background:${corStatus};color:#fff;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;">
-                                    <span class="material-symbols-outlined" style="font-size:13px;">${iconeStatus}</span>
-                                    ${p.status}
-                                </span>
-                            </div>
-                            <p class="pedido-descricao">1x ${p.nomeProduto}</p>
-                            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
-                                <p class="pedido-data" style="color:#e50615;font-weight:600;margin:0;">${precoFormatado}</p>
-                                <button style="display:flex;align-items:center;gap:4px;background:#f0f0f0;color:#333;border:none;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;"
-                                    onclick="abrirChatComEmpresa('${p.empresaId}', '${(p.empresaNome || 'Empresa').replace(/'/g,"\\'")}')">
-                                    <span class="material-symbols-outlined" style="font-size:15px;">chat</span>
-                                    Falar com a loja
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    lista.appendChild(div);
-                });
-            }, (err) => {
-                console.error(err);
-                lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar pedidos.</p>';
-            });
-        };
-
-        // ==========================================
-        // PEDIDOS DA EMPRESA EM TEMPO REAL (tela-10)
-        // ==========================================
-        // Mantém dois listeners simultâneos (Pendente e Aceito) para que os
-        // contadores dos dois cards fiquem sempre corretos, e guarda os
-        // resultados em cache para trocar a lista exibida instantaneamente
-        // quando o usuário clica em "Pedidos Pendentes" ou "Em Preparo".
-
-        let unsubscribePedidosEmpresa = null;
-        let unsubscribePreparoEmpresa = null;
-        let cachePedidosPendentes = [];
-        let cachePedidosPreparo = [];
-        let filtroPedidosEmpresa = 'Pendente';
-
-        window.mostrarPedidosPorStatus = function(status) {
-            filtroPedidosEmpresa = status;
-            const titulo = document.getElementById('loja-section-title');
-            if (titulo) titulo.textContent = status === 'Pendente' ? 'Pedidos Pendentes' : 'Pedidos em Preparo';
-
-            const cardPendentes = document.getElementById('card-pendentes');
-            const cardPreparo = document.getElementById('card-preparo');
-            if (cardPendentes) cardPendentes.style.outline = status === 'Pendente' ? '2px solid var(--primary, #e50615)' : 'none';
-            if (cardPreparo) cardPreparo.style.outline = status === 'Aceito' ? '2px solid var(--primary, #e50615)' : 'none';
-
-            renderizarPedidosEmpresa();
-        };
-
-        function renderizarPedidosEmpresa() {
-            const lista = document.getElementById('loja-pedidos-lista');
-            if (!lista) return;
-
-            const pedidos = filtroPedidosEmpresa === 'Pendente' ? cachePedidosPendentes : cachePedidosPreparo;
-
-            if (pedidos.length === 0) {
-                lista.innerHTML = filtroPedidosEmpresa === 'Pendente'
-                    ? '<p style="text-align:center; padding:20px; color:#888;">Nenhum pedido pendente no momento.</p>'
-                    : '<p style="text-align:center; padding:20px; color:#888;">Nenhum pedido em preparo no momento.</p>';
-                return;
-            }
-
-            lista.innerHTML = '';
-            pedidos.forEach(p => {
-                const precoFormatado = formatarPreco(p.preco);
-                const nomeSeguro = (p.clienteNome || 'Cliente').replace(/'/g, "\\'");
-                const div = document.createElement('div');
-                div.className = 'loja-pedido';
-
-                const botoesAcao = filtroPedidosEmpresa === 'Pendente' ? `
-                        <button style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;"
-                            onclick="aceitarPedido('${p.id}', '${p.clienteId}', '${nomeSeguro}')">
-                            ✓ Aceitar
-                        </button>
-                        <button style="flex:1;padding:10px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;"
-                            onclick="responderPedido('${p.id}', 'Recusado')">
-                            ✗ Recusar
-                        </button>
-                        <button style="padding:10px 12px;background:#f0f0f0;color:#333;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;"
-                            onclick="abrirChatComCliente('${p.clienteId}', '${nomeSeguro}')">
-                            <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
-                        </button>
-                ` : `
-                        <button style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;"
-                            onclick="responderPedido('${p.id}', 'Concluído')">
-                            ✓ Marcar como Entregue
-                        </button>
-                        <button style="padding:10px 12px;background:#f0f0f0;color:#333;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;"
-                            onclick="abrirChatComCliente('${p.clienteId}', '${nomeSeguro}')">
-                            <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
-                            Falar com o cliente
-                        </button>
-                `;
-
-                const enderecoHtml = filtroPedidosEmpresa === 'Aceito' ? `
-                        <div style="display:flex; align-items:center; gap:6px; margin:6px 0; color:#555; font-size:13px;">
-                            <span class="material-symbols-outlined" style="font-size:16px;">location_on</span>
-                            ${p.clienteLocalidade ? p.clienteLocalidade : 'Endereço não informado pelo cliente'}
-                        </div>
-                        ${p.clienteTelefone ? `
-                        <div style="display:flex; align-items:center; gap:6px; margin:2px 0 6px; color:#555; font-size:13px;">
-                            <span class="material-symbols-outlined" style="font-size:16px;">call</span>
-                            ${p.clienteTelefone}
-                        </div>` : ''}
-                ` : '';
-
-                div.innerHTML = `
-                    <div class="pedido-top">
-                        <strong>${p.clienteNome || 'Cliente'}</strong>
-                        <strong>${precoFormatado}</strong>
-                    </div>
-                    <div class="pedido-list" style="margin:6px 0;">1x ${p.nomeProduto}</div>
-                    ${enderecoHtml}
-                    <div style="display:flex;gap:8px;margin-top:10px;">
-                        ${botoesAcao}
-                    </div>
-                `;
-                lista.appendChild(div);
-            });
-        }
-
-        window.carregarPedidosEmpresa = function() {
-            const user = auth.currentUser;
-            const lista = document.getElementById('loja-pedidos-lista');
-            if (!lista) return;
-
-            if (!user) {
-                lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Faça login para ver os pedidos.</p>';
-                return;
-            }
-
-            if (unsubscribePedidosEmpresa) unsubscribePedidosEmpresa();
-            if (unsubscribePreparoEmpresa) unsubscribePreparoEmpresa();
-
-            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando...</p>';
-            filtroPedidosEmpresa = 'Pendente';
-            const titulo = document.getElementById('loja-section-title');
-            if (titulo) titulo.textContent = 'Pedidos Pendentes';
-
-            const qPendentes = query(
-                collection(db, "pedidos"),
-                where("empresaId", "==", user.uid),
-                where("status", "==", "Pendente")
-            );
-            unsubscribePedidosEmpresa = onSnapshot(qPendentes, (snap) => {
-                const contador = document.getElementById('contador-pendentes');
-                if (contador) contador.textContent = snap.size;
-
-                cachePedidosPendentes = [];
-                snap.forEach(d => cachePedidosPendentes.push({ id: d.id, ...d.data() }));
-                cachePedidosPendentes.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
-
-                if (filtroPedidosEmpresa === 'Pendente') renderizarPedidosEmpresa();
-            }, (err) => {
-                console.error(err);
-                if (filtroPedidosEmpresa === 'Pendente') {
-                    lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
-                }
-            });
-
-            const qPreparo = query(
-                collection(db, "pedidos"),
-                where("empresaId", "==", user.uid),
-                where("status", "==", "Aceito")
-            );
-            unsubscribePreparoEmpresa = onSnapshot(qPreparo, (snap) => {
-                const contador = document.getElementById('contador-preparo');
-                if (contador) contador.textContent = snap.size;
-
-                cachePedidosPreparo = [];
-                snap.forEach(d => cachePedidosPreparo.push({ id: d.id, ...d.data() }));
-                cachePedidosPreparo.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
-
-                if (filtroPedidosEmpresa === 'Aceito') renderizarPedidosEmpresa();
-            }, (err) => {
-                console.error(err);
-                if (filtroPedidosEmpresa === 'Aceito') {
-                    lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
-                }
-            });
-        };
-
-        // ACEITAR, RECUSAR OU CONCLUIR PEDIDO
-        window.responderPedido = async function(pedidoId, novoStatus) {
-            try {
-                const pedidoSnap = await getDoc(doc(db, "pedidos", pedidoId));
-                await updateDoc(doc(db, "pedidos", pedidoId), { status: novoStatus });
-
-                // Notifica o cliente sobre a mudança de status
-                if (pedidoSnap.exists()) {
-                    const p = pedidoSnap.data();
-                    let titulo = 'Atualização do seu pedido';
-                    let corpo = `Seu pedido de "${p.nomeProduto}" agora está: ${novoStatus}`;
-                    if (novoStatus === 'Recusado') {
-                        titulo = 'Pedido recusado';
-                        corpo = `A loja ${p.empresaNome || ''} recusou seu pedido de "${p.nomeProduto}".`;
-                    } else if (novoStatus === 'Concluído') {
-                        titulo = 'Pedido entregue';
-                        corpo = `Seu pedido de "${p.nomeProduto}" foi marcado como entregue.`;
-                    }
-                    criarNotificacao(p.clienteId, {
-                        tipo: 'pedido_status',
-                        titulo,
-                        corpo,
-                        pedidoId
-                    });
-                }
-                // Os contadores e as listas já se atualizam sozinhos pelos
-                // listeners em tempo real acima — não precisa mexer no DOM aqui.
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao atualizar pedido: ' + err.message);
-            }
-        };
-
-        // Aceita o pedido (muda status para "Aceito"), notifica o cliente
-        // e já leva a empresa direto pra conversa com quem pediu.
-        window.aceitarPedido = async function(pedidoId, clienteId, clienteNome) {
-            try {
-                const pedidoSnap = await getDoc(doc(db, "pedidos", pedidoId));
-                await updateDoc(doc(db, "pedidos", pedidoId), { status: 'Aceito' });
-
-                if (pedidoSnap.exists()) {
-                    const p = pedidoSnap.data();
-                    criarNotificacao(clienteId, {
-                        tipo: 'pedido_status',
-                        titulo: 'Pedido aceito!',
-                        corpo: `${p.empresaNome || 'A loja'} aceitou seu pedido de "${p.nomeProduto}".`,
-                        pedidoId
-                    });
-                }
-
-                // Cria (se não existir) e abre a conversa com esse cliente
-                await abrirChatComCliente(clienteId, clienteNome);
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao aceitar pedido: ' + err.message);
-            }
-        };
-
-        // ==========================================
-        // CHAT REAL EM TEMPO REAL (Firestore)
-        // ==========================================
-        // Modelo:
-        //   conversas/{conversaId}                -> metadados (cliente, empresa, última mensagem)
-        //   conversas/{conversaId}/mensagens/{id}  -> mensagens individuais
-        // conversaId = uids do cliente e da empresa ordenados e unidos por "_"
-
-        let conversaAtualId = null;
-        let conversaAtualDados = null;
-        let unsubscribeChat = null;
-        let unsubscribeConversasEmpresa = null;
-
-        function gerarConversaId(uidCliente, uidEmpresa) {
-            return [uidCliente, uidEmpresa].sort().join('_');
-        }
-
-        async function abrirConversa(clienteId, empresaId, dadosIniciais) {
-            const user = auth.currentUser;
-            if (!user) { alert('Você precisa estar logado.'); return; }
-
-            const conversaId = gerarConversaId(clienteId, empresaId);
-            conversaAtualId = conversaId;
-            // Usa sempre os dados de quem está abrindo a conversa AGORA,
-            // em vez de confiar cegamente no que foi salvo da última vez —
-            // assim, se o nome mudou (ou tinha sido salvo errado antes), a
-            // tela de chat sempre mostra o nome certo da outra pessoa.
-            conversaAtualDados = dadosIniciais;
-
-            const conversaRef = doc(db, 'conversas', conversaId);
-            try {
-                const snap = await getDoc(conversaRef);
-                if (!snap.exists()) {
-                    await setDoc(conversaRef, {
-                        participantes: [clienteId, empresaId],
-                        clienteId: dadosIniciais.clienteId,
-                        clienteNome: dadosIniciais.clienteNome,
-                        empresaId: dadosIniciais.empresaId,
-                        empresaNome: dadosIniciais.empresaNome,
-                        ultimaMensagem: '',
-                        ultimaMensagemEm: serverTimestamp()
-                    });
-                } else {
-                    // Conversa já existe: preserva a última mensagem, só
-                    // atualiza os nomes para não ficarem desatualizados.
-                    await setDoc(conversaRef, {
-                        clienteNome: dadosIniciais.clienteNome,
-                        empresaNome: dadosIniciais.empresaNome
-                    }, { merge: true });
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao abrir conversa: ' + err.message);
-                return;
-            }
-
-            const souEmpresa = user.uid === empresaId;
-            const nomeOutro = souEmpresa ? dadosIniciais.clienteNome : dadosIniciais.empresaNome;
-            const tituloEl = document.getElementById('chat-nome-contato');
-            if (tituloEl) tituloEl.textContent = nomeOutro || 'Conversa';
-
-            mudarTela('tela-8');
-            setTimeout(() => { if (typeof inicializarChat === 'function') inicializarChat(); }, 100);
-            escutarMensagens(conversaId);
-        }
-
-        // Cliente inicia/abre conversa com uma empresa
-        window.abrirChatComEmpresa = async function(empresaId, empresaNome) {
-            const user = auth.currentUser;
-            if (!user) { alert('Você precisa estar logado.'); return; }
-            await abrirConversa(user.uid, empresaId, {
-                clienteId: user.uid,
-                clienteNome: user.displayName || 'Cliente',
-                empresaId: empresaId,
-                empresaNome: empresaNome
-            });
-        };
-
-        // Empresa inicia/abre conversa com um cliente
-        window.abrirChatComCliente = async function(clienteId, clienteNome) {
-            const user = auth.currentUser;
-            if (!user) { alert('Você precisa estar logado.'); return; }
-            await abrirConversa(clienteId, user.uid, {
-                clienteId: clienteId,
-                clienteNome: clienteNome,
-                empresaId: user.uid,
-                empresaNome: user.displayName || 'Empresa'
-            });
-        };
-
-        // Botão de chat no cardápio da empresa (tela-15)
-        window.abrirChatEmpresaAtual = function() {
-            if (!empresaSelecionada) { alert('Abra o cardápio de uma loja primeiro.'); return; }
-            abrirChatComEmpresa(empresaSelecionada.id, empresaSelecionada.nome);
-        };
-
-        function escutarMensagens(conversaId) {
-            if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
-            const chatMessages = document.getElementById('chat-mensagens');
-            if (chatMessages) chatMessages.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando mensagens...</p>';
-
-            const q = query(collection(db, 'conversas', conversaId, 'mensagens'), orderBy('criadoEm', 'asc'));
-            unsubscribeChat = onSnapshot(q, (snap) => {
-                const user = auth.currentUser;
-                if (!chatMessages || !user) return;
-
-                if (snap.empty) {
-                    chatMessages.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Nenhuma mensagem ainda. Diga olá!</p>';
-                    return;
-                }
-
-                chatMessages.innerHTML = '';
-                let dataAnterior = '';
-                snap.forEach(docMsg => {
-                    const m = docMsg.data();
-                    const dataMsg = m.criadoEm?.toDate ? m.criadoEm.toDate() : new Date();
-                    const dataStr = dataMsg.toLocaleDateString('pt-BR');
-                    if (dataStr !== dataAnterior) {
-                        const divData = document.createElement('div');
-                        divData.className = 'chat-data';
-                        divData.textContent = dataStr === new Date().toLocaleDateString('pt-BR') ? 'Hoje' : dataStr;
-                        chatMessages.appendChild(divData);
-                        dataAnterior = dataStr;
-                    }
-
-                    const souEu = m.remetenteId === user.uid;
-                    const hora = m.criadoEm?.toDate ? dataMsg.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
-
-                    const div = document.createElement('div');
-                    div.className = 'mensagem ' + (souEu ? 'mensagem-enviada' : 'mensagem-recebida');
-
-                    if (souEu) {
-                        div.innerHTML = `
-                            <div class="mensagem-conteudo">
-                                <div class="mensagem-balao mensagem-balao-enviada"><p></p></div>
-                                <div class="mensagem-status">
-                                    <span class="mensagem-hora">${hora}</span>
-                                    <span class="material-symbols-outlined">done_all</span>
-                                </div>
-                            </div>
-                        `;
-                    } else {
-                        div.innerHTML = `
-                            <div class="mensagem-conteudo">
-                                <div class="mensagem-balao"><p></p></div>
-                                <span class="mensagem-hora">${hora}</span>
-                            </div>
-                        `;
-                    }
-                    div.querySelector('p').textContent = m.texto || '';
-                    chatMessages.appendChild(div);
-                });
-
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, (err) => {
-                console.error(err);
-                if (chatMessages) chatMessages.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar mensagens.</p>';
-            });
-        }
-
-        // Sobrescreve a função global (a versão local/fake definida em script.js) por uma real
-        window.enviarMensagem = async function(texto) {
-            texto = (texto || '').trim();
-            if (!texto) return;
-            const user = auth.currentUser;
-            if (!user) { alert('Você precisa estar logado.'); return; }
-            if (!conversaAtualId) { alert('Nenhuma conversa aberta.'); return; }
-
-            const souEmpresa = conversaAtualDados && user.uid === conversaAtualDados.empresaId;
-            const destinatarioId = souEmpresa ? conversaAtualDados.clienteId : conversaAtualDados.empresaId;
-            const meuNome = souEmpresa ? (conversaAtualDados.empresaNome || 'Empresa') : (conversaAtualDados.clienteNome || 'Cliente');
-
-            try {
-                await addDoc(collection(db, 'conversas', conversaAtualId, 'mensagens'), {
-                    remetenteId: user.uid,
-                    remetenteTipo: souEmpresa ? 'empresa' : 'cliente',
-                    texto: texto,
-                    criadoEm: serverTimestamp()
-                });
-                await updateDoc(doc(db, 'conversas', conversaAtualId), {
-                    ultimaMensagem: texto,
-                    ultimaMensagemEm: serverTimestamp()
-                });
-
-                // Notifica quem está do outro lado da conversa
-                if (destinatarioId) {
-                    criarNotificacao(destinatarioId, {
-                        tipo: 'mensagem',
-                        titulo: `Nova mensagem de ${meuNome}`,
-                        corpo: texto,
-                        conversaId: conversaAtualId
-                    });
-                }
-            } catch (err) {
-                console.error(err);
-                alert('Erro ao enviar mensagem: ' + err.message);
-            }
-        };
-
-        // Lista de conversas da empresa (tela-12), em tempo real
-        window.carregarConversasEmpresa = function() {
-            const user = auth.currentUser;
-            const lista = document.getElementById('mensagens-lista');
-            if (!lista) return;
-
-            if (!user) {
-                lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Faça login para ver suas mensagens.</p>';
-                return;
-            }
-
-            if (unsubscribeConversasEmpresa) unsubscribeConversasEmpresa();
-
-            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando conversas...</p>';
-
-            const q = query(collection(db, 'conversas'), where('empresaId', '==', user.uid));
-
-            unsubscribeConversasEmpresa = onSnapshot(q, (snap) => {
-                if (snap.empty) {
-                    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Nenhuma conversa ainda.</p>';
-                    return;
-                }
-
-                const conversas = [];
-                snap.forEach(d => conversas.push({ id: d.id, ...d.data() }));
-                conversas.sort((a, b) => {
-                    const ta = a.ultimaMensagemEm?.seconds || 0;
-                    const tb = b.ultimaMensagemEm?.seconds || 0;
-                    return tb - ta;
-                });
-
-                lista.innerHTML = '';
-                conversas.forEach(c => {
-                    const iniciais = (c.clienteNome || 'C').split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
-                    const item = document.createElement('div');
-                    item.className = 'mensagem-item';
-                    item.setAttribute('data-nome', c.clienteNome || '');
-                    item.setAttribute('data-id', c.id);
-                    item.innerHTML = `
-                        <div class="avatar avatar1">${iniciais}</div>
-                        <div class="mensagem-info">
-                            <div class="mensagem-topo"><h3>${c.clienteNome || 'Cliente'}</h3></div>
-                            <div class="mensagem-preview">${c.ultimaMensagem ? c.ultimaMensagem : 'Nenhuma mensagem ainda'}</div>
-                        </div>
-                    `;
-                    item.addEventListener('click', () => {
-                        abrirChatComCliente(c.clienteId, c.clienteNome);
-                    });
-                    lista.appendChild(item);
-                });
-            }, (err) => {
-                console.error(err);
-                lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar conversas.</p>';
-            });
-        };
-
-        // ==========================================
-        // NOTIFICAÇÕES (tempo real, cliente e empresa)
-        // ==========================================
-        // notificacoes/{id}: { paraUsuario, tipo, titulo, corpo, lida,
-        //                       criadoEm, pedidoId?, conversaId? }
-
-        let unsubscribeNotificacoes = null;
-        let telaAnteriorNotificacoes = 'tela-5';
-
-        async function criarNotificacao(paraUsuario, dados) {
-            if (!paraUsuario) return;
-            try {
-                await addDoc(collection(db, 'notificacoes'), {
-                    paraUsuario,
-                    lida: false,
-                    criadoEm: serverTimestamp(),
-                    ...dados
-                });
-            } catch (err) {
-                console.error('Erro ao criar notificação:', err);
-            }
-        }
-
-        // Liga o "sininho" (bolinha vermelha) de cliente e empresa em
-        // tempo real, contando quantas notificações não lidas existem.
-        function observarNotificacoes() {
-            const user = auth.currentUser;
-            if (!user) return;
-            if (unsubscribeNotificacoes) unsubscribeNotificacoes();
-
-            const q = query(
-                collection(db, 'notificacoes'),
-                where('paraUsuario', '==', user.uid),
-                where('lida', '==', false)
-            );
-            unsubscribeNotificacoes = onSnapshot(q, (snap) => {
-                const temNaoLidas = !snap.empty;
-                const pontoCliente = document.getElementById('ponto-notificacao-cliente');
-                const pontoEmpresa = document.getElementById('ponto-notificacao-empresa');
-                if (pontoCliente) pontoCliente.style.display = temNaoLidas ? 'block' : 'none';
-                if (pontoEmpresa) pontoEmpresa.style.display = temNaoLidas ? 'block' : 'none';
-            }, (err) => console.error('Erro ao observar notificações:', err));
-        }
-
-        // Abre a tela de notificações (comum a cliente e empresa) e marca
-        // todas como lidas ao visualizar.
-        window.abrirNotificacoes = function() {
-            const user = auth.currentUser;
-            if (!user) return;
-
-            // Lembra de qual tela veio, pra voltar certo
-            const telaAtiva = document.querySelector('.tela.ativa');
-            telaAnteriorNotificacoes = telaAtiva ? telaAtiva.id : (tipoUsuario === 'empresa' ? 'tela-10' : 'tela-5');
-
-            mudarTela('tela-17');
-
-            const lista = document.getElementById('notificacoes-lista');
-            if (lista) lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando notificações...</p>';
-
-            const q = query(collection(db, 'notificacoes'), where('paraUsuario', '==', user.uid));
-            getDocs(q).then(async (snap) => {
-                if (!lista) return;
-                if (snap.empty) {
-                    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Você não tem notificações.</p>';
-                    return;
-                }
-
-                const notifs = [];
-                snap.forEach(d => notifs.push({ id: d.id, ...d.data() }));
-                notifs.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
-
-                const iconePorTipo = {
-                    mensagem: 'chat',
-                    pedido_novo: 'receipt_long',
-                    pedido_status: 'local_shipping'
-                };
-
-                lista.innerHTML = '';
-                notifs.forEach(n => {
-                    const item = document.createElement('div');
-                    item.style.cssText = `background:#fff; border-radius:12px; padding:14px; display:flex; gap:12px; align-items:flex-start; box-shadow:0 1px 6px rgba(0,0,0,0.06); ${n.lida ? 'opacity:0.6;' : ''} cursor:pointer;`;
-                    item.innerHTML = `
-                        <div style="width:38px;height:38px;border-radius:50%;background:rgba(229,6,21,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                            <span class="material-symbols-outlined" style="color:var(--primary,#e50615);font-size:20px;">${iconePorTipo[n.tipo] || 'notifications'}</span>
-                        </div>
+        let categoriasMap = new Map();
+        produtos.forEach((docSnap) => {
+            const produto = { id: docSnap.id, ...docSnap.data() };
+            const categoria = produto.categoria || 'Outros';
+            if (!categoriasMap.has(categoria)) categoriasMap.set(categoria, []);
+            categoriasMap.get(categoria).push(produto);
+        });
+        let html = '';
+        for (let [categoria, produtosList] of categoriasMap) {
+            html += `<h3>${categoria}</h3>`;
+            produtosList.forEach(produto => {
+                const disponivel = produto.disponivel !== false;
+                const nomeSeguro = (produto.nome || 'Produto').replace(/'/g, "\\'");
+                html += `
+                    <div class="cardapio-item">
+                        ${produto.foto ? `<img src="${produto.foto}" alt="" style="width:52px;height:52px;border-radius:10px;object-fit:cover;margin-right:10px;">` : ''}
                         <div style="flex:1;">
-                            <strong style="font-size:14px;">${n.titulo || 'Notificação'}</strong>
-                            <p style="margin:4px 0 0; font-size:13px; color:#555;">${n.corpo || ''}</p>
+                            <h4>${produto.nome || 'Sem nome'}</h4>
+                            <p>${produto.descricao || ''}</p>
+                            <span class="cardapio-price">${formatarPreco(produto.preco)}</span>
+                            <div style="display:flex; gap:14px; margin-top:6px;">
+                                <button style="border:none;background:none;color:var(--primary,#e50615);font-size:12px;font-weight:600;cursor:pointer;padding:0;" onclick="editarProduto('${produto.id}')">Editar</button>
+                                <button style="border:none;background:none;color:#999;font-size:12px;font-weight:600;cursor:pointer;padding:0;" onclick="excluirProduto('${produto.id}', '${nomeSeguro}')">Excluir</button>
+                            </div>
                         </div>
-                    `;
-                    item.onclick = () => abrirDestinoNotificacao(n);
-                    lista.appendChild(item);
-                });
-
-                // Marca todas como lidas depois de mostrar a lista
-                const naoLidas = notifs.filter(n => !n.lida);
-                for (const n of naoLidas) {
-                    try { await updateDoc(doc(db, 'notificacoes', n.id), { lida: true }); } catch (e) { console.error(e); }
-                }
-            }).catch(err => {
-                console.error(err);
-                if (lista) lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
+                        <label class="cardapio-switch">
+                            <input type="checkbox" ${disponivel ? 'checked' : ''} onchange="alternarDisponibilidade('${produto.id}', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                `;
             });
-        };
+        }
+        lista.innerHTML = html;
+    }, (erro) => {
+        console.error(erro);
+        lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(erro)}</p>`;
+    });
+};
 
-        // Ao clicar numa notificação, leva direto pro lugar certo
-        function abrirDestinoNotificacao(n) {
-            if (n.tipo === 'mensagem' && n.conversaId) {
-                // Reabre a conversa a partir dos dados salvos nela
-                getDoc(doc(db, 'conversas', n.conversaId)).then(snap => {
-                    if (!snap.exists()) { mudarTela(tipoUsuario === 'empresa' ? 'tela-12' : 'tela-7'); return; }
-                    const c = snap.data();
-                    if (tipoUsuario === 'empresa') {
-                        abrirChatComCliente(c.clienteId, c.clienteNome);
-                    } else {
-                        abrirChatComEmpresa(c.empresaId, c.empresaNome);
-                    }
-                }).catch(() => mudarTela(tipoUsuario === 'empresa' ? 'tela-12' : 'tela-7'));
-            } else if (n.pedidoId) {
-                mudarTela(tipoUsuario === 'empresa' ? 'tela-10' : 'tela-7');
-            } else {
-                voltarDeNotificacoes();
-            }
+// ==========================================
+// LISTA DE EMPRESAS (tela-16) — tempo real
+// ==========================================
+
+let unsubscribeEmpresas = null;
+let cacheEmpresas = [];
+
+window.abrirListaEmpresas = function() {
+    mudarTela('tela-16');
+    const lista = document.getElementById('listaEmpresas');
+    if (!lista) return;
+
+    if (unsubscribeEmpresas) unsubscribeEmpresas();
+
+    lista.innerHTML = '<p style="text-align:center; color:#888;">Carregando empresas...</p>';
+
+    unsubscribeEmpresas = onSnapshot(collection(db, "empresas"), (snap) => {
+        if (snap.empty) {
+            lista.innerHTML = '<p style="text-align:center; color:#888;">Nenhuma empresa disponível no momento.</p>';
+            return;
+        }
+        cacheEmpresas = [];
+        lista.innerHTML = '';
+        snap.forEach(docEmp => {
+            const e = docEmp.data();
+            cacheEmpresas.push({ id: docEmp.id, ...e });
+            const aberta = e.aberto !== false;
+            const card = document.createElement('div');
+            card.style.cssText = 'background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,0.08);cursor:pointer;display:flex;align-items:center;gap:14px;transition:transform 0.15s;';
+            card.innerHTML = `
+                <div style="width:52px;height:52px;background:rgba(229,6,21,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <span class="material-symbols-outlined" style="color:var(--primary);font-size:26px;">storefront</span>
+                </div>
+                <div style="flex:1;">
+                    <h3 style="margin:0;font-size:15px;font-weight:600;">${e.nome || 'Loja'}</h3>
+                    <p style="margin:4px 0 0;font-size:12px;color:#888;">${e.categoria || 'Restaurante'}</p>
+                </div>
+                <span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:${aberta ? '#e7f8ef' : '#fdeceb'};color:${aberta ? '#10b981' : '#ef4444'};">${aberta ? 'Aberto' : 'Fechado'}</span>
+                <span class="material-symbols-outlined" style="color:#ccc;">chevron_right</span>
+            `;
+            card.onclick = () => abrirCardapioEmpresa(docEmp.id, e.nome || 'Loja');
+            lista.appendChild(card);
+        });
+    }, (err) => {
+        console.error(err);
+        lista.innerHTML = `<p style="text-align:center; color:#888;">${mensagemErro(err)}</p>`;
+    });
+};
+
+// ==========================================
+// CARDÁPIO DE UMA EMPRESA (tela-15) — tempo real
+// ==========================================
+
+let empresaSelecionada = null;
+let unsubscribeProdutosCliente = null;
+let empresaSelecionadaAberta = true;
+
+window.abrirCardapioEmpresa = async function(empresaId, empresaNome) {
+    empresaSelecionada = { id: empresaId, nome: empresaNome };
+    mudarTela('tela-15');
+
+    const titulo = document.getElementById('titulo-cardapio-empresa');
+    if (titulo) titulo.textContent = empresaNome;
+
+    const aviso = document.getElementById('loja-fechada-aviso');
+
+    try {
+        const empresaSnap = await getDoc(doc(db, "empresas", empresaId));
+        empresaSelecionadaAberta = empresaSnap.exists() ? (empresaSnap.data().aberto !== false) : true;
+    } catch(e) {
+        empresaSelecionadaAberta = true;
+    }
+    if (aviso) aviso.style.display = empresaSelecionadaAberta ? 'none' : 'block';
+
+    const lista = document.getElementById('listaProdutosCliente');
+    if (!lista) return;
+
+    if (unsubscribeProdutosCliente) unsubscribeProdutosCliente();
+
+    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando cardápio...</p>';
+
+    const q = query(collection(db, "produtos"), where("empresa", "==", empresaId));
+    unsubscribeProdutosCliente = onSnapshot(q, (snap) => {
+        const produtosDisponiveis = [];
+        snap.forEach(docProd => {
+            const p = docProd.data();
+            if (p.disponivel === false) return;
+            produtosDisponiveis.push({ id: docProd.id, ...p });
+        });
+
+        if (produtosDisponiveis.length === 0) {
+            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Esta empresa ainda não tem produtos disponíveis.</p>';
+            atualizarBarraCarrinho();
+            return;
+        }
+        lista.innerHTML = '';
+        produtosDisponiveis.forEach(p => {
+            const nomeSeguro = (p.nome || 'Produto').replace(/'/g, "\\'");
+            const empresaNomeSeguro = (empresaNome || 'Loja').replace(/'/g, "\\'");
+            const card = document.createElement('div');
+            card.className = 'produto-cliente-card';
+            const qtdAtual = carrinho.itens[p.id] ? carrinho.itens[p.id].quantidade : 0;
+            card.innerHTML = `
+                ${p.foto ? `<img src="${p.foto}" alt="" style="width:100%;height:100px;object-fit:cover;border-radius:10px;margin-bottom:8px;">` : ''}
+                <h3>${p.nome || 'Produto'}</h3>
+                <p>${p.descricao || ''}</p>
+                <strong>${formatarPreco(p.preco)}</strong>
+                <div class="produto-carrinho-controles" data-produto-id="${p.id}" style="display:flex; align-items:center; justify-content:space-between; margin-top:8px;">
+                    <button ${empresaSelecionadaAberta ? '' : 'disabled'} style="width:30px;height:30px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;" onclick="alterarQuantidadeCarrinho('${p.id}', '${nomeSeguro}', '${p.preco}', '${empresaId}', '${empresaNomeSeguro}', -1)">−</button>
+                    <span class="qtd-produto-${p.id}" style="min-width:20px;text-align:center;font-weight:600;">${qtdAtual}</span>
+                    <button ${empresaSelecionadaAberta ? '' : 'disabled'} style="width:30px;height:30px;border-radius:50%;border:none;background:var(--primary,#e50615);color:#fff;cursor:pointer;" onclick="alterarQuantidadeCarrinho('${p.id}', '${nomeSeguro}', '${p.preco}', '${empresaId}', '${empresaNomeSeguro}', 1)">+</button>
+                </div>
+            `;
+            lista.appendChild(card);
+        });
+        atualizarBarraCarrinho();
+    }, (err) => {
+        console.error(err);
+        lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
+    });
+};
+
+// ==========================================
+// CARRINHO / SACOLA (multi-item, com quantidade)
+// ==========================================
+
+let carrinho = { empresaId: null, empresaNome: null, itens: {} };
+
+function limparCarrinho() {
+    carrinho = { empresaId: null, empresaNome: null, itens: {} };
+    atualizarBarraCarrinho();
+}
+
+window.alterarQuantidadeCarrinho = function(produtoId, nome, preco, empresaId, empresaNome, delta) {
+    if (delta > 0 && !empresaSelecionadaAberta) {
+        toast('Esta loja está fechada no momento. Não é possível adicionar itens.', true);
+        return;
+    }
+
+    if (carrinho.empresaId && carrinho.empresaId !== empresaId && Object.keys(carrinho.itens).length > 0) {
+        if (!confirm('Sua sacola tem itens de outra loja. Deseja esvaziá-la e adicionar este item?')) {
+            return;
+        }
+        carrinho = { empresaId: null, empresaNome: null, itens: {} };
+    }
+
+    carrinho.empresaId = empresaId;
+    carrinho.empresaNome = empresaNome;
+
+    const atual = carrinho.itens[produtoId] || { nome, preco: precoParaNumero(preco), quantidade: 0 };
+    atual.quantidade += delta;
+    if (atual.quantidade <= 0) {
+        delete carrinho.itens[produtoId];
+    } else {
+        carrinho.itens[produtoId] = atual;
+    }
+
+    const qtdEl = document.querySelector(`.qtd-produto-${produtoId}`);
+    if (qtdEl) qtdEl.textContent = carrinho.itens[produtoId] ? carrinho.itens[produtoId].quantidade : 0;
+
+    atualizarBarraCarrinho();
+};
+
+function totalCarrinho() {
+    return Object.values(carrinho.itens).reduce((soma, it) => soma + it.preco * it.quantidade, 0);
+}
+
+function quantidadeTotalCarrinho() {
+    return Object.values(carrinho.itens).reduce((soma, it) => soma + it.quantidade, 0);
+}
+
+function atualizarBarraCarrinho() {
+    const barra = document.getElementById('barra-carrinho');
+    const texto = document.getElementById('carrinho-resumo-texto');
+    if (!barra || !texto) return;
+    const qtd = quantidadeTotalCarrinho();
+    if (qtd === 0) {
+        barra.style.display = 'none';
+        return;
+    }
+    barra.style.display = 'flex';
+    texto.textContent = `${qtd} ${qtd === 1 ? 'item' : 'itens'} • ${formatarPreco(totalCarrinho())}`;
+}
+
+window.abrirResumoCarrinho = function() {
+    if (quantidadeTotalCarrinho() === 0) return;
+    mudarTela('tela-18');
+};
+
+window.renderizarResumoCarrinho = function() {
+    const lista = document.getElementById('resumoCarrinhoLista');
+    const totalEl = document.getElementById('resumoCarrinhoTotal');
+    if (!lista || !totalEl) return;
+
+    const ids = Object.keys(carrinho.itens);
+    if (ids.length === 0) {
+        lista.innerHTML = '<p style="text-align:center; color:#888;">Sua sacola está vazia.</p>';
+        totalEl.textContent = formatarPreco(0);
+        return;
+    }
+
+    lista.innerHTML = '';
+    ids.forEach(id => {
+        const it = carrinho.itens[id];
+        const linha = document.createElement('div');
+        linha.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:10px; border-bottom:1px solid #f0f0f0; padding-bottom:10px;';
+        linha.innerHTML = `
+            <div>
+                <strong style="font-size:14px;">${it.nome}</strong>
+                <div style="font-size:12px; color:#888;">${formatarPreco(it.preco)} cada</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+                <button style="width:26px;height:26px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;" onclick="alterarQuantidadeResumo('${id}', -1)">−</button>
+                <span style="min-width:16px;text-align:center;font-weight:600;">${it.quantidade}</span>
+                <button style="width:26px;height:26px;border-radius:50%;border:none;background:var(--primary,#e50615);color:#fff;cursor:pointer;" onclick="alterarQuantidadeResumo('${id}', 1)">+</button>
+            </div>
+        `;
+        lista.appendChild(linha);
+    });
+    totalEl.textContent = formatarPreco(totalCarrinho());
+};
+
+window.alterarQuantidadeResumo = function(produtoId, delta) {
+    const it = carrinho.itens[produtoId];
+    if (!it) return;
+    it.quantidade += delta;
+    if (it.quantidade <= 0) delete carrinho.itens[produtoId];
+    window.renderizarResumoCarrinho();
+    atualizarBarraCarrinho();
+    if (quantidadeTotalCarrinho() === 0) mudarTela('tela-15');
+};
+
+window.confirmarPedidoCarrinho = async function() {
+    const user = auth.currentUser;
+    if (!user) { toast('Você precisa estar logado para fazer um pedido.', true); return; }
+
+    const ids = Object.keys(carrinho.itens);
+    if (ids.length === 0) { toast('Sua sacola está vazia.', true); return; }
+
+    // Reconfere se a loja continua aberta antes de gravar o pedido —
+    // evita corrida entre o cliente montando a sacola e a loja fechando.
+    try {
+        const empresaSnap = await getDoc(doc(db, "empresas", carrinho.empresaId));
+        if (empresaSnap.exists() && empresaSnap.data().aberto === false) {
+            toast('Essa loja acabou de fechar. Não é possível concluir o pedido agora.', true);
+            return;
+        }
+    } catch (e) { console.error(e); }
+
+    let clienteLocalidade = '';
+    let clienteTelefone = '';
+    try {
+        const perfilSnap = await getDoc(doc(db, "clientes", user.uid));
+        if (perfilSnap.exists()) {
+            clienteLocalidade = perfilSnap.data().localidade || '';
+            clienteTelefone = perfilSnap.data().telefone || '';
+        }
+    } catch (e) { console.error('Erro ao buscar endereço do cliente:', e); }
+
+    const itens = ids.map(id => ({
+        produtoId: id,
+        nome: carrinho.itens[id].nome,
+        preco: carrinho.itens[id].preco,
+        quantidade: carrinho.itens[id].quantidade
+    }));
+    const total = totalCarrinho();
+    const resumoNomes = itens.map(i => `${i.quantidade}x ${i.nome}`).join(', ');
+
+    try {
+        const pedidoRef = await addDoc(collection(db, "pedidos"), {
+            clienteId: user.uid,
+            clienteNome: user.displayName || "Cliente",
+            clienteEmail: user.email || "",
+            clienteLocalidade,
+            clienteTelefone,
+            empresaId: carrinho.empresaId,
+            empresaNome: carrinho.empresaNome,
+            itens,
+            preco: total,
+            quantidade: quantidadeTotalCarrinho(),
+            status: "Pendente",
+            criadoEm: serverTimestamp()
+        });
+
+        criarNotificacao(carrinho.empresaId, {
+            tipo: 'pedido_novo',
+            titulo: 'Novo pedido recebido',
+            corpo: `${user.displayName || 'Um cliente'} pediu: ${resumoNomes}`,
+            pedidoId: pedidoRef.id
+        });
+
+        toast(`✅ Pedido enviado! Aguarde a confirmação da loja.`);
+        limparCarrinho();
+        mudarTela('tela-7');
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao fazer pedido: ' + err.message, true);
+    }
+};
+
+// ==========================================
+// PEDIDOS DO CLIENTE EM TEMPO REAL (tela-7)
+// ==========================================
+
+let unsubscribePedidosCliente = null;
+
+function itensParaTexto(pedido) {
+    if (Array.isArray(pedido.itens) && pedido.itens.length > 0) {
+        return pedido.itens.map(i => `${i.quantidade}x ${i.nome}`).join('<br>');
+    }
+    // compatibilidade com pedidos antigos (item único)
+    return `1x ${pedido.nomeProduto || 'Item'}`;
+}
+
+window.carregarPedidosCliente = function() {
+    const user = auth.currentUser;
+    const lista = document.getElementById('pedidos-cliente-lista');
+    if (!lista) return;
+
+    if (!user) {
+        lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Faça login para ver seus pedidos.</p>';
+        return;
+    }
+
+    if (unsubscribePedidosCliente) unsubscribePedidosCliente();
+
+    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando...</p>';
+
+    const q = query(collection(db, "pedidos"), where("clienteId", "==", user.uid));
+
+    unsubscribePedidosCliente = onSnapshot(q, (snap) => {
+        if (snap.empty) {
+            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Você ainda não fez nenhum pedido.</p>';
+            return;
         }
 
-        window.voltarDeNotificacoes = function() {
-            mudarTela(telaAnteriorNotificacoes || (tipoUsuario === 'empresa' ? 'tela-10' : 'tela-5'));
-        };
+        const pedidos = [];
+        snap.forEach(d => pedidos.push({ id: d.id, ...d.data() }));
+        pedidos.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
 
-        // ==========================================
-        // INICIALIZAÇÃO
-        // ==========================================
-        // IMPORTANTE: a tela é decidida a partir de onAuthStateChanged (o
-        // evento real do Firebase avisando se a sessão foi restaurada),
-        // não a partir do localStorage sozinho — assim a tela de
-        // pedidos/loja nunca tenta carregar dados com auth.currentUser
-        // ainda nulo (o que antes dava a impressão de que os pedidos
-        // tinham sumido ao recarregar a página).
+        lista.innerHTML = '';
+        pedidos.forEach(p => {
+            const corStatus = p.status === 'Aceito' ? '#10b981' : p.status === 'Recusado' ? '#ef4444' : p.status === 'Concluído' ? '#6366f1' : '#f59e0b';
+            const iconeStatus = p.status === 'Aceito' ? 'check_circle' : p.status === 'Recusado' ? 'cancel' : p.status === 'Concluído' ? 'task_alt' : 'schedule';
+            const precoFormatado = formatarPreco(p.preco);
 
-        let inicializacaoTratada = false;
+            const div = document.createElement('div');
+            div.className = 'pedido-card';
+            div.style.cssText = 'margin-bottom:12px;';
+            div.innerHTML = `
+                <div class="pedido-info">
+                    <div class="pedido-titulo">
+                        <h3>${p.empresaNome || 'Empresa'}</h3>
+                        <span style="display:flex;align-items:center;gap:4px;background:${corStatus};color:#fff;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;">
+                            <span class="material-symbols-outlined" style="font-size:13px;">${iconeStatus}</span>
+                            ${p.status}
+                        </span>
+                    </div>
+                    <p class="pedido-descricao">${itensParaTexto(p)}</p>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+                        <p class="pedido-data" style="color:#e50615;font-weight:600;margin:0;">${precoFormatado}</p>
+                        <button style="display:flex;align-items:center;gap:4px;background:#f0f0f0;color:#333;border:none;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;"
+                            onclick="abrirChatComEmpresa('${p.empresaId}', '${(p.empresaNome || 'Empresa').replace(/'/g,"\\'")}')">
+                            <span class="material-symbols-outlined" style="font-size:15px;">chat</span>
+                            Falar com a loja
+                        </button>
+                    </div>
+                </div>
+            `;
+            lista.appendChild(div);
+        });
+    }, (err) => {
+        console.error(err);
+        lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar pedidos.</p>';
+    });
+};
 
-        onAuthStateChanged(auth, (user) => {
-            const tipoSalvo = localStorage.getItem('tipoUsuario');
+// ==========================================
+// PEDIDOS DA EMPRESA EM TEMPO REAL (tela-10)
+// ==========================================
 
-            if (user && tipoSalvo) {
-                tipoUsuario = tipoSalvo;
-                const nomePerfil = document.getElementById('nomePerfil');
-                const emailPerfil = document.getElementById('emailPerfil');
-                if (nomePerfil) nomePerfil.textContent = user.displayName || 'Usuário';
-                if (emailPerfil) emailPerfil.textContent = user.email || '';
+let unsubscribePedidosEmpresa = null;
+let unsubscribePreparoEmpresa = null;
+let unsubscribeConcluidosEmpresa = null;
+let unsubscribeRecusadosEmpresa = null;
+let cachePedidosPorStatus = { Pendente: [], Aceito: [], 'Concluído': [], Recusado: [] };
+let filtroPedidosEmpresa = 'Pendente';
 
-                observarNotificacoes();
+window.mostrarPedidosPorStatus = function(status) {
+    filtroPedidosEmpresa = status;
+    const titulos = {
+        'Pendente': 'Pedidos Pendentes',
+        'Aceito': 'Pedidos em Preparo',
+        'Concluído': 'Pedidos Entregues',
+        'Recusado': 'Pedidos Recusados'
+    };
+    const titulo = document.getElementById('loja-section-title');
+    if (titulo) titulo.textContent = titulos[status] || 'Pedidos';
 
-                if (!inicializacaoTratada) {
-                    inicializacaoTratada = true;
-                    if (tipoSalvo === 'cliente') {
-                        mudarTela('tela-5');
-                        (async () => {
-                            try {
-                                const snap = await getDoc(doc(db, "clientes", user.uid));
-                                if (snap.exists() && snap.data().localidade) {
-                                    atualizarLocalidadeHome(snap.data().localidade);
-                                }
-                            } catch (e) { console.error(e); }
-                        })();
-                    } else if (tipoSalvo === 'empresa') {
-                        mudarTela('tela-10');
-                    }
-                }
-            } else if (!user && tipoSalvo && inicializacaoTratada === false) {
-                // Tínhamos um tipo salvo, mas a sessão não pôde ser
-                // restaurada (expirou, foi revogada, etc). Limpa o estado
-                // velho e manda para a seleção de acesso.
-                inicializacaoTratada = true;
-                localStorage.removeItem('tipoUsuario');
-                localStorage.removeItem('nomeUsuario');
-                localStorage.removeItem('emailUsuario');
+    const mapaCards = { 'Pendente': 'card-pendentes', 'Aceito': 'card-preparo', 'Concluído': 'card-concluidos', 'Recusado': 'card-recusados' };
+    Object.entries(mapaCards).forEach(([st, id]) => {
+        const el = document.getElementById(id);
+        if (el) el.style.outline = status === st ? '2px solid var(--primary, #e50615)' : 'none';
+    });
+
+    renderizarPedidosEmpresa();
+};
+
+function renderizarPedidosEmpresa() {
+    const lista = document.getElementById('loja-pedidos-lista');
+    if (!lista) return;
+
+    const pedidos = cachePedidosPorStatus[filtroPedidosEmpresa] || [];
+
+    if (pedidos.length === 0) {
+        lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Nenhum pedido nesta categoria no momento.</p>';
+        return;
+    }
+
+    lista.innerHTML = '';
+    pedidos.forEach(p => {
+        const precoFormatado = formatarPreco(p.preco);
+        const nomeSeguro = (p.clienteNome || 'Cliente').replace(/'/g, "\\'");
+        const div = document.createElement('div');
+        div.className = 'loja-pedido';
+
+        let botoesAcao = '';
+        if (filtroPedidosEmpresa === 'Pendente') {
+            botoesAcao = `
+                <button style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;"
+                    onclick="aceitarPedido('${p.id}', '${p.clienteId}', '${nomeSeguro}')">✓ Aceitar</button>
+                <button style="flex:1;padding:10px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;"
+                    onclick="responderPedido('${p.id}', 'Recusado')">✗ Recusar</button>
+                <button style="padding:10px 12px;background:#f0f0f0;color:#333;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;"
+                    onclick="abrirChatComCliente('${p.clienteId}', '${nomeSeguro}')">
+                    <span class="material-symbols-outlined" style="font-size:18px;">chat</span>
+                </button>
+            `;
+        } else if (filtroPedidosEmpresa === 'Aceito') {
+            botoesAcao = `
+                <button style="flex:1;padding:10px;background:#10b981;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;"
+                    onclick="responderPedido('${p.id}', 'Concluído')">✓ Marcar como Entregue</button>
+                <button style="padding:10px 12px;background:#f0f0f0;color:#333;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;"
+                    onclick="abrirChatComCliente('${p.clienteId}', '${nomeSeguro}')">
+                    <span class="material-symbols-outlined" style="font-size:18px;">chat</span> Falar com o cliente
+                </button>
+            `;
+        } else {
+            botoesAcao = `
+                <button style="flex:1;padding:10px;background:#f0f0f0;color:#333;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;gap:6px;"
+                    onclick="abrirChatComCliente('${p.clienteId}', '${nomeSeguro}')">
+                    <span class="material-symbols-outlined" style="font-size:18px;">chat</span> Falar com o cliente
+                </button>
+            `;
+        }
+
+        const enderecoHtml = (filtroPedidosEmpresa === 'Aceito' || filtroPedidosEmpresa === 'Concluído') ? `
+                <div style="display:flex; align-items:center; gap:6px; margin:6px 0; color:#555; font-size:13px;">
+                    <span class="material-symbols-outlined" style="font-size:16px;">location_on</span>
+                    ${p.clienteLocalidade ? p.clienteLocalidade : 'Endereço não informado pelo cliente'}
+                </div>
+                ${p.clienteTelefone ? `
+                <div style="display:flex; align-items:center; gap:6px; margin:2px 0 6px; color:#555; font-size:13px;">
+                    <span class="material-symbols-outlined" style="font-size:16px;">call</span>
+                    ${p.clienteTelefone}
+                </div>` : ''}
+        ` : '';
+
+        div.innerHTML = `
+            <div class="pedido-top">
+                <strong>${p.clienteNome || 'Cliente'}</strong>
+                <strong>${precoFormatado}</strong>
+            </div>
+            <div class="pedido-list" style="margin:6px 0;">${itensParaTexto(p)}</div>
+            ${enderecoHtml}
+            <div style="display:flex;gap:8px;margin-top:10px;">
+                ${botoesAcao}
+            </div>
+        `;
+        lista.appendChild(div);
+    });
+}
+
+window.carregarPedidosEmpresa = function() {
+    const user = auth.currentUser;
+    const lista = document.getElementById('loja-pedidos-lista');
+    if (!lista) return;
+
+    if (!user) {
+        lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Faça login para ver os pedidos.</p>';
+        return;
+    }
+
+    [unsubscribePedidosEmpresa, unsubscribePreparoEmpresa, unsubscribeConcluidosEmpresa, unsubscribeRecusadosEmpresa].forEach(fn => { if (fn) fn(); });
+
+    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando...</p>';
+    filtroPedidosEmpresa = 'Pendente';
+    const titulo = document.getElementById('loja-section-title');
+    if (titulo) titulo.textContent = 'Pedidos Pendentes';
+
+    const statusParaContador = {
+        'Pendente': 'contador-pendentes',
+        'Aceito': 'contador-preparo',
+        'Concluído': 'contador-concluidos',
+        'Recusado': 'contador-recusados'
+    };
+
+    function escutarStatus(status, setUnsub) {
+        const q = query(collection(db, "pedidos"), where("empresaId", "==", user.uid), where("status", "==", status));
+        const unsub = onSnapshot(q, (snap) => {
+            const contadorEl = document.getElementById(statusParaContador[status]);
+            if (contadorEl) contadorEl.textContent = snap.size;
+
+            cachePedidosPorStatus[status] = [];
+            snap.forEach(d => cachePedidosPorStatus[status].push({ id: d.id, ...d.data() }));
+            cachePedidosPorStatus[status].sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+
+            if (filtroPedidosEmpresa === status) renderizarPedidosEmpresa();
+        }, (err) => {
+            console.error(err);
+            if (filtroPedidosEmpresa === status) {
+                lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
             }
         });
+        return unsub;
+    }
+
+    unsubscribePedidosEmpresa = escutarStatus('Pendente');
+    unsubscribePreparoEmpresa = escutarStatus('Aceito');
+    unsubscribeConcluidosEmpresa = escutarStatus('Concluído');
+    unsubscribeRecusadosEmpresa = escutarStatus('Recusado');
+};
+
+window.responderPedido = async function(pedidoId, novoStatus) {
+    try {
+        const pedidoSnap = await getDoc(doc(db, "pedidos", pedidoId));
+        await updateDoc(doc(db, "pedidos", pedidoId), { status: novoStatus });
+
+        if (pedidoSnap.exists()) {
+            const p = pedidoSnap.data();
+            let titulo = 'Atualização do seu pedido';
+            let corpo = `Seu pedido em ${p.empresaNome || 'loja'} agora está: ${novoStatus}`;
+            if (novoStatus === 'Recusado') {
+                titulo = 'Pedido recusado';
+                corpo = `A loja ${p.empresaNome || ''} recusou seu pedido.`;
+            } else if (novoStatus === 'Concluído') {
+                titulo = 'Pedido entregue';
+                corpo = `Seu pedido em ${p.empresaNome || 'loja'} foi marcado como entregue.`;
+            }
+            criarNotificacao(p.clienteId, { tipo: 'pedido_status', titulo, corpo, pedidoId });
+        }
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao atualizar pedido: ' + err.message, true);
+    }
+};
+
+window.aceitarPedido = async function(pedidoId, clienteId, clienteNome) {
+    try {
+        const pedidoSnap = await getDoc(doc(db, "pedidos", pedidoId));
+        await updateDoc(doc(db, "pedidos", pedidoId), { status: 'Aceito' });
+
+        if (pedidoSnap.exists()) {
+            const p = pedidoSnap.data();
+            criarNotificacao(clienteId, {
+                tipo: 'pedido_status',
+                titulo: 'Pedido aceito!',
+                corpo: `${p.empresaNome || 'A loja'} aceitou seu pedido.`,
+                pedidoId
+            });
+        }
+
+        await abrirChatComCliente(clienteId, clienteNome);
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao aceitar pedido: ' + err.message, true);
+    }
+};
+
+// ==========================================
+// CHAT REAL EM TEMPO REAL (Firestore)
+// ==========================================
+
+let conversaAtualId = null;
+let conversaAtualDados = null;
+let unsubscribeChat = null;
+let unsubscribeConversasEmpresa = null;
+
+function gerarConversaId(uidCliente, uidEmpresa) {
+    return [uidCliente, uidEmpresa].sort().join('_');
+}
+
+async function abrirConversa(clienteId, empresaId, dadosIniciais) {
+    const user = auth.currentUser;
+    if (!user) { toast('Você precisa estar logado.', true); return; }
+
+    const conversaId = gerarConversaId(clienteId, empresaId);
+    conversaAtualId = conversaId;
+    conversaAtualDados = dadosIniciais;
+
+    const conversaRef = doc(db, 'conversas', conversaId);
+    try {
+        const snap = await getDoc(conversaRef);
+        if (!snap.exists()) {
+            await setDoc(conversaRef, {
+                participantes: [clienteId, empresaId],
+                clienteId: dadosIniciais.clienteId,
+                clienteNome: dadosIniciais.clienteNome,
+                empresaId: dadosIniciais.empresaId,
+                empresaNome: dadosIniciais.empresaNome,
+                ultimaMensagem: '',
+                ultimaMensagemEm: serverTimestamp()
+            });
+        } else {
+            await setDoc(conversaRef, {
+                clienteNome: dadosIniciais.clienteNome,
+                empresaNome: dadosIniciais.empresaNome
+            }, { merge: true });
+        }
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao abrir conversa: ' + err.message, true);
+        return;
+    }
+
+    const souEmpresa = user.uid === empresaId;
+    const nomeOutro = souEmpresa ? dadosIniciais.clienteNome : dadosIniciais.empresaNome;
+    const tituloEl = document.getElementById('chat-nome-contato');
+    if (tituloEl) tituloEl.textContent = nomeOutro || 'Conversa';
+
+    mudarTela('tela-8');
+    setTimeout(() => { if (typeof inicializarChat === 'function') inicializarChat(); }, 100);
+    escutarMensagens(conversaId);
+}
+
+window.abrirChatComEmpresa = async function(empresaId, empresaNome) {
+    const user = auth.currentUser;
+    if (!user) { toast('Você precisa estar logado.', true); return; }
+    await abrirConversa(user.uid, empresaId, {
+        clienteId: user.uid,
+        clienteNome: user.displayName || 'Cliente',
+        empresaId: empresaId,
+        empresaNome: empresaNome
+    });
+};
+
+window.abrirChatComCliente = async function(clienteId, clienteNome) {
+    const user = auth.currentUser;
+    if (!user) { toast('Você precisa estar logado.', true); return; }
+    await abrirConversa(clienteId, user.uid, {
+        clienteId: clienteId,
+        clienteNome: clienteNome,
+        empresaId: user.uid,
+        empresaNome: user.displayName || 'Empresa'
+    });
+};
+
+window.abrirChatEmpresaAtual = function() {
+    if (!empresaSelecionada) { toast('Abra o cardápio de uma loja primeiro.', true); return; }
+    abrirChatComEmpresa(empresaSelecionada.id, empresaSelecionada.nome);
+};
+
+function escutarMensagens(conversaId) {
+    if (unsubscribeChat) { unsubscribeChat(); unsubscribeChat = null; }
+    const chatMessages = document.getElementById('chat-mensagens');
+    if (chatMessages) chatMessages.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando mensagens...</p>';
+
+    const q = query(collection(db, 'conversas', conversaId, 'mensagens'), orderBy('criadoEm', 'asc'));
+    unsubscribeChat = onSnapshot(q, (snap) => {
+        const user = auth.currentUser;
+        if (!chatMessages || !user) return;
+
+        if (snap.empty) {
+            chatMessages.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Nenhuma mensagem ainda. Diga olá!</p>';
+            return;
+        }
+
+        chatMessages.innerHTML = '';
+        let dataAnterior = '';
+        snap.forEach(docMsg => {
+            const m = docMsg.data();
+            const dataMsg = m.criadoEm?.toDate ? m.criadoEm.toDate() : new Date();
+            const dataStr = dataMsg.toLocaleDateString('pt-BR');
+            if (dataStr !== dataAnterior) {
+                const divData = document.createElement('div');
+                divData.className = 'chat-data';
+                divData.textContent = dataStr === new Date().toLocaleDateString('pt-BR') ? 'Hoje' : dataStr;
+                chatMessages.appendChild(divData);
+                dataAnterior = dataStr;
+            }
+
+            const souEu = m.remetenteId === user.uid;
+            const hora = m.criadoEm?.toDate ? dataMsg.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+
+            const div = document.createElement('div');
+            div.className = 'mensagem ' + (souEu ? 'mensagem-enviada' : 'mensagem-recebida');
+
+            if (souEu) {
+                div.innerHTML = `
+                    <div class="mensagem-conteudo">
+                        <div class="mensagem-balao mensagem-balao-enviada"><p></p></div>
+                        <div class="mensagem-status">
+                            <span class="mensagem-hora">${hora}</span>
+                            <span class="material-symbols-outlined">done_all</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                div.innerHTML = `
+                    <div class="mensagem-conteudo">
+                        <div class="mensagem-balao"><p></p></div>
+                        <span class="mensagem-hora">${hora}</span>
+                    </div>
+                `;
+            }
+            div.querySelector('p').textContent = m.texto || '';
+            chatMessages.appendChild(div);
+        });
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, (err) => {
+        console.error(err);
+        if (chatMessages) chatMessages.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar mensagens.</p>';
+    });
+}
+
+window.enviarMensagem = async function(texto) {
+    texto = (texto || '').trim();
+    if (!texto) return;
+    const user = auth.currentUser;
+    if (!user) { toast('Você precisa estar logado.', true); return; }
+    if (!conversaAtualId) { toast('Nenhuma conversa aberta.', true); return; }
+
+    const souEmpresa = conversaAtualDados && user.uid === conversaAtualDados.empresaId;
+    const destinatarioId = souEmpresa ? conversaAtualDados.clienteId : conversaAtualDados.empresaId;
+    const meuNome = souEmpresa ? (conversaAtualDados.empresaNome || 'Empresa') : (conversaAtualDados.clienteNome || 'Cliente');
+
+    try {
+        await addDoc(collection(db, 'conversas', conversaAtualId, 'mensagens'), {
+            remetenteId: user.uid,
+            remetenteTipo: souEmpresa ? 'empresa' : 'cliente',
+            texto: texto,
+            criadoEm: serverTimestamp()
+        });
+        await updateDoc(doc(db, 'conversas', conversaAtualId), {
+            ultimaMensagem: texto,
+            ultimaMensagemEm: serverTimestamp()
+        });
+
+        if (destinatarioId) {
+            criarNotificacao(destinatarioId, {
+                tipo: 'mensagem',
+                titulo: `Nova mensagem de ${meuNome}`,
+                corpo: texto,
+                conversaId: conversaAtualId
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        toast('Erro ao enviar mensagem: ' + err.message, true);
+    }
+};
+
+window.carregarConversasEmpresa = function() {
+    const user = auth.currentUser;
+    const lista = document.getElementById('mensagens-lista');
+    if (!lista) return;
+
+    if (!user) {
+        lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Faça login para ver suas mensagens.</p>';
+        return;
+    }
+
+    if (unsubscribeConversasEmpresa) unsubscribeConversasEmpresa();
+
+    lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando conversas...</p>';
+
+    const q = query(collection(db, 'conversas'), where('empresaId', '==', user.uid));
+
+    unsubscribeConversasEmpresa = onSnapshot(q, (snap) => {
+        if (snap.empty) {
+            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Nenhuma conversa ainda.</p>';
+            return;
+        }
+
+        const conversas = [];
+        snap.forEach(d => conversas.push({ id: d.id, ...d.data() }));
+        conversas.sort((a, b) => (b.ultimaMensagemEm?.seconds || 0) - (a.ultimaMensagemEm?.seconds || 0));
+
+        lista.innerHTML = '';
+        conversas.forEach(c => {
+            const iniciais = (c.clienteNome || 'C').split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+            const item = document.createElement('div');
+            item.className = 'mensagem-item';
+            item.setAttribute('data-nome', c.clienteNome || '');
+            item.setAttribute('data-id', c.id);
+            item.innerHTML = `
+                <div class="avatar avatar1">${iniciais}</div>
+                <div class="mensagem-info">
+                    <div class="mensagem-topo"><h3>${c.clienteNome || 'Cliente'}</h3></div>
+                    <div class="mensagem-preview">${c.ultimaMensagem ? c.ultimaMensagem : 'Nenhuma mensagem ainda'}</div>
+                </div>
+            `;
+            item.addEventListener('click', () => {
+                abrirChatComCliente(c.clienteId, c.clienteNome);
+            });
+            lista.appendChild(item);
+        });
+    }, (err) => {
+        console.error(err);
+        lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Erro ao carregar conversas.</p>';
+    });
+};
+
+// ==========================================
+// PESQUISA (tela-6) — lojas e produtos
+// ==========================================
+
+let cacheEmpresasBusca = null;
+let cacheProdutosBusca = null;
+
+async function garantirCacheBusca() {
+    if (cacheEmpresasBusca && cacheProdutosBusca) return;
+    const [empresasSnap, produtosSnap] = await Promise.all([
+        getDocs(collection(db, 'empresas')),
+        getDocs(collection(db, 'produtos'))
+    ]);
+    cacheEmpresasBusca = [];
+    empresasSnap.forEach(d => cacheEmpresasBusca.push({ id: d.id, ...d.data() }));
+    cacheProdutosBusca = [];
+    produtosSnap.forEach(d => { if (d.data().disponivel !== false) cacheProdutosBusca.push({ id: d.id, ...d.data() }); });
+}
+
+function renderizarResultadosBusca(termo) {
+    const container = document.getElementById('pesquisa-resultados');
+    if (!container) return;
+
+    if (!termo) {
+        container.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Digite para buscar lojas e produtos.</p>';
+        return;
+    }
+
+    const t = termo.toLowerCase();
+    const lojas = (cacheEmpresasBusca || []).filter(e => (e.nome || '').toLowerCase().includes(t) || (e.categoria || '').toLowerCase().includes(t));
+    const produtos = (cacheProdutosBusca || []).filter(p => (p.nome || '').toLowerCase().includes(t) || (p.categoria || '').toLowerCase().includes(t));
+
+    if (lojas.length === 0 && produtos.length === 0) {
+        container.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Nenhum resultado encontrado.</p>';
+        return;
+    }
+
+    let html = '';
+    if (lojas.length > 0) {
+        html += '<h3 style="padding:0 4px;">Lojas</h3>';
+        lojas.forEach(l => {
+            html += `
+                <div class="resultado-item" style="cursor:pointer;" onclick="abrirCardapioEmpresa('${l.id}', '${(l.nome||'Loja').replace(/'/g,"\\'")}')">
+                    <div class="resultado-info">
+                        <div class="resultado-titulo"><h4>${l.nome || 'Loja'}</h4></div>
+                        <p>${l.categoria || 'Restaurante'} • ${l.aberto === false ? 'Fechado' : 'Aberto'}</p>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    if (produtos.length > 0) {
+        html += '<h3 style="padding:12px 4px 0;">Produtos</h3>';
+        produtos.forEach(p => {
+            html += `
+                <div class="resultado-item" style="cursor:pointer;" onclick="abrirCardapioEmpresa('${p.empresa}', '${(p.nomeEmpresa||'Loja').replace(/'/g,"\\'")}')">
+                    <div class="resultado-info">
+                        <div class="resultado-titulo"><h4>${p.nome || 'Produto'}</h4></div>
+                        <p>${p.nomeEmpresa || 'Loja'} • ${formatarPreco(p.preco)}</p>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    container.innerHTML = html;
+}
+
+window.inicializarPesquisa = function() {
+    const input = document.getElementById('pesquisa-busca-input');
+    if (!input || input.hasListener) return;
+
+    let timeoutBusca = null;
+    input.addEventListener('input', function(e) {
+        clearTimeout(timeoutBusca);
+        const termo = e.target.value.trim();
+        timeoutBusca = setTimeout(async () => {
+            const container = document.getElementById('pesquisa-resultados');
+            if (termo && container) container.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Buscando...</p>';
+            try {
+                await garantirCacheBusca();
+                renderizarResultadosBusca(termo);
+            } catch (err) {
+                console.error(err);
+                if (container) container.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
+            }
+        }, 300);
+    });
+    input.hasListener = true;
+};
+
+// ==========================================
+// NOTIFICAÇÕES (tempo real, cliente e empresa)
+// ==========================================
+
+let unsubscribeNotificacoes = null;
+let telaAnteriorNotificacoes = 'tela-5';
+
+async function criarNotificacao(paraUsuario, dados) {
+    if (!paraUsuario) return;
+    try {
+        await addDoc(collection(db, 'notificacoes'), {
+            paraUsuario,
+            lida: false,
+            criadoEm: serverTimestamp(),
+            ...dados
+        });
+    } catch (err) {
+        console.error('Erro ao criar notificação:', err);
+    }
+}
+
+function observarNotificacoes() {
+    const user = auth.currentUser;
+    if (!user) return;
+    if (unsubscribeNotificacoes) unsubscribeNotificacoes();
+
+    const q = query(
+        collection(db, 'notificacoes'),
+        where('paraUsuario', '==', user.uid),
+        where('lida', '==', false)
+    );
+    unsubscribeNotificacoes = onSnapshot(q, (snap) => {
+        const temNaoLidas = !snap.empty;
+        const pontoCliente = document.getElementById('ponto-notificacao-cliente');
+        const pontoEmpresa = document.getElementById('ponto-notificacao-empresa');
+        if (pontoCliente) pontoCliente.style.display = temNaoLidas ? 'block' : 'none';
+        if (pontoEmpresa) pontoEmpresa.style.display = temNaoLidas ? 'block' : 'none';
+    }, (err) => console.error('Erro ao observar notificações:', err));
+}
+
+window.abrirNotificacoes = function() {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const telaAtiva = document.querySelector('.tela.ativa');
+    telaAnteriorNotificacoes = telaAtiva ? telaAtiva.id : (tipoUsuario === 'empresa' ? 'tela-10' : 'tela-5');
+
+    mudarTela('tela-17');
+
+    const lista = document.getElementById('notificacoes-lista');
+    if (lista) lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando notificações...</p>';
+
+    const q = query(collection(db, 'notificacoes'), where('paraUsuario', '==', user.uid));
+    getDocs(q).then(async (snap) => {
+        if (!lista) return;
+        if (snap.empty) {
+            lista.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Você não tem notificações.</p>';
+            return;
+        }
+
+        const notifs = [];
+        snap.forEach(d => notifs.push({ id: d.id, ...d.data() }));
+        notifs.sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+
+        const iconePorTipo = {
+            mensagem: 'chat',
+            pedido_novo: 'receipt_long',
+            pedido_status: 'local_shipping'
+        };
+
+        lista.innerHTML = '';
+        notifs.forEach(n => {
+            const item = document.createElement('div');
+            item.style.cssText = `background:#fff; border-radius:12px; padding:14px; display:flex; gap:12px; align-items:flex-start; box-shadow:0 1px 6px rgba(0,0,0,0.06); ${n.lida ? 'opacity:0.6;' : ''} cursor:pointer;`;
+            item.innerHTML = `
+                <div style="width:38px;height:38px;border-radius:50%;background:rgba(229,6,21,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <span class="material-symbols-outlined" style="color:var(--primary,#e50615);font-size:20px;">${iconePorTipo[n.tipo] || 'notifications'}</span>
+                </div>
+                <div style="flex:1;">
+                    <strong style="font-size:14px;">${n.titulo || 'Notificação'}</strong>
+                    <p style="margin:4px 0 0; font-size:13px; color:#555;">${n.corpo || ''}</p>
+                </div>
+            `;
+            item.onclick = () => abrirDestinoNotificacao(n);
+            lista.appendChild(item);
+        });
+
+        const naoLidas = notifs.filter(n => !n.lida);
+        for (const n of naoLidas) {
+            try { await updateDoc(doc(db, 'notificacoes', n.id), { lida: true }); } catch (e) { console.error(e); }
+        }
+    }).catch(err => {
+        console.error(err);
+        if (lista) lista.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
+    });
+};
+
+function abrirDestinoNotificacao(n) {
+    if (n.tipo === 'mensagem' && n.conversaId) {
+        getDoc(doc(db, 'conversas', n.conversaId)).then(snap => {
+            if (!snap.exists()) { mudarTela(tipoUsuario === 'empresa' ? 'tela-12' : 'tela-7'); return; }
+            const c = snap.data();
+            if (tipoUsuario === 'empresa') {
+                abrirChatComCliente(c.clienteId, c.clienteNome);
+            } else {
+                abrirChatComEmpresa(c.empresaId, c.empresaNome);
+            }
+        }).catch(() => mudarTela(tipoUsuario === 'empresa' ? 'tela-12' : 'tela-7'));
+    } else if (n.pedidoId) {
+        mudarTela(tipoUsuario === 'empresa' ? 'tela-10' : 'tela-7');
+    } else {
+        voltarDeNotificacoes();
+    }
+}
+
+window.voltarDeNotificacoes = function() {
+    mudarTela(telaAnteriorNotificacoes || (tipoUsuario === 'empresa' ? 'tela-10' : 'tela-5'));
+};
+
+// ==========================================
+// INICIALIZAÇÃO
+// ==========================================
+
+let inicializacaoTratada = false;
+
+onAuthStateChanged(auth, (user) => {
+    const tipoSalvo = localStorage.getItem('tipoUsuario');
+
+    if (user && tipoSalvo) {
+        tipoUsuario = tipoSalvo;
+        const nomePerfil = document.getElementById('nomePerfil');
+        const emailPerfil = document.getElementById('emailPerfil');
+        if (nomePerfil) nomePerfil.textContent = user.displayName || 'Usuário';
+        if (emailPerfil) emailPerfil.textContent = user.email || '';
+
+        observarNotificacoes();
+
+        if (!inicializacaoTratada) {
+            inicializacaoTratada = true;
+            if (tipoSalvo === 'cliente') {
+                mudarTela('tela-5');
+                (async () => {
+                    try {
+                        const snap = await getDoc(doc(db, "clientes", user.uid));
+                        if (snap.exists() && snap.data().localidade) {
+                            atualizarLocalidadeHome(snap.data().localidade);
+                        }
+                    } catch (e) { console.error(e); }
+                })();
+            } else if (tipoSalvo === 'empresa') {
+                mudarTela('tela-10');
+            }
+        }
+    } else if (!user && tipoSalvo && inicializacaoTratada === false) {
+        inicializacaoTratada = true;
+        localStorage.removeItem('tipoUsuario');
+        localStorage.removeItem('nomeUsuario');
+        localStorage.removeItem('emailUsuario');
+    }
+});
 
     </script>
 </body>
