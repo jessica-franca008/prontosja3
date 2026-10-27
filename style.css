@@ -2517,3 +2517,87 @@ body {
     margin-top: 16px;
     color: #666;
 }
+
+/* ========================================== */
+/* NOVO: CHECKOUT, PAGAMENTO E DETALHES       */
+/* ========================================== */
+
+/* Quebra de linha nas mensagens do chat (mensagem do Pix tem várias linhas) */
+.mensagem-balao p { white-space: pre-wrap; word-break: break-word; }
+
+/* Finalizar pedido (tela-18) */
+.checkout-card {
+    background: #fff; border: 1px solid var(--border-light); border-radius: 14px;
+    padding: 16px; margin-bottom: 14px;
+}
+.checkout-card h2 { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--text-main); }
+.checkout-total {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid #eee;
+    font-size: 15px; font-weight: 700;
+}
+.checkout-lista { padding: 0; }
+.checkout-linha {
+    display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px;
+    background: none; border: none; text-align: left; font-family: inherit; cursor: pointer;
+}
+.checkout-linha + .checkout-linha { border-top: 1px solid #eee; }
+.checkout-ico { color: var(--primary); font-size: 24px; }
+.checkout-texto { flex: 1; display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: var(--text-main); }
+.checkout-texto strong { font-size: 14px; }
+.checkout-texto small { color: var(--text-muted); font-size: 12px; }
+.checkout-seta { color: var(--text-muted); }
+
+.checkout-rodape { padding: 12px 16px; background: #fff; border-top: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 10px; }
+.btn-checkout {
+    width: 100%; height: 48px; background: var(--primary); color: #fff; border: none;
+    border-radius: 12px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer;
+}
+.btn-checkout:active { background: var(--primary-dark); }
+.btn-checkout:disabled { opacity: .6; }
+
+/* Forma de pagamento (tela-19) */
+.pg-pergunta { font-size: 16px; font-weight: 700; margin-bottom: 14px; color: var(--text-main); }
+.pg-opcao {
+    display: flex; align-items: center; gap: 12px; width: 100%; padding: 14px;
+    background: #fff; border: 1px solid var(--border-light); border-radius: 14px;
+    margin-bottom: 12px; text-align: left; font-family: inherit; cursor: pointer;
+}
+.pg-opcao.selecionada { border: 1.5px solid var(--primary); }
+.pg-ico { font-size: 28px; color: #374151; }
+.pg-ico-pix { color: var(--primary); }
+.pg-texto { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.pg-texto strong { font-size: 14px; color: var(--text-main); }
+.pg-texto small { font-size: 12px; color: var(--text-muted); }
+.pg-radio { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #b9b9bf; position: relative; flex-shrink: 0; }
+.pg-opcao.selecionada .pg-radio { border-color: var(--primary); }
+.pg-opcao.selecionada .pg-radio::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--primary); }
+.pg-total { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; }
+
+/* Detalhes do pedido (tela-20) */
+.det-card { background: #fff; border: 1px solid var(--border-light); border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+.det-cliente { display: flex; align-items: center; gap: 12px; }
+.det-avatar { width: 46px; height: 46px; border-radius: 50%; background: #d9f3e3; color: #1f8a4c; display: grid; place-items: center; font-weight: 700; }
+.det-cliente-info { flex: 1; display: flex; flex-direction: column; font-size: 15px; font-weight: 700; }
+.det-cliente-info span { font-size: 13px; font-weight: 400; color: var(--text-muted); }
+.det-ligar { color: var(--primary); text-decoration: none; display: flex; }
+.det-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+.det-item { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; padding: 6px 0; }
+.det-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 15px; border-top: 1px solid #eee; margin-top: 8px; padding-top: 10px; }
+.det-bloco + .det-bloco { border-top: 1px solid #eee; margin-top: 12px; padding-top: 12px; }
+.det-rotulo { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px; }
+.det-valor { font-size: 14px; display: block; margin-bottom: 6px; }
+.det-badge { display: inline-block; border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 600; }
+.det-badge.verde { background: #d9f3e3; color: #1f8a4c; }
+.det-badge.laranja { background: #fdeed6; color: #d97a14; }
+.det-badge.vermelho { background: #fdecee; color: var(--primary); }
+.det-badge.azul { background: #e0e7ff; color: #4338ca; }
+.det-acoes { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.det-btn { width: 100%; height: 46px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
+.det-btn.primario { background: var(--primary); color: #fff; }
+.det-btn.cinza { background: #eeeff1; color: var(--text-main); }
+.det-btn.contorno { background: #fff; color: #1f8a4c; border: 1.5px solid #1f8a4c; }
+.pedido-ver-detalhes {
+    background: none; border: none; color: var(--primary); font-size: 12px; font-weight: 600;
+    cursor: pointer; padding: 0; font-family: inherit;
+}
