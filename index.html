@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* ── Perfil: inputs editáveis ── */
+        /* ── Perfil / endereço: inputs editáveis ── */
         .detalhe-input {
             border: none;
             border-bottom: 1.5px solid #e0e0e0;
@@ -24,9 +24,7 @@
             font-family: inherit;
             transition: border-color 0.2s;
         }
-        .detalhe-input:focus {
-            border-bottom-color: var(--primary, #e50615);
-        }
+        .detalhe-input:focus { border-bottom-color: var(--primary, #e50615); }
         .perfil-foto {
             width: 90px;
             height: 90px;
@@ -35,12 +33,7 @@
             background-position: center;
             background-color: #f0f0f0;
         }
-        .perfil-email-sub {
-            font-size: 13px;
-            color: #888;
-            margin-top: 2px;
-            display: block;
-        }
+        .perfil-email-sub { font-size: 13px; color: #888; margin-top: 2px; display: block; }
         .btn-salvar-perfil {
             display: flex;
             align-items: center;
@@ -58,9 +51,7 @@
             cursor: pointer;
             font-family: inherit;
         }
-        .btn-salvar-perfil:active {
-            opacity: 0.85;
-        }
+        .btn-salvar-perfil:active { opacity: 0.85; }
     </style>
 </head>
 <body>
@@ -364,21 +355,18 @@
             <section id="tela-9" class="tela">
                 <div class="perfil-cabecalho"><h1>Meu Perfil</h1></div>
 
-                <!-- Foto + nome + e-mail -->
                 <div class="perfil-conteudo">
                     <div class="perfil-foto-container">
                         <div class="perfil-foto" id="perfilFotoEl"></div>
                         <button class="btn-camera" onclick="document.getElementById('inputFotoPerfil').click()">
                             <span class="material-symbols-outlined">camera_alt</span>
                         </button>
-                        <!-- Input oculto para selecionar imagem da galeria -->
                         <input type="file" id="inputFotoPerfil" accept="image/*" style="display:none;">
                     </div>
                     <h2 id="nomePerfil">Carregando...</h2>
                     <span class="perfil-email-sub" id="emailPerfil"></span>
                 </div>
 
-                <!-- Campos editáveis -->
                 <div class="perfil-detalhes">
                     <div class="detalhe-item">
                         <div class="detalhe-icone"><span class="material-symbols-outlined">call</span></div>
@@ -396,7 +384,6 @@
                     </div>
                 </div>
 
-                <!-- Botão salvar -->
                 <button onclick="salvarPerfil()" class="btn-salvar-perfil">
                     <span class="material-symbols-outlined">save</span>
                     Salvar Alterações
@@ -415,7 +402,6 @@
                     <button class="nav-item ativo"><span class="material-symbols-outlined">person</span><span>Perfil</span></button>
                 </nav>
             </section>
-
             <!-- TELA 10: MINHA LOJA (pedidos em tempo real) -->
             <section id="tela-10" class="tela">
                 <div class="loja-header" style="display:flex; align-items:center; justify-content:space-between;">
@@ -475,7 +461,6 @@
                     <div class="card-loja"><div class="icone-loja"><span class="material-symbols-outlined">store</span></div><div class="info-loja"><h3 id="ajustes-nome-loja">Minha Loja</h3><span id="ajustes-cnpj-loja">CNPJ: —</span></div></div>
                     <div class="ajustes-lista"><div class="ajustes-item" onclick="abrirDadosDaLoja()"><div class="item-esquerda"><span class="material-symbols-outlined">store</span><p>Dados da Loja</p></div><span class="material-symbols-outlined seta">chevron_right</span></div></div>
 
-                    <!-- Formulário de dados da loja (oculto até o usuário clicar) -->
                     <div id="form-dados-loja" style="display:none; padding:16px;">
                         <div class="campo-input-produto">
                             <label>Nome da Loja</label>
@@ -509,6 +494,13 @@
                             <div class="input-wrapper-produto">
                                 <span class="material-symbols-outlined">location_on</span>
                                 <input type="text" id="lojaEndereco" placeholder="Endereço completo da loja">
+                            </div>
+                        </div>
+                        <div class="campo-input-produto">
+                            <label>Chave Pix (CPF, CNPJ, e-mail, telefone com +55 ou chave aleatória)</label>
+                            <div class="input-wrapper-produto">
+                                <span class="material-symbols-outlined">qr_code_2</span>
+                                <input type="text" id="lojaChavePix" placeholder="Chave Pix para receber pagamentos">
                             </div>
                         </div>
                         <button onclick="salvarDadosDaLoja()" class="btn-salvar-produto">
@@ -607,7 +599,6 @@
                     <div id="listaProdutosCliente" class="produtos-cliente-grid"></div>
                 </div>
 
-                <!-- Barra do carrinho (some quando vazio) -->
                 <div id="barra-carrinho" style="display:none; position:sticky; bottom:64px; margin:0 16px 10px; background:var(--primary,#e50615); color:#fff; border-radius:14px; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 14px rgba(0,0,0,0.18); cursor:pointer;" onclick="abrirResumoCarrinho()">
                     <span id="carrinho-resumo-texto">0 itens</span>
                     <span style="display:flex; align-items:center; gap:6px; font-weight:700;">Ver sacola <span class="material-symbols-outlined">shopping_bag</span></span>
@@ -621,7 +612,7 @@
                 </nav>
             </section>
 
-            <!-- TELA 16: LISTA DE EMPRESAS (nova) -->
+            <!-- TELA 16: LISTA DE EMPRESAS -->
             <section id="tela-16" class="tela">
                 <div class="tela-cabecalho">
                     <button onclick="mudarTela('tela-5')" class="btn-voltar">
@@ -642,7 +633,7 @@
                 </nav>
             </section>
 
-            <!-- TELA 17: NOTIFICAÇÕES (nova, comum a cliente e empresa) -->
+            <!-- TELA 17: NOTIFICAÇÕES -->
             <section id="tela-17" class="tela">
                 <div class="tela-cabecalho">
                     <button onclick="voltarDeNotificacoes()" class="btn-voltar">
@@ -655,25 +646,90 @@
                 </div>
             </section>
 
-            <!-- TELA 18: RESUMO DA SACOLA / CHECKOUT -->
+            <!-- TELA 18: FINALIZAR PEDIDO (resumo + endereço + entrega) -->
             <section id="tela-18" class="tela">
                 <div class="tela-cabecalho">
-                    <button onclick="mudarTela('tela-15')" class="btn-voltar">
-                        <span class="material-symbols-outlined">arrow_back</span>
-                    </button>
-                    <h1>Sua Sacola</h1>
+                    <button onclick="mudarTela('tela-15')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button>
+                    <h1>Finalizar pedido</h1>
                 </div>
                 <div class="produto-conteudo">
-                    <div id="resumoCarrinhoLista" style="padding:16px; display:flex; flex-direction:column; gap:10px;"></div>
-                    <div style="padding:0 16px; display:flex; justify-content:space-between; font-weight:700; font-size:16px; border-top:1px solid #eee; margin-top:8px; padding-top:14px;">
-                        <span>Total</span>
-                        <span id="resumoCarrinhoTotal">R$ 0,00</span>
+                    <div class="checkout-card">
+                        <h2>Resumo do pedido</h2>
+                        <div id="resumoCarrinhoLista" style="display:flex; flex-direction:column; gap:10px;"></div>
+                        <div class="checkout-total"><span>Total do pedido</span><strong id="resumoCarrinhoTotal">R$ 0,00</strong></div>
                     </div>
-                    <button onclick="confirmarPedidoCarrinho()" class="btn-salvar-produto" style="margin:20px 16px 0; width:calc(100% - 32px);">
-                        <span class="material-symbols-outlined">check_circle</span>
-                        Confirmar Pedido
+
+                    <div class="checkout-card checkout-lista">
+                        <!-- CORRIGIDO: endereço digitado aqui mesmo, sem precisar ir ao Perfil -->
+                        <div class="checkout-linha" style="cursor:default;">
+                            <span class="material-symbols-outlined checkout-ico">location_on</span>
+                            <span class="checkout-texto">
+                                <strong>Endereço de entrega</strong>
+                                <input id="checkout-endereco-input" class="detalhe-input" type="text" placeholder="Rua, número, bairro, cidade">
+                            </span>
+                        </div>
+                        <div class="checkout-linha">
+                            <span class="material-symbols-outlined checkout-ico">two_wheeler</span>
+                            <span class="checkout-texto">
+                                <strong>Entrega</strong>
+                                <small>Tempo estimado: 30 a 45 min</small>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="checkout-rodape">
+                    <button class="btn-checkout" onclick="irParaPagamento()">Continuar para pagamento</button>
+                </div>
+            </section>
+
+            <!-- TELA 19: FORMA DE PAGAMENTO -->
+            <section id="tela-19" class="tela">
+                <div class="tela-cabecalho">
+                    <button onclick="mudarTela('tela-18')" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button>
+                    <h1>Forma de pagamento</h1>
+                </div>
+                <div class="produto-conteudo">
+                    <h2 class="pg-pergunta">Como deseja pagar?</h2>
+
+                    <button class="pg-opcao selecionada" data-forma="Pix" onclick="selecionarPagamento('Pix')">
+                        <span class="material-symbols-outlined pg-ico pg-ico-pix">qr_code_2</span>
+                        <span class="pg-texto"><strong>Pix</strong><small>Pagamento rápido</small></span>
+                        <span class="pg-radio"></span>
+                    </button>
+
+                    <button class="pg-opcao" data-forma="Cartão" onclick="selecionarPagamento('Cartão')">
+                        <span class="material-symbols-outlined pg-ico">credit_card</span>
+                        <span class="pg-texto"><strong>Cartão de crédito ou débito</strong><small>Pagar com cartão na entrega</small></span>
+                        <span class="pg-radio"></span>
+                    </button>
+
+                    <button class="pg-opcao" data-forma="Dinheiro" onclick="selecionarPagamento('Dinheiro')">
+                        <span class="material-symbols-outlined pg-ico">payments</span>
+                        <span class="pg-texto"><strong>Dinheiro na entrega</strong><small>Pagar ao receber</small></span>
+                        <span class="pg-radio"></span>
                     </button>
                 </div>
+                <div class="checkout-rodape">
+                    <div class="pg-total"><span>Total:</span><strong id="pagamentoTotal">R$ 0,00</strong></div>
+                    <button id="btnConfirmarPagamento" class="btn-checkout" onclick="confirmarPedidoCarrinho()">Confirmar pagamento</button>
+                </div>
+            </section>
+
+            <!-- TELA 20: DETALHES DO PEDIDO (empresa) -->
+            <section id="tela-20" class="tela">
+                <div class="tela-cabecalho">
+                    <button onclick="fecharDetalhesPedido()" class="btn-voltar"><span class="material-symbols-outlined">arrow_back</span></button>
+                    <h1>Detalhes do pedido</h1>
+                </div>
+                <div class="produto-conteudo" id="detalhe-pedido-conteudo">
+                    <p style="text-align:center; padding:20px; color:#888;">Carregando...</p>
+                </div>
+                <nav class="navegacao-inferior">
+                    <button onclick="mudarTela('tela-10')" class="nav-item ativo"><span class="material-symbols-outlined">home</span><span>Início</span></button>
+                    <button onclick="mudarTela('tela-11')" class="nav-item"><span class="material-symbols-outlined">restaurant_menu</span><span>Cardápio</span></button>
+                    <button onclick="mudarTela('tela-12')" class="nav-item"><span class="material-symbols-outlined">chat</span><span>Mensagens</span></button>
+                    <button onclick="mudarTela('tela-13')" class="nav-item"><span class="material-symbols-outlined">settings</span><span>Ajustes</span></button>
+                </nav>
             </section>
 
         </div>
@@ -751,6 +807,10 @@ function toast(msg, isError) {
     else if (isError) alert(msg);
 }
 
+function esc(s) {
+    return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 // ==========================================
 // AUTH
 // ==========================================
@@ -792,6 +852,7 @@ window.loginComGoogle = async function() {
                     categoria: 'Restaurante',
                     cnpj: '',
                     endereco: '',
+                    chavePix: '',
                     aberto: true,
                     criadoEm: serverTimestamp()
                 });
@@ -845,13 +906,10 @@ function traduzirErroAuth(err) {
     }
 }
 
-// Leva da tela de login para o cadastro certo (cliente ou empresa),
-// respeitando o tipo escolhido na tela de seleção de acesso.
 window.irParaCadastro = function() {
     irParaCadastroTipo(tipoUsuario === 'empresa' ? 'empresa' : 'cliente');
 };
 
-// Alterna entre "Sou Cliente" / "Sou Empresa" dentro do próprio cadastro
 window.irParaCadastroTipo = function(tipo) {
     tipoUsuario = tipo;
     const destino = tipo === 'empresa' ? 'tela-4' : 'tela-3';
@@ -947,6 +1005,7 @@ window.cadastrarEmpresa = async function() {
             cnpj,
             categoria,
             endereco,
+            chavePix: '',
             aberto: true,
             criadoEm: serverTimestamp()
         }, { merge: true });
@@ -1016,13 +1075,15 @@ window.sairDaConta = function() {
     [unsubscribePedidosCliente, unsubscribePedidosEmpresa, unsubscribePreparoEmpresa,
      unsubscribeConcluidosEmpresa, unsubscribeRecusadosEmpresa, unsubscribeChat,
      unsubscribeConversasEmpresa, unsubscribeProdutosEmpresa, unsubscribeProdutosCliente,
-     unsubscribeEmpresas, unsubscribeNotificacoes, unsubscribeStatusLoja].forEach(fn => {
+     unsubscribeEmpresas, unsubscribeNotificacoes, unsubscribeStatusLoja,
+     unsubscribeDetalhePedido].forEach(fn => {
         if (typeof fn === 'function') fn();
     });
     unsubscribePedidosCliente = unsubscribePedidosEmpresa = unsubscribePreparoEmpresa =
         unsubscribeConcluidosEmpresa = unsubscribeRecusadosEmpresa = unsubscribeChat =
         unsubscribeConversasEmpresa = unsubscribeProdutosEmpresa = unsubscribeProdutosCliente =
-        unsubscribeEmpresas = unsubscribeNotificacoes = unsubscribeStatusLoja = null;
+        unsubscribeEmpresas = unsubscribeNotificacoes = unsubscribeStatusLoja =
+        unsubscribeDetalhePedido = null;
 
     auth.signOut().then(() => {
         tipoUsuario = null;
@@ -1153,8 +1214,6 @@ window.toggleStatusLoja = async function() {
     const novoEstado = !lojaAbertaAtual;
     try {
         await updateDoc(doc(db, "empresas", user.uid), { aberto: novoEstado });
-        // A UI é atualizada pelo listener onSnapshot acima assim que a
-        // escrita é confirmada — mantém tudo consistente entre abas/dispositivos.
     } catch (err) {
         console.error(err);
         toast('Erro ao atualizar status da loja: ' + err.message, true);
@@ -1199,10 +1258,12 @@ window.abrirDadosDaLoja = async function() {
             const cnpjI = document.getElementById('lojaCnpj');
             const catI = document.getElementById('lojaCategoria');
             const endI = document.getElementById('lojaEndereco');
+            const pixI = document.getElementById('lojaChavePix');
             if (nomeI) nomeI.value = e.nome || '';
             if (cnpjI) cnpjI.value = e.cnpj || '';
             if (catI && e.categoria) catI.value = e.categoria;
             if (endI) endI.value = e.endereco || '';
+            if (pixI) pixI.value = e.chavePix || '';
         }
     } catch (err) {
         console.error(err);
@@ -1217,11 +1278,12 @@ window.salvarDadosDaLoja = async function() {
     const cnpj = document.getElementById('lojaCnpj')?.value.trim() || '';
     const categoria = document.getElementById('lojaCategoria')?.value || 'Restaurante';
     const endereco = document.getElementById('lojaEndereco')?.value.trim() || '';
+    const chavePix = document.getElementById('lojaChavePix')?.value.trim() || '';
 
     if (!nome) { toast('Informe o nome da loja.', true); return; }
 
     try {
-        await updateDoc(doc(db, "empresas", user.uid), { nome, cnpj, categoria, endereco });
+        await updateDoc(doc(db, "empresas", user.uid), { nome, cnpj, categoria, endereco, chavePix });
         toast('✅ Dados da loja salvos!');
         window.carregarAjustesEmpresa();
         const form = document.getElementById('form-dados-loja');
@@ -1655,7 +1717,7 @@ window.renderizarResumoCarrinho = function() {
         linha.style.cssText = 'display:flex; align-items:center; justify-content:space-between; gap:10px; border-bottom:1px solid #f0f0f0; padding-bottom:10px;';
         linha.innerHTML = `
             <div>
-                <strong style="font-size:14px;">${it.nome}</strong>
+                <strong style="font-size:14px;">${esc(it.nome)}</strong>
                 <div style="font-size:12px; color:#888;">${formatarPreco(it.preco)} cada</div>
             </div>
             <div style="display:flex; align-items:center; gap:8px;">
@@ -1679,6 +1741,104 @@ window.alterarQuantidadeResumo = function(produtoId, delta) {
     if (quantidadeTotalCarrinho() === 0) mudarTela('tela-15');
 };
 
+// ==========================================
+// PIX COPIA E COLA (padrão BR Code do Banco Central)
+// ==========================================
+
+function semAcento(s) {
+    return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9 ]/g, '').toUpperCase().trim();
+}
+function tlv(id, valor) { return id + String(valor.length).padStart(2, '0') + valor; }
+function crc16(str) {
+    let crc = 0xFFFF;
+    for (let i = 0; i < str.length; i++) {
+        crc ^= str.charCodeAt(i) << 8;
+        for (let j = 0; j < 8; j++) {
+            crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
+            crc &= 0xFFFF;
+        }
+    }
+    return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+function gerarPixCopiaECola({ chave, nome, cidade, valor, txid }) {
+    const conta = tlv('00', 'br.gov.bcb.pix') + tlv('01', chave.trim());
+    const payload =
+        tlv('00', '01') +
+        tlv('26', conta) +
+        tlv('52', '0000') +
+        tlv('53', '986') +
+        tlv('54', valor.toFixed(2)) +
+        tlv('58', 'BR') +
+        tlv('59', semAcento(nome).slice(0, 25) || 'LOJA') +
+        tlv('60', semAcento(cidade).slice(0, 15) || 'BRASIL') +
+        tlv('62', tlv('05', (txid || '***').replace(/[^A-Za-z0-9]/g, '').slice(0, 25) || '***')) +
+        '6304';
+    return payload + crc16(payload);
+}
+        // ==========================================
+// TELA 18: FINALIZAR PEDIDO / TELA 19: FORMA DE PAGAMENTO
+// (CORRIGIDO: endereço digitado na própria tela e salvo no clique)
+// ==========================================
+
+let enderecoCheckout = '';
+
+window.preencherCheckout = async function() {
+    const input = document.getElementById('checkout-endereco-input');
+    const user = auth.currentUser;
+    if (!input || !user) return;
+    try {
+        const snap = await getDoc(doc(db, 'clientes', user.uid));
+        enderecoCheckout = snap.exists() ? (snap.data().localidade || '').trim() : '';
+    } catch (e) { enderecoCheckout = ''; }
+    input.value = enderecoCheckout;
+};
+
+window.irParaPagamento = async function() {
+    if (quantidadeTotalCarrinho() === 0) { toast('Sua sacola está vazia.', true); return; }
+
+    const user = auth.currentUser;
+    if (!user) { toast('Você precisa estar logado.', true); return; }
+
+    const input = document.getElementById('checkout-endereco-input');
+    const endereco = (input?.value || '').trim();
+    if (!endereco) {
+        toast('Informe o endereço de entrega para continuar.', true);
+        input?.focus();
+        return;
+    }
+
+    try {
+        // salva já no perfil, assim o pedido e a home usam o mesmo endereço
+        await setDoc(doc(db, 'clientes', user.uid), {
+            uid: user.uid,
+            nome: user.displayName || '',
+            email: user.email || '',
+            localidade: endereco,
+            atualizadoEm: serverTimestamp()
+        }, { merge: true });
+        enderecoCheckout = endereco;
+        atualizarLocalidadeHome(endereco);
+    } catch (e) {
+        console.error(e);
+        toast('Erro ao salvar endereço: ' + e.message, true);
+        return;
+    }
+
+    mudarTela('tela-19');
+};
+
+let formaPagamento = 'Pix';
+
+window.prepararPagamento = function() {
+    const el = document.getElementById('pagamentoTotal');
+    if (el) el.textContent = formatarPreco(totalCarrinho());
+};
+
+window.selecionarPagamento = function(forma) {
+    formaPagamento = forma;
+    document.querySelectorAll('.pg-opcao').forEach(b => b.classList.toggle('selecionada', b.dataset.forma === forma));
+};
+
 window.confirmarPedidoCarrinho = async function() {
     const user = auth.currentUser;
     if (!user) { toast('Você precisa estar logado para fazer um pedido.', true); return; }
@@ -1686,64 +1846,128 @@ window.confirmarPedidoCarrinho = async function() {
     const ids = Object.keys(carrinho.itens);
     if (ids.length === 0) { toast('Sua sacola está vazia.', true); return; }
 
-    // Reconfere se a loja continua aberta antes de gravar o pedido —
-    // evita corrida entre o cliente montando a sacola e a loja fechando.
+    const btn = document.getElementById('btnConfirmarPagamento');
+    if (btn) btn.disabled = true;
+
     try {
-        const empresaSnap = await getDoc(doc(db, "empresas", carrinho.empresaId));
-        if (empresaSnap.exists() && empresaSnap.data().aberto === false) {
-            toast('Essa loja acabou de fechar. Não é possível concluir o pedido agora.', true);
+        // loja ainda aberta? + dados da loja (chave Pix)
+        let empresa = {};
+        try {
+            const empresaSnap = await getDoc(doc(db, 'empresas', carrinho.empresaId));
+            if (empresaSnap.exists()) {
+                empresa = empresaSnap.data();
+                if (empresa.aberto === false) {
+                    toast('Essa loja acabou de fechar. Não é possível concluir o pedido agora.', true);
+                    return;
+                }
+            }
+        } catch (e) { console.error(e); }
+
+        // dados do cliente
+        let clienteLocalidade = '', clienteTelefone = '';
+        try {
+            const perfilSnap = await getDoc(doc(db, 'clientes', user.uid));
+            if (perfilSnap.exists()) {
+                clienteLocalidade = perfilSnap.data().localidade || '';
+                clienteTelefone = perfilSnap.data().telefone || '';
+            }
+        } catch (e) { console.error(e); }
+
+        if (!clienteLocalidade.trim()) clienteLocalidade = enderecoCheckout || '';
+        if (!clienteLocalidade.trim()) {
+            toast('Informe o endereço de entrega para continuar.', true);
+            mudarTela('tela-18');
             return;
         }
-    } catch (e) { console.error(e); }
 
-    let clienteLocalidade = '';
-    let clienteTelefone = '';
-    try {
-        const perfilSnap = await getDoc(doc(db, "clientes", user.uid));
-        if (perfilSnap.exists()) {
-            clienteLocalidade = perfilSnap.data().localidade || '';
-            clienteTelefone = perfilSnap.data().telefone || '';
-        }
-    } catch (e) { console.error('Erro ao buscar endereço do cliente:', e); }
+        const forma = formaPagamento;
+        const itens = ids.map(id => ({
+            produtoId: id,
+            nome: carrinho.itens[id].nome,
+            preco: carrinho.itens[id].preco,
+            quantidade: carrinho.itens[id].quantidade
+        }));
+        const total = totalCarrinho();
+        const resumoNomes = itens.map(i => `${i.quantidade}x ${i.nome}`).join(', ');
+        const empresaId = carrinho.empresaId;
+        const empresaNome = carrinho.empresaNome;
 
-    const itens = ids.map(id => ({
-        produtoId: id,
-        nome: carrinho.itens[id].nome,
-        preco: carrinho.itens[id].preco,
-        quantidade: carrinho.itens[id].quantidade
-    }));
-    const total = totalCarrinho();
-    const resumoNomes = itens.map(i => `${i.quantidade}x ${i.nome}`).join(', ');
-
-    try {
-        const pedidoRef = await addDoc(collection(db, "pedidos"), {
+        const pedidoRef = await addDoc(collection(db, 'pedidos'), {
             clienteId: user.uid,
-            clienteNome: user.displayName || "Cliente",
-            clienteEmail: user.email || "",
+            clienteNome: user.displayName || 'Cliente',
+            clienteEmail: user.email || '',
             clienteLocalidade,
             clienteTelefone,
-            empresaId: carrinho.empresaId,
-            empresaNome: carrinho.empresaNome,
+            empresaId,
+            empresaNome,
             itens,
             preco: total,
             quantidade: quantidadeTotalCarrinho(),
-            status: "Pendente",
+            pagamento: {
+                forma,                                                // 'Pix' | 'Cartão' | 'Dinheiro'
+                status: forma === 'Pix' ? 'Aguardando' : 'Na entrega'  // 'Aguardando' | 'Aprovado' | 'Na entrega'
+            },
+            status: 'Pendente',
             criadoEm: serverTimestamp()
         });
 
-        criarNotificacao(carrinho.empresaId, {
+        criarNotificacao(empresaId, {
             tipo: 'pedido_novo',
             titulo: 'Novo pedido recebido',
-            corpo: `${user.displayName || 'Um cliente'} pediu: ${resumoNomes}`,
+            corpo: `${user.displayName || 'Um cliente'} pediu: ${resumoNomes} (${forma})`,
             pedidoId: pedidoRef.id
         });
 
-        toast(`✅ Pedido enviado! Aguarde a confirmação da loja.`);
+        // ---- monta a mensagem do Pix antes de limpar a sacola ----
+        let mensagemPix = '';
+        if (forma === 'Pix') {
+            const numero = pedidoRef.id.slice(0, 6).toUpperCase();
+            const linhasItens = itens.map(i => `• ${i.quantidade}x ${i.nome}`).join('\n');
+            mensagemPix =
+`🧾 NOVO PEDIDO #${numero}
+${linhasItens}
+
+💰 Total: ${formatarPreco(total)}
+📍 Entrega: ${clienteLocalidade}
+💳 Pagamento: Pix
+`;
+            if (empresa.chavePix && empresa.chavePix.trim()) {
+                const copiaECola = gerarPixCopiaECola({
+                    chave: empresa.chavePix,
+                    nome: empresaNome,
+                    cidade: 'BRASIL',
+                    valor: total,
+                    txid: pedidoRef.id
+                });
+                mensagemPix +=
+`
+Para pagar, use o Pix abaixo:
+🔑 Chave Pix: ${empresa.chavePix.trim()}
+
+📋 Pix Copia e Cola (já com o valor):
+${copiaECola}
+
+Depois de pagar, envie o comprovante aqui no chat. 🙏`;
+            } else {
+                mensagemPix += `\n⚠️ A loja ainda não cadastrou a chave Pix. Aguarde a loja enviar os dados para pagamento e depois mande o comprovante aqui.`;
+            }
+        }
+
         limparCarrinho();
-        mudarTela('tela-7');
+
+        if (forma === 'Pix') {
+            toast('✅ Pedido enviado! Pague via Pix e envie o comprovante.');
+            await abrirChatComEmpresa(empresaId, empresaNome);   // abre o chat com a loja
+            await window.enviarMensagem(mensagemPix);            // mensagem automática
+        } else {
+            toast('✅ Pedido enviado! Aguarde a confirmação da loja.');
+            mudarTela('tela-7');
+        }
     } catch (err) {
         console.error(err);
         toast('Erro ao fazer pedido: ' + err.message, true);
+    } finally {
+        if (btn) btn.disabled = false;
     }
 };
 
@@ -1757,7 +1981,6 @@ function itensParaTexto(pedido) {
     if (Array.isArray(pedido.itens) && pedido.itens.length > 0) {
         return pedido.itens.map(i => `${i.quantidade}x ${i.nome}`).join('<br>');
     }
-    // compatibilidade com pedidos antigos (item único)
     return `1x ${pedido.nomeProduto || 'Item'}`;
 }
 
@@ -1915,12 +2138,17 @@ function renderizarPedidosEmpresa() {
                 </div>` : ''}
         ` : '';
 
+        const formaPg = p.pagamento && p.pagamento.forma ? p.pagamento.forma : '';
+        const pagoOk = p.pagamento && p.pagamento.status === 'Aprovado';
+
         div.innerHTML = `
             <div class="pedido-top">
                 <strong>${p.clienteNome || 'Cliente'}</strong>
                 <strong>${precoFormatado}</strong>
             </div>
             <div class="pedido-list" style="margin:6px 0;">${itensParaTexto(p)}</div>
+            ${formaPg ? `<div style="font-size:12px; color:#555; margin-bottom:4px;">💳 ${esc(formaPg)}${formaPg === 'Pix' ? (pagoOk ? ' • pago ✔' : ' • aguardando comprovante') : ''}</div>` : ''}
+            <button class="pedido-ver-detalhes" onclick="abrirDetalhesPedido('${p.id}')">Ver detalhes ›</button>
             ${enderecoHtml}
             <div style="display:flex;gap:8px;margin-top:10px;">
                 ${botoesAcao}
@@ -2027,6 +2255,128 @@ window.aceitarPedido = async function(pedidoId, clienteId, clienteNome) {
 };
 
 // ==========================================
+// TELA 20: DETALHES DO PEDIDO (empresa)
+// ==========================================
+
+let unsubscribeDetalhePedido = null;
+let detalheAtual = null;
+
+window.abrirDetalhesPedido = function(pedidoId) {
+    mudarTela('tela-20');
+    const box = document.getElementById('detalhe-pedido-conteudo');
+    if (box) box.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Carregando...</p>';
+    if (unsubscribeDetalhePedido) unsubscribeDetalhePedido();
+
+    unsubscribeDetalhePedido = onSnapshot(doc(db, 'pedidos', pedidoId), (snap) => {
+        if (!snap.exists()) {
+            box.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">Pedido não encontrado.</p>';
+            return;
+        }
+        detalheAtual = { id: snap.id, ...snap.data() };
+        renderizarDetalhePedido();
+    }, (err) => {
+        console.error(err);
+        box.innerHTML = `<p style="text-align:center; padding:20px; color:#888;">${mensagemErro(err)}</p>`;
+    });
+};
+
+window.fecharDetalhesPedido = function() {
+    if (unsubscribeDetalhePedido) { unsubscribeDetalhePedido(); unsubscribeDetalhePedido = null; }
+    mudarTela('tela-10');
+};
+
+function renderizarDetalhePedido() {
+    const p = detalheAtual;
+    const box = document.getElementById('detalhe-pedido-conteudo');
+    if (!p || !box) return;
+
+    const nome = p.clienteNome || 'Cliente';
+    const iniciais = nome.split(' ').map(x => x[0]).slice(0, 2).join('').toUpperCase();
+    const pg = p.pagamento || { forma: 'Não informado', status: '' };
+    const nomesForma = { 'Pix': 'Pix', 'Cartão': 'Cartão de crédito ou débito', 'Dinheiro': 'Dinheiro na entrega' };
+
+    let badgePg;
+    if (pg.status === 'Aprovado') badgePg = '<span class="det-badge verde">✔ Pagamento aprovado</span>';
+    else if (pg.forma === 'Pix') badgePg = '<span class="det-badge laranja">Aguardando comprovante</span>';
+    else badgePg = '<span class="det-badge azul">Pagar na entrega</span>';
+
+    const rotulosStatus = { 'Pendente': ['Pendente de preparo', 'laranja'], 'Aceito': ['Em preparo', 'verde'], 'Concluído': ['Entregue', 'azul'], 'Recusado': ['Recusado', 'vermelho'] };
+    const [txtStatus, corStatus] = rotulosStatus[p.status] || [p.status, 'laranja'];
+
+    const itensHtml = (Array.isArray(p.itens) ? p.itens : []).map(i =>
+        `<div class="det-item"><span>${esc(i.quantidade)}x ${esc(i.nome)}</span><strong>${formatarPreco(i.preco * i.quantidade)}</strong></div>`
+    ).join('') || `<div class="det-item"><span>1x ${esc(p.nomeProduto || 'Item')}</span></div>`;
+
+    let acoes = '';
+    if (p.status === 'Pendente') {
+        acoes += `<button class="det-btn primario" onclick="detalheAcao('aceitar')">Aceitar pedido</button>
+                  <button class="det-btn cinza" onclick="detalheAcao('recusar')">Recusar</button>`;
+    } else if (p.status === 'Aceito') {
+        acoes += `<button class="det-btn primario" onclick="detalheAcao('entregue')">Marcar como entregue</button>`;
+    }
+    if (pg.forma === 'Pix' && pg.status !== 'Aprovado' && p.status !== 'Recusado') {
+        acoes += `<button class="det-btn contorno" onclick="detalheAcao('pagamento')">Confirmar pagamento recebido</button>`;
+    }
+    acoes += `<button class="det-btn cinza" onclick="detalheAcao('chat')">Falar com o cliente</button>`;
+
+    box.innerHTML = `
+        <div class="det-card det-cliente">
+            <div class="det-avatar">${esc(iniciais)}</div>
+            <div class="det-cliente-info">${esc(nome)}<span>${esc(p.clienteTelefone || 'Telefone não informado')}</span></div>
+            ${p.clienteTelefone ? `<a class="det-ligar" href="tel:${esc(p.clienteTelefone.replace(/[^\d+]/g, ''))}"><span class="material-symbols-outlined">call</span></a>` : ''}
+        </div>
+
+        <div class="det-card">
+            <h3>Itens do pedido</h3>
+            ${itensHtml}
+            <div class="det-total"><span>Total</span><span>${formatarPreco(p.preco)}</span></div>
+        </div>
+
+        <div class="det-card">
+            <div class="det-bloco">
+                <span class="det-rotulo">Forma de pagamento</span>
+                <span class="det-valor">${esc(nomesForma[pg.forma] || pg.forma)}</span>
+                ${badgePg}
+            </div>
+            <div class="det-bloco">
+                <span class="det-rotulo">Status do pedido</span>
+                <span class="det-badge ${corStatus}">${esc(txtStatus)}</span>
+            </div>
+            <div class="det-bloco">
+                <span class="det-rotulo">Endereço de entrega</span>
+                <span class="det-valor">${esc(p.clienteLocalidade || 'Não informado')}</span>
+            </div>
+        </div>
+
+        <div class="det-acoes">${acoes}</div>
+    `;
+}
+
+window.detalheAcao = async function(acao) {
+    const p = detalheAtual;
+    if (!p) return;
+    try {
+        if (acao === 'aceitar') await responderPedido(p.id, 'Aceito');
+        else if (acao === 'recusar') await responderPedido(p.id, 'Recusado');
+        else if (acao === 'entregue') await responderPedido(p.id, 'Concluído');
+        else if (acao === 'chat') await abrirChatComCliente(p.clienteId, p.clienteNome || 'Cliente');
+        else if (acao === 'pagamento') {
+            await updateDoc(doc(db, 'pedidos', p.id), { 'pagamento.status': 'Aprovado' });
+            criarNotificacao(p.clienteId, {
+                tipo: 'pedido_status',
+                titulo: 'Pagamento confirmado',
+                corpo: `${p.empresaNome || 'A loja'} confirmou o recebimento do seu Pix.`,
+                pedidoId: p.id
+            });
+            toast('✅ Pagamento confirmado');
+        }
+    } catch (err) {
+        console.error(err);
+        toast('Erro: ' + err.message, true);
+    }
+};
+
+// ==========================================
 // CHAT REAL EM TEMPO REAL (Firestore)
 // ==========================================
 
@@ -2039,12 +2389,6 @@ function gerarConversaId(uidCliente, uidEmpresa) {
     return [uidCliente, uidEmpresa].sort().join('_');
 }
 
-// A tela de chat (tela-8) é compartilhada entre cliente e empresa.
-// Antes disso, o menu inferior ficava travado nas telas do cliente —
-// então quando a empresa abria uma conversa e clicava em "Perfil" no
-// menu, ela caía na tela de perfil do CLIENTE (achando que tinha
-// "entrado na conta dele"). Aqui a gente monta o menu certo (e o botão
-// de voltar certo) de acordo com quem está usando o chat no momento.
 function aplicarNavegacaoChat(souEmpresa) {
     const nav = document.getElementById('chat-nav');
     const btnVoltar = document.getElementById('chat-btn-voltar');
