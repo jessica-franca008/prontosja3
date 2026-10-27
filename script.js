@@ -63,11 +63,19 @@ function mudarTela(idTela) {
         }, 100);
     }
 
-    // Atualiza o resumo da sacola ao abrir a tela de checkout
+    // Finalizar pedido: resumo da sacola + endereço
     if (idTela === 'tela-18') {
         setTimeout(() => {
             if (typeof renderizarResumoCarrinho === 'function') renderizarResumoCarrinho();
+            if (typeof preencherCheckout === 'function') preencherCheckout();
         }, 100);
+    }
+
+    // Forma de pagamento: atualiza o total
+    if (idTela === 'tela-19') {
+        setTimeout(() => {
+            if (typeof prepararPagamento === 'function') prepararPagamento();
+        }, 50);
     }
 }
 
@@ -243,7 +251,7 @@ function inicializarCadastroProduto() {
     }
 
     // Só reseta o formulário se não estivermos entrando em modo de edição
-    // (o firebase-app.js controla isso via window._modoEdicaoProduto)
+    // (o firebase controla isso via window._modoEdicaoProduto)
     if (!window._modoEdicaoProduto) {
         resetPhoto();
     }
@@ -280,9 +288,8 @@ window.showToast = showToast;
 // ==========================================
 // A função window.enviarMensagem() que realmente grava a mensagem no
 // Firestore e o listener em tempo real (escutarMensagens) ficam
-// definidos no firebase-app.js, pois dependem do Firebase. Aqui
-// cuidamos só dos elementos de interface (input, botão de enviar e
-// gravação de áudio).
+// definidos no módulo Firebase do index.html. Aqui cuidamos só dos
+// elementos de interface (input, botão de enviar e gravação de áudio).
 
 let mediaRecorder;
 let audioChunks = [];
@@ -421,7 +428,7 @@ function exibirAudioGravadoLocal(audioBlob) {
 
 // SWITCH DA LOJA — a mudança visual imediata acontece aqui; quem
 // realmente decide o estado (e salva no Firestore) é o
-// toggleStatusLoja() do firebase-app.js.
+// toggleStatusLoja() do módulo Firebase.
 let switchInicializado = false;
 
 function inicializarSwitchLoja() {
@@ -439,7 +446,7 @@ function inicializarSwitchLoja() {
     }
 }
 
-// Usado pelo firebase-app.js para refletir o estado real (vindo do
+// Usado pelo módulo Firebase para refletir o estado real (vindo do
 // Firestore) no switch, mantendo vários dispositivos sincronizados.
 function aplicarEstadoLoja(aberta) {
     const switchBtn = document.getElementById("switch");
@@ -499,7 +506,7 @@ function inicializarBuscaMensagens() {
 
 function inicializarAjustes() {
     // Mantido por compatibilidade; o carregamento real dos dados da
-    // loja acontece em carregarAjustesEmpresa() no firebase-app.js
+    // loja acontece em carregarAjustesEmpresa() no módulo Firebase
 }
 
 // TOGGLE VISIBILIDADE DE SENHA (mantido para telas que ainda usam senha)
